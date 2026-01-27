@@ -177,50 +177,6 @@ function AboutPage() {
         <p className="partners-subtitle-wrapper">Building Dreams, Together</p>
       </div>
       
-      {/* National Real Estate Convention 2025 Banner */}
-      <section className="convention-banner">
-        <div className="convention-banner-content">
-          <h2 className="convention-title">NATIONAL REAL ESTATE CONVENTION 2025</h2>
-          <div className="convention-co-presentors">
-            <h3 className="convention-section-title">CO-PRESENTORS</h3>
-            <div className="convention-logos">
-              <div className="convention-logo-item">LEUTERIO REALTY</div>
-              <div className="convention-logo-item">FILIPINO HOMES.COM</div>
-              <div className="convention-logo-item">Rent.ph</div>
-              <div className="convention-logo-item">CEBULANDMASTERS</div>
-            </div>
-          </div>
-          <div className="convention-sponsors">
-            <div className="sponsor-category">
-              <h3 className="convention-section-title">MAJOR SPONSORS</h3>
-              <div className="convention-logos">
-                <div className="convention-logo-item">8990</div>
-                <div className="convention-logo-item">AppleOne</div>
-                <div className="convention-logo-item">Filinvest</div>
-                <div className="convention-logo-item">Taft Properties</div>
-              </div>
-            </div>
-            <div className="sponsor-category">
-              <h3 className="convention-section-title">MINOR SPONSORS</h3>
-              <div className="convention-logos">
-                <div className="convention-logo-item">BDO</div>
-                <div className="convention-logo-item">Primeworld</div>
-              </div>
-            </div>
-            <div className="sponsor-category">
-              <h3 className="convention-section-title">STAR BENEFACTORS</h3>
-              <div className="convention-logos">
-                <div className="convention-logo-item">Various Partners</div>
-              </div>
-            </div>
-          </div>
-          <div className="convention-details">
-            <p className="convention-date">OCT 19-20, 2025 | WATERFRONT HOTEL & CASINO LAHUG, CEBU CITY</p>
-            <p className="convention-hashtag">#LRNAATCON2025</p>
-          </div>
-        </div>
-      </section>
-      
       <Footer />
     </div>
   )
