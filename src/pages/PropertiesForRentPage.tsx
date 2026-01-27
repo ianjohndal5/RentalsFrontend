@@ -17,6 +17,7 @@ function PropertiesForRentPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('newest')
   const [currentPage, setCurrentPage] = useState(1)
+  const [viewMode, setViewMode] = useState<'horizontal' | 'vertical'>('vertical') // 'horizontal' for hamburger, 'vertical' for grid
   const itemsPerPage = 9 // 3 rows x 3 columns
 
   const propertyTypes = ['All Types', 'Condominium', 'Apartment', 'House', 'Bed Space', 'Commercial Spaces', 'Office Spaces', 'Studio', 'TownHouse', 'WareHouse', 'Dormitory', 'Farm Land']
@@ -436,9 +437,27 @@ function PropertiesForRentPage() {
                 <path d="M1 1L6 6L11 1" stroke="#666666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
-            <button className="hamburger-menu-btn" aria-label="Menu">
+            <button 
+              className="hamburger-menu-btn" 
+              aria-label="Menu"
+              onClick={() => setViewMode('horizontal')}
+              style={{ backgroundColor: viewMode === 'horizontal' ? '#8B4513' : '#ffffff' }}
+            >
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 12H21M3 6H21M3 18H21" stroke="#333" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+            <button 
+              className="grid-view-btn" 
+              aria-label="Grid View"
+              onClick={() => setViewMode('vertical')}
+              style={{ backgroundColor: viewMode === 'vertical' ? '#8B4513' : '#ffffff' }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
+                <rect x="14" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
+                <rect x="3" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
+                <rect x="14" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
               </svg>
             </button>
           </div>
@@ -448,33 +467,102 @@ function PropertiesForRentPage() {
           <div className="properties-content-wrapper">
             {paginatedProperties.length > 0 ? (
               <>
-                <div className="properties-grid">
-                  {paginatedProperties.map(property => (
-                    <VerticalPropertyCard
-                      key={property.id}
-                      propertyType={property.propertyType}
-                      date={property.date}
-                      price={property.price}
-                      title={property.title}
-                      image={property.image}
-                      rentManagerName={property.rentManagerName}
-                      rentManagerRole={property.rentManagerRole}
-                      bedrooms={property.bedrooms}
-                      bathrooms={property.bathrooms}
-                      parking={property.parking}
-                    />
-                  ))}
+                <div className={viewMode === 'horizontal' ? 'properties-list' : 'properties-grid'}>
+                  {paginatedProperties.map(property => 
+                    viewMode === 'horizontal' ? (
+                      <HorizontalPropertyCard
+                        key={property.id}
+                        id={property.id}
+                        propertyType={property.propertyType}
+                        date={property.date}
+                        price={property.price}
+                        title={property.title}
+                        image={property.image}
+                        rentManagerName={property.rentManagerName}
+                        rentManagerRole={property.rentManagerRole}
+                        bedrooms={property.bedrooms}
+                        bathrooms={property.bathrooms}
+                        parking={property.parking}
+                      />
+                    ) : (
+                      <VerticalPropertyCard
+                        key={property.id}
+                        id={property.id}
+                        propertyType={property.propertyType}
+                        date={property.date}
+                        price={property.price}
+                        title={property.title}
+                        image={property.image}
+                        rentManagerName={property.rentManagerName}
+                        rentManagerRole={property.rentManagerRole}
+                        bedrooms={property.bedrooms}
+                        bathrooms={property.bathrooms}
+                        parking={property.parking}
+                      />
+                    )
+                  )}
                 </div>
                 {totalPages > 1 && (
-                  <div className="properties-pagination">
-                    {Array.from({ length: totalPages }, (_, index) => (
-                      <button
-                        key={index + 1}
-                        className={`pagination-dot ${currentPage === index + 1 ? 'pagination-dot-active' : ''}`}
-                        onClick={() => setCurrentPage(index + 1)}
-                        aria-label={`Go to page ${index + 1}`}
-                      />
-                    ))}
+                  <div className="pagination">
+                    <button 
+                      className="pagination-arrow"
+                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                      aria-label="Previous page"
+                    >
+                      ←
+                    </button>
+                    {currentPage > 2 && (
+                      <>
+                        <button 
+                          className="pagination-number"
+                          onClick={() => setCurrentPage(1)}
+                        >
+                          1
+                        </button>
+                        {currentPage > 3 && <span className="pagination-ellipsis">...</span>}
+                      </>
+                    )}
+                    {currentPage > 1 && (
+                      <button 
+                        className="pagination-number"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        {currentPage - 1}
+                      </button>
+                    )}
+                    <button 
+                      className="pagination-number active"
+                    >
+                      {currentPage}
+                    </button>
+                    {currentPage < totalPages && (
+                      <button 
+                        className="pagination-number"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        {currentPage + 1}
+                      </button>
+                    )}
+                    {currentPage < totalPages - 1 && (
+                      <>
+                        {currentPage < totalPages - 2 && <span className="pagination-ellipsis">...</span>}
+                        <button 
+                          className="pagination-number"
+                          onClick={() => setCurrentPage(totalPages)}
+                        >
+                          {totalPages}
+                        </button>
+                      </>
+                    )}
+                    <button 
+                      className="pagination-arrow"
+                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                      disabled={currentPage === totalPages}
+                      aria-label="Next page"
+                    >
+                      →
+                    </button>
                   </div>
                 )}
               </>
@@ -500,9 +588,7 @@ function PropertiesForRentPage() {
                 Handpicked properties from our verified agents
               </p>
             </div>
-            <a href="#all-properties" className="featured-properties-link">
-              View All Properties <span>→</span>
-            </a>
+           
           </div>
         </div>
         <div className="featured-properties-carousel-wrapper">
@@ -510,6 +596,7 @@ function PropertiesForRentPage() {
             {properties.map(property => (
               <HorizontalPropertyCard
                 key={property.id}
+                id={property.id}
                 propertyType={property.propertyType}
                 date={property.date}
                 price={property.price}
@@ -536,6 +623,7 @@ function PropertiesForRentPage() {
             {properties.map(property => (
               <HorizontalPropertyCard
                 key={property.id}
+                id={property.id}
                 propertyType={property.propertyType}
                 date={property.date}
                 price={property.price}

@@ -5,117 +5,97 @@ import PageHeader from '../components/PageHeader'
 import './BlogPage.css'
 
 function BlogPage() {
-  const [selectedCategory, setSelectedCategory] = useState('All')
-
-  const categories = ['All', 'Market Insights', 'Tips & Guides', 'News', 'Property Reviews', 'Legal']
+  const [currentPage, setCurrentPage] = useState(1)
 
   const blogPosts = [
     {
       id: 1,
-      title: 'Top 10 Neighborhoods in Metro Manila for Renters in 2026',
-      category: 'Market Insights',
-      excerpt: 'Discover the most sought-after neighborhoods in Metro Manila that offer the best value, amenities, and lifestyle for renters this year.',
-      date: 'January 20, 2026',
+      title: 'Top 10 Tips for the First-Time Renters in Manila',
+      category: 'Legal',
+      excerpt: 'Moving to Manila for the first time? Here are essential tips to help you navigate the rental market and find your perfect home.',
+      date: 'January 15, 2026',
       author: 'Maria Santos',
-      readTime: '5 min read',
+      readTime: '7 min read',
       image: '/assets/blog-1.jpg',
       featured: true
     },
     {
       id: 2,
-      title: 'Essential Checklist: What to Look for Before Signing a Lease',
-      category: 'Tips & Guides',
-      excerpt: 'Learn the critical factors you need to consider before committing to a rental property to ensure a smooth and worry-free experience.',
-      date: 'January 18, 2026',
-      author: 'John Reyes',
+      title: 'Top 10 Tips for the First-Time Renters in Manila',
+      category: 'Legal',
+      excerpt: 'Moving to Manila for the first time? Here are essential tips to help you navigate the rental market and find your perfect home.',
+      date: 'January 15, 2026',
+      author: 'Maria Santos',
       readTime: '7 min read',
       image: '/assets/blog-2.jpg',
-      featured: false
+      featured: false,
+      trending: true
     },
     {
       id: 3,
-      title: 'Understanding Your Rights as a Tenant in the Philippines',
+      title: 'Top 10 Tips for the First-Time Renters in Manila',
       category: 'Legal',
-      excerpt: 'A comprehensive guide to tenant rights and responsibilities under Philippine law to help you navigate your rental journey confidently.',
+      excerpt: 'Moving to Manila for the first time? Here are essential tips to help you navigate the rental market and find your perfect home.',
       date: 'January 15, 2026',
-      author: 'Sarah Dela Cruz',
-      readTime: '10 min read',
+      author: 'Maria Santos',
+      readTime: '7 min read',
       image: '/assets/blog-3.jpg',
-      featured: false
+      featured: false,
+      trending: true
     },
     {
       id: 4,
-      title: 'How to Make Your Rental Property Feel Like Home',
-      category: 'Tips & Guides',
-      excerpt: 'Transform your rental space into a cozy home with these practical decorating tips and tricks that won\'t violate your lease agreement.',
-      date: 'January 12, 2026',
-      author: 'Patricia Lim',
-      readTime: '6 min read',
+      title: 'Top 10 Tips for the First-Time Renters in Manila',
+      category: 'Legal',
+      excerpt: 'Moving to Manila for the first time? Here are essential tips to help you navigate the rental market and find your perfect home.',
+      date: 'January 15, 2026',
+      author: 'Maria Santos',
+      readTime: '7 min read',
       image: '/assets/blog-4.jpg',
-      featured: false
+      featured: false,
+      trending: true
     },
     {
       id: 5,
-      title: 'The Rise of Co-Living Spaces in Philippine Cities',
-      category: 'Market Insights',
-      excerpt: 'Explore the growing trend of co-living spaces and how they\'re changing the rental landscape for young professionals and students.',
-      date: 'January 10, 2026',
-      author: 'Miguel Torres',
-      readTime: '8 min read',
+      title: 'Understanding Your Rental Contract: A Complete Guide',
+      category: 'Legal',
+      excerpt: 'A comprehensive guide to understanding rental contracts and what to look for before signing.',
+      date: 'January 12, 2026',
+      author: 'John Reyes',
+      readTime: '7 min read',
       image: '/assets/blog-5.jpg',
-      featured: false
+      featured: false,
+      trending: false
     },
     {
       id: 6,
-      title: 'Budgeting for Your First Rental: Hidden Costs to Consider',
-      category: 'Tips & Guides',
-      excerpt: 'Beyond the monthly rent, discover the additional expenses you should factor into your budget when renting your first property.',
-      date: 'January 8, 2026',
-      author: 'Robert Garcia',
-      readTime: '6 min read',
+      title: 'Understanding Your Rental Contract: A Complete Guide',
+      category: 'Legal',
+      excerpt: 'A comprehensive guide to understanding rental contracts and what to look for before signing.',
+      date: 'January 12, 2026',
+      author: 'John Reyes',
+      readTime: '7 min read',
       image: '/assets/blog-6.jpg',
-      featured: false
+      featured: false,
+      trending: false
     },
     {
       id: 7,
-      title: 'New Rental Laws in 2026: What Tenants Need to Know',
-      category: 'News',
-      excerpt: 'Stay informed about the latest rental regulations and how they affect your rights and obligations as a tenant in the Philippines.',
-      date: 'January 5, 2026',
-      author: 'Maria Santos',
-      readTime: '9 min read',
-      image: '/assets/blog-7.jpg',
-      featured: false
-    },
-    {
-      id: 8,
-      title: 'Comparing Condominiums vs Apartments: Which is Right for You?',
-      category: 'Property Reviews',
-      excerpt: 'An in-depth comparison of condominiums and apartments to help you decide which type of rental property suits your lifestyle best.',
-      date: 'January 3, 2026',
+      title: 'Understanding Your Rental Contract: A Complete Guide',
+      category: 'Legal',
+      excerpt: 'A comprehensive guide to understanding rental contracts and what to look for before signing.',
+      date: 'January 12, 2026',
       author: 'John Reyes',
       readTime: '7 min read',
-      image: '/assets/blog-8.jpg',
-      featured: false
-    },
-    {
-      id: 9,
-      title: 'Pet-Friendly Rentals: Finding the Perfect Home for You and Your Furry Friend',
-      category: 'Tips & Guides',
-      excerpt: 'Tips and strategies for finding pet-friendly rental properties and negotiating pet policies with landlords.',
-      date: 'December 28, 2025',
-      author: 'Sarah Dela Cruz',
-      readTime: '5 min read',
-      image: '/assets/blog-9.jpg',
-      featured: false
+      image: '/assets/blog-7.jpg',
+      featured: false,
+      trending: false
     }
   ]
 
-  const filteredPosts = selectedCategory === 'All' 
-    ? blogPosts 
-    : blogPosts.filter(post => post.category === selectedCategory)
-
   const featuredPost = blogPosts.find(post => post.featured)
+  const trendingPosts = blogPosts.filter(post => post.trending)
+  const regularPosts = blogPosts.filter(post => !post.featured && !post.trending)
 
   return (
     <div className="blog-page">
@@ -126,95 +106,129 @@ function BlogPage() {
 
       {/* Main Content */}
       <main className="blog-main-content">
-        {/* Category Filter */}
-        <div className="blog-categories">
-          {categories.map((category) => (
-            <button
-              key={category}
-              className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-
-        {/* Featured Post */}
-        {selectedCategory === 'All' && featuredPost && (
-          <div className="featured-post">
-            <div className="featured-post-image">
-              <img src={featuredPost.image} alt={featuredPost.title} />
-              <div className="featured-badge">Featured</div>
-            </div>
-            <div className="featured-post-content">
-              <div className="post-meta">
-                <span className="post-category">{featuredPost.category}</span>
-                <span className="post-date">{featuredPost.date}</span>
-              </div>
-              <h2 className="featured-post-title">{featuredPost.title}</h2>
-              <p className="featured-post-excerpt">{featuredPost.excerpt}</p>
-              <div className="post-footer">
-                <div className="post-author-info">
-                  <span className="author-name">By {featuredPost.author}</span>
-                  <span className="read-time">{featuredPost.readTime}</span>
+        <div className="blog-content-layout">
+          {/* Left Column - Featured Article */}
+          <div className="blog-featured-column">
+            {featuredPost && (
+              <article className="featured-article-card">
+                <div className="featured-article-image">
+                  <img src={featuredPost.image} alt={featuredPost.title} />
                 </div>
-                <button className="read-more-btn">Read Article</button>
-              </div>
+                <div className="featured-article-content">
+                  <h2 className="featured-article-title">{featuredPost.title}</h2>
+                  <p className="featured-article-excerpt">{featuredPost.excerpt}</p>
+                  <div className="featured-article-meta">
+                    <div className="article-author">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span>{featuredPost.author}</span>
+                    </div>
+                    <div className="article-date">
+                      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 2V6M14 2V6M3 10H17M5 4H15C16.1046 4 17 4.89543 17 6V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V6C3 4.89543 3.89543 4 5 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span>{featuredPost.date}</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            )}
+          </div>
+
+          {/* Right Column - Trending Articles */}
+          <div className="blog-trending-column">
+            <div className="trending-header">
+              <h3 className="trending-title">TRENDINGS</h3>
+            </div>
+            <div className="trending-articles">
+              {trendingPosts.map((post) => (
+                <article key={post.id} className="trending-article-card">
+                  <div className="trending-article-image">
+                    <img src={post.image} alt={post.title} />
+                  </div>
+                  <div className="trending-article-content">
+                    <h4 className="trending-article-title">{post.title}</h4>
+                    <div className="trending-article-meta">
+                      <div className="article-author">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span>{post.author}</span>
+                      </div>
+                      <div className="article-date">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6 2V6M14 2V6M3 10H17M5 4H15C16.1046 4 17 4.89543 17 6V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V6C3 4.89543 3.89543 4 5 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span>{post.date}</span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Blog Grid */}
-        <div className="blog-posts-grid">
-          {filteredPosts.filter(post => !post.featured || selectedCategory !== 'All').map((post) => (
-            <article key={post.id} className="blog-post-card">
-              <div className="blog-post-image">
+        {/* Regular Articles Grid */}
+        <div className="blog-articles-grid">
+          {regularPosts.map((post) => (
+            <article key={post.id} className="blog-article-card">
+              <div className="blog-article-image">
                 <img src={post.image} alt={post.title} />
               </div>
-              <div className="blog-post-content">
-                <div className="post-meta">
-                  <span className="post-category">{post.category}</span>
-                  <span className="post-date">{post.date}</span>
+              <div className="blog-article-content">
+                <div className="article-tags">
+                  <span className="article-category-tag">{post.category}</span>
+                  <span className="article-read-time">{post.readTime}</span>
                 </div>
-                <h3 className="blog-post-title">{post.title}</h3>
-                <p className="blog-post-excerpt">{post.excerpt}</p>
-                <div className="post-footer">
-                  <div className="post-author-info">
-                    <span className="author-name">By {post.author}</span>
-                    <span className="read-time">{post.readTime}</span>
-                  </div>
-                  <button className="read-more-btn-small">Read More →</button>
-                </div>
+                <h3 className="blog-article-title">{post.title}</h3>
+                <a href="#" className="read-more-link">Read More →</a>
               </div>
             </article>
           ))}
         </div>
 
-        {/* Newsletter Section */}
-        <div className="blog-newsletter-section">
-          <div className="newsletter-content">
-            <div className="newsletter-icon">
-              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="30" fill="#FE8E0A" opacity="0.2"/>
-                <path d="M15 20C13.35 20 12 21.35 12 23V37C12 38.65 13.35 40 15 40H45C46.65 40 48 38.65 48 37V23C48 21.35 46.65 20 45 20H15ZM15 23H45V25.5L30 32.5L15 25.5V23Z" fill="#FE8E0A"/>
-              </svg>
-            </div>
-            <h2 className="newsletter-title">Subscribe to Our Newsletter</h2>
-            <p className="newsletter-text">
-              Get the latest rental tips, market insights, and exclusive property listings delivered to your inbox every week.
-            </p>
-            <form className="newsletter-form">
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
-                className="newsletter-input"
-                required
-              />
-              <button type="submit" className="newsletter-btn">Subscribe</button>
-            </form>
+        {/* Pagination */}
+        <div className="blog-pagination">
+          <button className="pagination-btn pagination-prev" aria-label="Previous page">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <div className="pagination-numbers">
+            <button className={`pagination-number ${currentPage === 1 ? 'active' : ''}`} onClick={() => setCurrentPage(1)}>1</button>
+            <button className={`pagination-number ${currentPage === 2 ? 'active' : ''}`} onClick={() => setCurrentPage(2)}>2</button>
+            <button className={`pagination-number ${currentPage === 3 ? 'active' : ''}`} onClick={() => setCurrentPage(3)}>3</button>
+            <span className="pagination-ellipsis">...</span>
+            <button className={`pagination-number ${currentPage === 50 ? 'active' : ''}`} onClick={() => setCurrentPage(50)}>50</button>
           </div>
+          <button className="pagination-btn pagination-next" aria-label="Next page">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </main>
+
+      {/* Newsletter Section - Full Width at Bottom */}
+      <div className="blog-newsletter-section">
+        <div className="newsletter-container">
+          <h2 className="newsletter-title">Subscribe to Our Newsletter</h2>
+          <p className="newsletter-text">
+            Get the latest rental tips, market insights, and property updates delivered to your inbox.
+          </p>
+          <form className="newsletter-form">
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              className="newsletter-input"
+              required
+            />
+            <button type="submit" className="newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
 
       <Footer />
     </div>

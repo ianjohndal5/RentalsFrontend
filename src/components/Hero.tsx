@@ -2,7 +2,7 @@ import './Hero.css'
 
 function Hero() {
   return (
-    <section id="home" style={{ position: 'relative', height: '550px', overflow: 'hidden' }}>
+    <section id="home" style={{ position: 'relative', height: '550px', overflow: 'hidden', }}>
       {/* Background image that matches Figma hero */}
       <img
         src="/assets/landing-hero-bg-784ecf.png"

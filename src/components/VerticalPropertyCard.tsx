@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom'
 import './VerticalPropertyCard.css'
 
 interface VerticalPropertyCardProps {
+  id?: number | string
   propertyType?: string
   date?: string
   price?: string
@@ -14,6 +16,7 @@ interface VerticalPropertyCardProps {
 }
 
 function VerticalPropertyCard({
+  id,
   propertyType = 'Commercial Spaces',
   date = 'Sat 05, 2024',
   price = '$1200/Month',
@@ -25,8 +28,24 @@ function VerticalPropertyCard({
   bathrooms = 2,
   parking = 2,
 }: VerticalPropertyCardProps) {
+  const navigate = useNavigate()
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't navigate if clicking on buttons or links
+    if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('svg')) {
+      return
+    }
+    if (id) {
+      navigate(`/property/${id}`)
+    }
+  }
+
   return (
-    <article className="vertical-property-card">
+    <article 
+      className="vertical-property-card" 
+      onClick={handleCardClick}
+      style={{ cursor: id ? 'pointer' : 'default' }}
+    >
       <img
         src={image}
         alt={title}

@@ -27,6 +27,8 @@
   line-height: 1.11;
   letter-spacing: -0.0139em;
   margin: 0 0 10px 0;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
 }
 
 .blogs-section .section-subtitle {

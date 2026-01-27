@@ -25,6 +25,8 @@ function AboutPage() {
               e.currentTarget.src = '/assets/aboutusbackgroundphoto.svg'
             }}
           />
+          {/* Orange bar below background */}
+          <div className="about-hero-orange-bar"></div>
           <div className="about-hero-content">
             <h1 className="about-hero-title text-center">About Rentals.ph</h1>
             <p className="about-hero-subtitle">We provide full service at every step.</p>
@@ -37,29 +39,22 @@ function AboutPage() {
         <div className="about-cards-container">
           <div className="about-cards-grid">
             {/* Card 1 - Rent.ph Cares */}
+            
             <div className="about-card">
-              <div className="about-card-image-wrapper">
+                <img 
+                  src="/assets/pin-orange.svg" 
+                  alt="Pinned Icon" 
+                  className="pinned-icon-image"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
+                />
+              <div className="about-card-icon-wrapper">
+                
                 <img 
                   src="/assets/rentph-cares.png" 
                   alt="Rent.ph Cares - Your Rental, Their Hope" 
-                  className="about-card-image"
+                  className="about-card-icon-image"
                   onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
-              </div>
-              <div className="about-card-icon-wrapper">
-                <div className="about-card-magnifier">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="11" cy="11" r="8" stroke="#FE8E0A" strokeWidth="2" fill="none"/>
-                    <path d="m21 21-4.35-4.35" stroke="#FE8E0A" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div className="about-card-icon">
-                  <svg width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="31" cy="31" r="31" fill="#205ED7"/>
-                    <path d="M31 15L22 23V42H40V23L31 15Z" fill="white" stroke="#FE8E0A" strokeWidth="1"/>
-                    <rect x="27" y="32" width="8" height="8" fill="#FE8E0A"/>
-                  </svg>
-                </div>
               </div>
               <h3 className="about-card-title">Rent.ph Cares Your Rental, Their Hope</h3>
               <p className="about-card-text">
@@ -69,30 +64,19 @@ function AboutPage() {
 
             {/* Card 2 - Trusted Partner */}
             <div className="about-card">
-              <div className="about-card-image-wrapper">
+              <img 
+                  src="/assets/pin-orange.svg" 
+                  alt="Pinned Icon" 
+                  className="pinned-icon-image"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
+                />
+              <div className="about-card-icon-wrapper">
                 <img 
                   src="/assets/your-trusted-rental-partner.png" 
                   alt="Your Trusted Rental Partner" 
-                  className="about-card-image"
+                  className="about-card-icon-image"
                   onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
-              </div>
-              <div className="about-card-icon-wrapper">
-                <div className="about-card-magnifier">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="11" cy="11" r="8" stroke="#FE8E0A" strokeWidth="2" fill="none"/>
-                    <path d="m21 21-4.35-4.35" stroke="#FE8E0A" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div className="about-card-icon">
-                  <svg width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="31" cy="31" r="31" fill="#205ED7"/>
-                    <circle cx="31" cy="25" r="7" fill="white"/>
-                    <path d="M20 40C20 33 24 28 31 28C38 28 42 33 42 40V48H20V40Z" fill="white"/>
-                    <circle cx="28" cy="25" r="2" fill="#FE8E0A"/>
-                    <circle cx="34" cy="25" r="2" fill="#FE8E0A"/>
-                  </svg>
-                </div>
               </div>
               <h3 className="about-card-title">Your Trusted Rental Partner</h3>
               <p className="about-card-text">
@@ -102,30 +86,19 @@ function AboutPage() {
 
             {/* Card 3 - Transforming Investment */}
             <div className="about-card">
-              <div className="about-card-image-wrapper">
+              <img 
+                  src="/assets/pin-orange.svg" 
+                  alt="Pinned Icon" 
+                  className="pinned-icon-image"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
+                />
+              <div className="about-card-icon-wrapper">
                 <img 
                   src="/assets/transforming-real-estate.png" 
                   alt="Transforming Real Estate Investment" 
-                  className="about-card-image"
+                  className="about-card-icon-image"
                   onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
-              </div>
-              <div className="about-card-icon-wrapper">
-                <div className="about-card-magnifier">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="11" cy="11" r="8" stroke="#FE8E0A" strokeWidth="2" fill="none"/>
-                    <path d="m21 21-4.35-4.35" stroke="#FE8E0A" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div className="about-card-icon">
-                  <svg width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="31" cy="31" r="31" fill="#205ED7"/>
-                    <rect x="20" y="22" width="10" height="18" fill="white"/>
-                    <rect x="32" y="22" width="10" height="18" fill="white"/>
-                    <rect x="25" y="28" width="4" height="4" fill="#FE8E0A"/>
-                    <rect x="33" y="28" width="4" height="4" fill="#FE8E0A"/>
-                  </svg>
-                </div>
               </div>
               <h3 className="about-card-title">Transforming Real Estate Investment Into Productive Assets</h3>
               <p className="about-card-text">
@@ -135,28 +108,19 @@ function AboutPage() {
 
             {/* Card 4 - Comprehensive Solution */}
             <div className="about-card">
-              <div className="about-card-image-wrapper">
+              <img 
+                  src="/assets/pin-orange.svg" 
+                  alt="Pinned Icon" 
+                  className="pinned-icon-image"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
+                />
+              <div className="about-card-icon-wrapper">
                 <img 
                   src="/assets/comprehensive-rental-solution.png" 
                   alt="Comprehensive Rental Solution Nationwide" 
-                  className="about-card-image"
+                  className="about-card-icon-image"
                   onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
-              </div>
-              <div className="about-card-icon-wrapper">
-                <div className="about-card-magnifier">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="11" cy="11" r="8" stroke="#FE8E0A" strokeWidth="2" fill="none"/>
-                    <path d="m21 21-4.35-4.35" stroke="#FE8E0A" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div className="about-card-icon">
-                  <svg width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="31" cy="31" r="31" fill="#205ED7"/>
-                    <rect x="24" y="24" width="14" height="14" fill="white"/>
-                    <rect x="28" y="28" width="6" height="6" fill="#FE8E0A"/>
-                  </svg>
-                </div>
               </div>
               <h3 className="about-card-title">Your Comprehensive Rental Solution Nationwide</h3>
               <p className="about-card-text">
@@ -172,10 +136,10 @@ function AboutPage() {
         <Testimonials />
      
       
-      <div className="about-partners-wrapper">
+     
         <Partners />
         <p className="partners-subtitle-wrapper">Building Dreams, Together</p>
-      </div>
+      
       
       <Footer />
     </div>
