@@ -32,7 +32,7 @@ function ContactUsPage() {
       <Navbar />
 
       {/* Page Header */}
-      <PageHeader title="Contact Us" />
+   
 
       {/* Main Content with Background */}
       <main className="contact-main-content">

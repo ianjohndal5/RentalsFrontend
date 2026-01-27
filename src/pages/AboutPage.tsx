@@ -2,7 +2,6 @@ import Navbar from '../components/Navbar'
 import Testimonials from '../components/Testimonials'
 import Footer from '../components/Footer'
 import Partners from '../components/Partners'
-import PageHeader from '../components/PageHeader'
 import './AboutPage.css'
 
 function AboutPage() {
@@ -11,8 +10,7 @@ function AboutPage() {
       <Navbar />
       
       {/* Page Header */}
-      <PageHeader title="About Us" />
-
+      
       {/* Hero Section with Background Image */}
       <section className="about-hero-section">
         <div className="about-hero-container">
@@ -139,6 +137,13 @@ function AboutPage() {
      
         <Partners />
         <p className="partners-subtitle-wrapper">Building Dreams, Together</p>
+        
+        {/* Partners Description */}
+        <div className="partners-description-container">
+          <p className="partners-description">
+            We are proud to collaborate with industry-leading organizations and trusted partners who share our commitment to excellence in real estate and rental services. Our strategic partnerships enable us to deliver comprehensive solutions, innovative services, and exceptional value to property owners and tenants across the Philippines. Together, we build stronger communities and create lasting relationships that drive success in the rental market.
+          </p>
+        </div>
       
       
       <Footer />

@@ -1,6 +1,62 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Hero.css'
 
 function Hero() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [propertyType, setPropertyType] = useState('')
+  const [location, setLocation] = useState('')
+  const navigate = useNavigate()
+
+  // Map property types from Hero to PropertiesForRentPage format
+  const propertyTypeMap: { [key: string]: string } = {
+    'condominium': 'Condominium',
+    'apartment': 'Apartment',
+    'bedspace': 'Bed Space',
+    'commercial': 'Commercial Spaces',
+    'office': 'Office Spaces'
+  }
+
+  // Map locations from Hero to PropertiesForRentPage format
+  const locationMap: { [key: string]: string } = {
+    'manila': 'Manila',
+    'makati': 'Makati City',
+    'bgc': 'BGC',
+    'quezon': 'Quezon City',
+    'mandaluyong': 'Mandaluyong',
+    'pasig': 'Pasig',
+    'cebu': 'Cebu City',
+    'davao': 'Davao City',
+    'lapulapu': 'Lapulapu',
+    'metro-manila': 'Metro Manila'
+  }
+
+  const handleSearch = () => {
+    const params = new URLSearchParams()
+    
+    if (searchQuery.trim()) {
+      params.set('search', searchQuery.trim())
+    }
+    
+    if (propertyType && propertyTypeMap[propertyType]) {
+      params.set('type', propertyTypeMap[propertyType])
+    }
+    
+    if (location && locationMap[location]) {
+      params.set('location', locationMap[location])
+    }
+    
+    // Navigate to properties page with query parameters
+    const queryString = params.toString()
+    navigate(`/properties${queryString ? `?${queryString}` : ''}`)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
   return (
     <section id="home" style={{ position: 'relative', height: '550px', overflow: 'hidden', }}>
       {/* Background image that matches Figma hero */}
@@ -25,15 +81,21 @@ function Hero() {
           <div className="search-input-wrapper">
             <input 
               type="text" 
-              className="search-input" 
+              className="search-inputs" 
               placeholder="What are you looking for?"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
 
             <div className="search-divider" />
 
-            <select className="search-dropdown">
+            <select 
+              className="search-dropdown"
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+            >
               <option value="">Property Type</option>
-              <option value="search">Search here...</option>
               <option value="condominium">Condominium</option>
               <option value="apartment">Apartment</option>
               <option value="bedspace">Bed Space</option>
@@ -43,21 +105,28 @@ function Hero() {
               
             <div className="search-divider" />
               
-            <select className="search-dropdown">
+            <select 
+              className="search-dropdown"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            >
               <option value="">Location</option>
-              <option value="search">Search here...</option>
-              <option value="abra">Abra</option>
-              <option value="agusan-del-sur">Agusan Del Sur</option>
-              <option value="aklan">Aklan</option>
-              <option value="antique">Antique</option>
-              <option value="apayao">Apayao</option>
-              <option value="manila">Manila</option>
-              <option value="makati">Makati</option>
+              <option value="metro-manila">Metro Manila</option>
+              <option value="makati">Makati City</option>
+              <option value="bgc">BGC</option>
               <option value="quezon">Quezon City</option>
-              <option value="cebu">Cebu</option>
+              <option value="mandaluyong">Mandaluyong</option>
+              <option value="pasig">Pasig</option>
+              <option value="cebu">Cebu City</option>
+              <option value="davao">Davao City</option>
+              <option value="lapulapu">Lapulapu</option>
+              <option value="manila">Manila</option>
             </select>
 
-            <button className="search-button">
+            <button 
+              className="search-button"
+              onClick={handleSearch}
+            >
               <span className="sr-only">Search</span>
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="11" cy="11" r="6" stroke="white" strokeWidth="2.5"/>
