@@ -31,6 +31,10 @@ function PropertyCard({
         src={image}
         alt={title}
         className="property-image"
+        onError={(e) => {
+          // Fallback to default image if the provided image fails to load
+          e.currentTarget.src = '/assets/property-main.png'
+        }}
       />
       <div className="property-content">
         <div className="property-header-row">

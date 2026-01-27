@@ -50,7 +50,7 @@ function Blogs() {
         <div className="blogs-pagination">
           <span className="pagination-dot pagination-dot-active"></span>
           <span className="pagination-dot"></span>
-          <span className="pagination-dot pagination-dot-active-2"></span>
+          <span className="pagination-dot"></span>
           <span className="pagination-dot"></span>
           <span className="pagination-dot"></span>
         </div>
