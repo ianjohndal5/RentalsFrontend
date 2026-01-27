@@ -235,6 +235,7 @@
   border-top: 1px solid #e5e7eb;
   background: #fafafa;
   flex-shrink: 0;
+  gap: 0;
 }
 
 .vertical-property-feature-item {
@@ -245,6 +246,9 @@
   gap: 8px;
   border-right: 1px solid #e5e7eb;
   padding: 12px 8px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .vertical-property-feature-item:last-child {

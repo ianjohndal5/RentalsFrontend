@@ -1,4 +1,4 @@
-import PropertyCard from './PropertyCard'
+import HorizontalPropertyCard from './VerticalPropertyCard'
 import './FeaturedProperties.css'
 
 function FeaturedProperties() {
@@ -22,7 +22,7 @@ function FeaturedProperties() {
       <div className="carousel-wrapper">
         <div className="property-carousel">
           {Array.from({ length: 6 }).map((_, index) => (
-            <PropertyCard key={index} />
+            <HorizontalPropertyCard key={index} />
           ))}
         </div>
       </div>

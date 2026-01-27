@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import PropertyCard from '../components/PropertyCard'
+import VerticalPropertyCard from '../components/VerticalPropertyCard'
+import HorizontalPropertyCard from '../components/HorizontalPropertyCard'
 import './PropertiesForRentPage.css'
 import PageHeader from '../components/PageHeader'
 
@@ -15,6 +16,8 @@ function PropertiesForRentPage() {
   const [priceMax, setPriceMax] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('newest')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 9 // 3 rows x 3 columns
 
   const propertyTypes = ['All Types', 'Condominium', 'Apartment', 'House', 'Bed Space', 'Commercial Spaces', 'Office Spaces', 'Studio', 'TownHouse', 'WareHouse', 'Dormitory', 'Farm Land']
   const locations = ['Metro Manila', 'Makati City', 'BGC', 'Quezon City', 'Mandaluyong', 'Pasig', 'Cebu City', 'Davao City', 'Lapulapu', 'Manila']
@@ -251,16 +254,31 @@ function PropertiesForRentPage() {
     return 0
   })
 
+  // Pagination calculations
+  const totalPages = Math.ceil(sortedProperties.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedProperties = sortedProperties.slice(startIndex, endIndex)
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedLocation, selectedType, minBaths, minBeds, priceMin, priceMax, searchQuery, sortBy])
+
   return (
     <div className="properties-for-rent-page">
       <Navbar />
       {/* Page Header */}
       <PageHeader title="Properties for Rent" />
-
+      <div className="properties-breadcrumbs">
+            <Link to="/" className="breadcrumb-link">Home</Link>
+            <span className="breadcrumb-separator">&gt;</span>
+            <span className="breadcrumb-current">Properties</span>
+          </div>
       {/* Main Content Layout */}
       <main className="properties-main-layout">
         {/* Left Sidebar - Filters & Categories */}
-        <aside className="properties-sidebar">
+        <div className="properties-sidebar">
           {/* Advance Search Section */}
           <div className="advance-search-section">
             <h2 className="section-title">Advance Search</h2>
@@ -377,16 +395,12 @@ function PropertiesForRentPage() {
               ))}
             </ul>
           </div>
-        </aside>
+        </div>
 
         {/* Right Main Content */}
         <div className="properties-main-content">
           {/* Breadcrumbs */}
-          <div className="properties-breadcrumbs">
-            <Link to="/" className="breadcrumb-link">Home</Link>
-            <span className="breadcrumb-separator">&gt;</span>
-            <span className="breadcrumb-current">Properties</span>
-          </div>
+          
 
           {/* Top Search Bar */}
           <div className="top-search-bar-container">
@@ -411,7 +425,7 @@ function PropertiesForRentPage() {
             >
               <option value="price-low">Price Low to High</option>
               <option value="price-high">Price High to Low</option>
-              <option value="newest">Newest</option>
+              <option value="newest">Sort by:</option>
             </select>
             <button 
               className="sort-dropdown-btn"
@@ -432,24 +446,38 @@ function PropertiesForRentPage() {
 
           {/* Properties Grid Container */}
           <div className="properties-content-wrapper">
-            {sortedProperties.length > 0 ? (
-              <div className="properties-grid">
-                {sortedProperties.map(property => (
-                  <PropertyCard
-                    key={property.id}
-                    propertyType={property.propertyType}
-                    date={property.date}
-                    price={property.price}
-                    title={property.title}
-                    image={property.image}
-                    rentManagerName={property.rentManagerName}
-                    rentManagerRole={property.rentManagerRole}
-                    bedrooms={property.bedrooms}
-                    bathrooms={property.bathrooms}
-                    parking={property.parking}
-                  />
-                ))}
-              </div>
+            {paginatedProperties.length > 0 ? (
+              <>
+                <div className="properties-grid">
+                  {paginatedProperties.map(property => (
+                    <VerticalPropertyCard
+                      key={property.id}
+                      propertyType={property.propertyType}
+                      date={property.date}
+                      price={property.price}
+                      title={property.title}
+                      image={property.image}
+                      rentManagerName={property.rentManagerName}
+                      rentManagerRole={property.rentManagerRole}
+                      bedrooms={property.bedrooms}
+                      bathrooms={property.bathrooms}
+                      parking={property.parking}
+                    />
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <div className="properties-pagination">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                      <button
+                        key={index + 1}
+                        className={`pagination-dot ${currentPage === index + 1 ? 'pagination-dot-active' : ''}`}
+                        onClick={() => setCurrentPage(index + 1)}
+                        aria-label={`Go to page ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
               <div className="no-results">
                 <h3 className="no-results-title">No Properties Found</h3>
@@ -461,6 +489,68 @@ function PropertiesForRentPage() {
           </div>
         </div>
       </main>
+
+      {/* Featured Properties Section */}
+      <section className="featured-properties-section">
+        <div className="featured-properties-container">
+          <div className="featured-properties-header">
+            <div>
+              <h2 className="featured-properties-title">Featured Properties</h2>
+              <p className="featured-properties-subtitle">
+                Handpicked properties from our verified agents
+              </p>
+            </div>
+            <a href="#all-properties" className="featured-properties-link">
+              View All Properties <span>→</span>
+            </a>
+          </div>
+        </div>
+        <div className="featured-properties-carousel-wrapper">
+          <div className="featured-properties-carousel">
+            {properties.map(property => (
+              <HorizontalPropertyCard
+                key={property.id}
+                propertyType={property.propertyType}
+                date={property.date}
+                price={property.price}
+                title={property.title}
+                image={property.image}
+                rentManagerName={property.rentManagerName}
+                rentManagerRole={property.rentManagerRole}
+                bedrooms={property.bedrooms}
+                bathrooms={property.bathrooms}
+                parking={property.parking}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Properties for Short-Term Rent Section */}
+      <section className="short-term-rent-section">
+        <div className="short-term-rent-container">
+          <h2 className="short-term-rent-title">Properties for Short-Term Rent</h2>
+        </div>
+        <div className="short-term-carousel-wrapper">
+          <div className="short-term-carousel">
+            {properties.map(property => (
+              <HorizontalPropertyCard
+                key={property.id}
+                propertyType={property.propertyType}
+                date={property.date}
+                price={property.price}
+                title={property.title}
+                image={property.image}
+                rentManagerName={property.rentManagerName}
+                rentManagerRole={property.rentManagerRole}
+                bedrooms={property.bedrooms}
+                bathrooms={property.bathrooms}
+                parking={property.parking}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>

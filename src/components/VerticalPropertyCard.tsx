@@ -1,6 +1,6 @@
-import './PropertyCard.css'
+import './VerticalPropertyCard.css'
 
-interface PropertyCardProps {
+interface VerticalPropertyCardProps {
   propertyType?: string
   date?: string
   price?: string
@@ -13,7 +13,7 @@ interface PropertyCardProps {
   parking?: number
 }
 
-function PropertyCard({
+function VerticalPropertyCard({
   propertyType = 'Commercial Spaces',
   date = 'Sat 05, 2024',
   price = '$1200/Month',
@@ -24,26 +24,28 @@ function PropertyCard({
   bedrooms = 4,
   bathrooms = 2,
   parking = 2,
-}: PropertyCardProps) {
+}: VerticalPropertyCardProps) {
   return (
-    <article className="property-card">
+    <article className="vertical-property-card">
       <img
         src={image}
         alt={title}
-        className="property-image"
+        className="vertical-property-image"
         onError={(e) => {
           // Fallback to default image if the provided image fails to load
           e.currentTarget.src = '/assets/property-main.png'
         }}
       />
-      <div className="property-content">
-        <div className="property-header-row">
-          <p className="property-type">{propertyType}</p>
-          <p className="property-date">{date}</p>
+      <div className="vertical-property-content">
+        <div className="vertical-property-header-row">
+          <p className="vertical-property-type">{propertyType}</p>
+          <p className="vertical-property-date">{date}</p>
         </div>
-        <div className="property-price-row">
-          <p className="property-price">{price}</p>
-          <button className="property-like" aria-label="Add to favorites">
+        <div className="vertical-property-price-row">
+          <p className="vertical-property-price">{price}</p>
+          
+          <div className="vertical-property-contact-icons">
+          <button className="vertical-property-like" aria-label="Add to favorites">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -59,9 +61,6 @@ function PropertyCard({
               />
             </svg>
           </button>
-        </div>
-        <h3 className="property-title">{title}</h3>
-        <div className="property-contact-icons">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="5" width="18" height="14" rx="2" stroke="#205ED7" strokeWidth="2"/>
             <path d="M3 7L12 13L21 7" stroke="#205ED7" strokeWidth="2" strokeLinecap="round"/>
@@ -78,20 +77,23 @@ function PropertyCard({
             <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke="#205ED7" strokeWidth="2"/>
           </svg>
         </div>
-        <div className="rent-manager-badge">
+        </div>
+        <h3 className="vertical-property-title">{title}</h3>
+        
+        <div className="vertical-rent-manager-badge">
           <img
             src="/assets/rental-ph-logo.svg"
             alt="Rentals.ph Official"
-            className="rent-manager-avatar"
+            className="vertical-rent-manager-avatar"
           />
-          <div className="rent-manager-info">
-            <p className="rent-manager-name">{rentManagerName}</p>
-            <p className="rent-manager-role">{rentManagerRole}</p>
+          <div className="vertical-rent-manager-info">
+            <p className="vertical-rent-manager-name">{rentManagerName}</p>
+            <p className="vertical-rent-manager-role">{rentManagerRole}</p>
           </div>
         </div>
       </div>
-      <div className="property-features">
-        <div className="property-feature-item">
+      <div className="vertical-property-features">
+        <div className="vertical-property-feature-item">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 20V14M3 14V4H7L10 7H14V14M3 14H14M14 14V20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             <rect x="5" y="16" width="2" height="2" fill="#6b7280"/>
@@ -99,14 +101,14 @@ function PropertyCard({
           </svg>
           <span>{bedrooms}</span>
         </div>
-        <div className="property-feature-item">
+        <div className="vertical-property-feature-item">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 7H15M9 11H15M9 15H15" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
             <path d="M21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 12.9995 3.16613 13.9581 3.46927 14.85L3 21L9.15 20.5307C10.0419 20.8339 11.0005 21 12 21C16.9706 21 21 16.9706 21 12Z" stroke="#6b7280" strokeWidth="2"/>
           </svg>
           <span>{bathrooms}</span>
         </div>
-        <div className="property-feature-item">
+        <div className="vertical-property-feature-item">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5 17V7C5 5.89543 5.89543 5 7 5H17C18.1046 5 19 5.89543 19 7V17C19 18.1046 18.1046 19 17 19H7C5.89543 19 5 18.1046 5 17Z" stroke="#6b7280" strokeWidth="2"/>
             <path d="M9 12L12 9M12 9L15 12M12 9V15" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
@@ -118,4 +120,4 @@ function PropertyCard({
   )
 }
 
-export default PropertyCard
+export default VerticalPropertyCard

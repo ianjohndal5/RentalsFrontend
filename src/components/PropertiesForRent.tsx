@@ -1,4 +1,4 @@
-import PropertyCard from './PropertyCard'
+import VerticalPropertyCard from './VerticalPropertyCard'
 import './PropertiesForRent.css'
 
 function PropertiesForRent() {
@@ -98,7 +98,7 @@ function PropertiesForRent() {
 
         <div className="property-cards-grid">
           {properties.map((property) => (
-            <PropertyCard
+            <VerticalPropertyCard
               key={property.id}
               propertyType={property.propertyType}
               date={property.date}

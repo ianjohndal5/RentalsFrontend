@@ -1,25 +1,28 @@
 /* =========================
-   VERTICAL PROPERTY CARD CONTAINER
+   HORIZONTAL PROPERTY CARD CONTAINER
 ========================= */
-.vertical-property-card {
+.horizontal-property-card {
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   overflow: hidden;
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   flex-shrink: 0;
+  width: 100%;
+  max-width: 800px;
+  min-height: 280px;
 }
 
-.vertical-property-card:hover {
+.horizontal-property-card:hover {
   transform: translateY(-4px);
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-.vertical-property-card:hover .vertical-property-image {
+.horizontal-property-card:hover .horizontal-property-image {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
@@ -27,9 +30,11 @@
 /* =========================
    IMAGE
 ========================= */
-.vertical-property-image {
-  width: 100%;
-  height: 320px;
+.horizontal-property-image {
+  width: 400px;
+  min-width: 300px;
+  height: 100%;
+  min-height: 280px;
   object-fit: cover;
   object-position: center;
   flex-shrink: 0;
@@ -41,25 +46,26 @@
 /* =========================
    CONTENT
 ========================= */
-.vertical-property-content {
+.horizontal-property-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 18px;
   gap: 8px;
+  min-width: 0;
 }
 
 /* =========================
    HEADER ROW
 ========================= */
-.vertical-property-header-row {
+.horizontal-property-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
 }
 
-.vertical-property-type {
+.horizontal-property-type {
   color: #205ed7;
   font-family: 'Inter', sans-serif;
   font-size: 13px;
@@ -71,7 +77,7 @@
   text-overflow: ellipsis;
 }
 
-.vertical-property-date {
+.horizontal-property-date {
   color: #9ca3af;
   font-family: 'Inter', sans-serif;
   font-size: 12px;
@@ -82,7 +88,7 @@
 /* =========================
    PRICE ROW
 ========================= */
-.vertical-property-price-row {
+.horizontal-property-price-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,7 +96,7 @@
   min-width: 0;
 }
 
-.vertical-property-price {
+.horizontal-property-price {
   color: #205ED7;
   font-family: 'Inter', sans-serif;
   font-size: 24px;
@@ -102,7 +108,7 @@
 }
 
 /* LIKE BUTTON */
-.vertical-property-like {
+.horizontal-property-like {
   width: 31px;
   height: 31px;
   border-radius: 20%;
@@ -115,13 +121,13 @@
   transition: all 0.2s ease;
 }
 
-.vertical-property-like:hover {
+.horizontal-property-like:hover {
   background: #fef2f2;
   border-color: #fca5a5;
   transform: scale(1.05);
 }
 
-.vertical-property-like svg {
+.horizontal-property-like svg {
   width: 18px;
   height: 18px;
 }
@@ -129,7 +135,7 @@
 /* =========================
    TITLE
 ========================= */
-.vertical-property-title {
+.horizontal-property-title {
   color: #111827;
   font-family: 'Inter', sans-serif;
   font-size: 16px;
@@ -147,19 +153,15 @@
 /* =========================
    CONTACT ICONS
 ========================= */
-.vertical-property-contact-icons {
+.horizontal-property-contact-icons {
   display: flex;
   flex-direction: row;
-  align-items: end;
-  position: relative;
-  bottom: 102px;
-  right: calc(10% - 8px);
+  align-items: center;
   gap: 8px;
-  overflow: visible;
   flex-shrink: 0;
 }
 
-.vertical-property-contact-icons svg {
+.horizontal-property-contact-icons svg {
   width: 32px;
   height: 32px;
   cursor: pointer;
@@ -169,7 +171,7 @@
   background: #f3f4f6;
 }
 
-.vertical-property-contact-icons svg:hover {
+.horizontal-property-contact-icons svg:hover {
   transform: translateY(-2px);
   background: #e5e7eb;
 }
@@ -177,17 +179,16 @@
 /* =========================
    RENT MANAGER BADGE
 ========================= */
-.vertical-rent-manager-badge {
+.horizontal-rent-manager-badge {
   display: flex;
   gap: 8px;
   padding: 10px;
   background: #eff6ff;
   border-radius: 8px;
-  margin-top: auto;
   flex-shrink: 0;
 }
 
-.vertical-rent-manager-avatar {
+.horizontal-rent-manager-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -197,14 +198,14 @@
   flex-shrink: 0;
 }
 
-.vertical-rent-manager-info {
+.horizontal-rent-manager-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
 
-.vertical-rent-manager-name {
+.horizontal-rent-manager-name {
   color: #205ed7;
   font-family: 'Inter', sans-serif;
   font-size: 13px;
@@ -215,7 +216,7 @@
   white-space: nowrap;
 }
 
-.vertical-rent-manager-role {
+.horizontal-rent-manager-role {
   color: #60a5fa;
   font-family: 'Inter', sans-serif;
   font-size: 11px;
@@ -226,68 +227,120 @@
 }
 
 /* =========================
-   FEATURES BAR (BOTTOM)
+   FEATURES BAR
 ========================= */
-.vertical-property-features {
+.horizontal-property-features {
   display: flex;
   align-items: center;
-  height: 52px;
+  gap: 0;
+  margin-top: auto;
+  padding-top: 12px;
   border-top: 1px solid #e5e7eb;
-  background: #fafafa;
   flex-shrink: 0;
 }
 
-.vertical-property-feature-item {
+.horizontal-property-feature-item {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   border-right: 1px solid #e5e7eb;
-  padding: 12px 8px;
+  padding: 8px;
+  width: 100%;
+  min-width: 0;
 }
 
-.vertical-property-feature-item:last-child {
+.horizontal-property-feature-item:last-child {
   border-right: none;
 }
 
-.vertical-property-feature-item svg {
+.horizontal-property-feature-item svg {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 }
 
-.vertical-property-feature-item span {
+.horizontal-property-feature-item span {
   color: #374151;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 600;
 }
 
-/* Responsive adjustments - Keep vertical layout on all screen sizes */
-@media (max-width: 768px) { 
-  .vertical-property-card {
-    max-width: 100%;
-    width: 100%;
-    height: auto;
-    min-height: 520px;
-    flex-direction: column;
+/* Responsive adjustments - Keep horizontal layout on all screen sizes */
+@media (max-width: 768px) {
+  .horizontal-property-card {
+    flex-direction: row;
+    min-height: 240px;
   }
   
-  .vertical-property-image {
-    height: 280px;
+  .horizontal-property-image {
+    width: 250px;
+    min-width: 200px;
+    min-height: 240px;
   }
   
-  .vertical-property-content {
-    padding: 16px;
-    gap: 8px;
+  .horizontal-property-content {
+    padding: 14px;
+    gap: 6px;
   }
   
-  .vertical-property-price {
-    font-size: 22px;
+  .horizontal-property-price {
+    font-size: 20px;
   }
   
-  .vertical-property-title {
-    font-size: 15px;
+  .horizontal-property-title {
+    font-size: 14px;
+  }
+
+  .horizontal-property-features {
+    gap: 12px;
   }
 }
+
+@media (max-width: 480px) {
+  .horizontal-property-card {
+    flex-direction: row;
+    min-height: 200px;
+  }
+  
+  .horizontal-property-image {
+    width: 180px;
+    min-width: 150px;
+    min-height: 200px;
+  }
+  
+  .horizontal-property-content {
+    padding: 12px;
+    gap: 4px;
+  }
+  
+  .horizontal-property-price {
+    font-size: 18px;
+  }
+  
+  .horizontal-property-title {
+    font-size: 13px;
+    max-height: 36px;
+  }
+
+  .horizontal-property-features {
+    gap: 8px;
+    padding-top: 8px;
+  }
+
+  .horizontal-property-feature-item {
+    gap: 4px;
+  }
+
+  .horizontal-property-feature-item svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .horizontal-property-feature-item span {
+    font-size: 13px;
+  }
+}
+
