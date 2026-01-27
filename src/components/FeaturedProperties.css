@@ -1,0 +1,148 @@
+/* SECTION */
+.featured-section {
+  background-color: #ffffff;
+  padding: 10px 0 50px 0;
+  border-top: none;
+  overflow: hidden;
+}
+
+/* CONTAINER */
+.featured-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 80px;
+}
+
+/* HEADER */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+
+.section-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+  line-height: 1.11;
+  letter-spacing: -0.0138em;
+}
+
+.section-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #4B5563;
+  line-height: 1.33;
+  letter-spacing: -0.0278em;
+}
+
+/* LINK */
+.section-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #205ED7;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.03125em;
+}
+
+.section-link:hover {
+  color: #FE8E0A;
+}
+
+/* CAROUSEL WRAPPER - FULL BLEED */
+.carousel-wrapper {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+}
+
+/* CAROUSEL CONTAINER */
+.property-carousel {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 20px 80px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.property-carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.property-carousel::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.property-carousel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.property-carousel::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.property-carousel > * {
+  scroll-snap-align: start;
+}
+
+.section-subheader {
+  margin-top: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .featured-container {
+    padding: 0 40px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .property-carousel {
+    padding: 20px 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .featured-container {
+    padding: 0 20px;
+  }
+
+  .featured-section {
+    padding: 60px 0;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .section-subtitle {
+    font-size: 16px;
+  }
+
+  .property-carousel {
+    padding: 20px 20px;
+    gap: 16px;
+  }
+}

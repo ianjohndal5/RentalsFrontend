@@ -1,0 +1,36 @@
+    /* Navigation */
+    .navbar-container {
+      position: relative;
+      z-index: 10;
+      padding: 20px 80px;
+    }
+
+    .nav-link {
+      color: #205ed7;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      margin-right: 30px;
+    }
+
+    .nav-link.active {
+      font-weight: 700;
+    }
+
+    .login-button {
+      background: #fe8e0a;
+      border-radius: 10px;
+      border: 1px solid #fe8e0a;
+      color: #ffffff;
+      padding: 0 20px;
+      height: 48px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
