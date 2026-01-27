@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PropertyCard from '../components/PropertyCard'
@@ -316,7 +317,27 @@ function PropertiesForRentPage() {
 
             <div className="filter-group price-range-group">
               <label className="price-range-label">Price Range</label>
-              <div className="price-range-slider-container">
+              <div className="price-range-inputs-container">
+                <div className="price-range-inputs">
+                  <input 
+                    type="text" 
+                    className="price-input"
+                    placeholder="T"
+                    value={priceMin}
+                    onChange={(e) => setPriceMin(e.target.value)}
+                  />
+                  <div className="price-range-separator">
+                    <span>T</span>
+                    <span>o</span>
+                  </div>
+                  <input 
+                    type="text" 
+                    className="price-input"
+                    placeholder="O"
+                    value={priceMax}
+                    onChange={(e) => setPriceMax(e.target.value)}
+                  />
+                </div>
                 <input 
                   type="range" 
                   min="0" 
@@ -326,22 +347,6 @@ function PropertiesForRentPage() {
                   onChange={(e) => setPriceMin(e.target.value)}
                   className="price-range-slider"
                 />
-                <div className="price-range-inputs">
-                  <input 
-                    type="text" 
-                    className="price-input"
-                    placeholder="T"
-                    value={priceMin}
-                    onChange={(e) => setPriceMin(e.target.value)}
-                  />
-                  <input 
-                    type="text" 
-                    className="price-input"
-                    placeholder="O"
-                    value={priceMax}
-                    onChange={(e) => setPriceMax(e.target.value)}
-                  />
-                </div>
               </div>
             </div>
 
@@ -376,8 +381,16 @@ function PropertiesForRentPage() {
 
         {/* Right Main Content */}
         <div className="properties-main-content">
+          {/* Breadcrumbs */}
+          <div className="properties-breadcrumbs">
+            <Link to="/" className="breadcrumb-link">Home</Link>
+            <span className="breadcrumb-separator">&gt;</span>
+            <span className="breadcrumb-current">Properties</span>
+          </div>
+
           {/* Top Search Bar */}
-          <div className="top-search-bar">
+          <div className="top-search-bar-container">
+            <div className="top-search-bar">
             <div className="search-input-container">
               <svg className="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="11" cy="11" r="8" stroke="#666" strokeWidth="2"/>
@@ -415,34 +428,37 @@ function PropertiesForRentPage() {
               </svg>
             </button>
           </div>
+          </div>
 
-          {/* Properties Grid */}
-          {sortedProperties.length > 0 ? (
-            <div className="properties-grid">
-              {sortedProperties.map(property => (
-                <PropertyCard
-                  key={property.id}
-                  propertyType={property.propertyType}
-                  date={property.date}
-                  price={property.price}
-                  title={property.title}
-                  image={property.image}
-                  rentManagerName={property.rentManagerName}
-                  rentManagerRole={property.rentManagerRole}
-                  bedrooms={property.bedrooms}
-                  bathrooms={property.bathrooms}
-                  parking={property.parking}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="no-results">
-              <h3 className="no-results-title">No Properties Found</h3>
-              <p className="no-results-text">
-                Try adjusting your filters to see more properties
-              </p>
-            </div>
-          )}
+          {/* Properties Grid Container */}
+          <div className="properties-content-wrapper">
+            {sortedProperties.length > 0 ? (
+              <div className="properties-grid">
+                {sortedProperties.map(property => (
+                  <PropertyCard
+                    key={property.id}
+                    propertyType={property.propertyType}
+                    date={property.date}
+                    price={property.price}
+                    title={property.title}
+                    image={property.image}
+                    rentManagerName={property.rentManagerName}
+                    rentManagerRole={property.rentManagerRole}
+                    bedrooms={property.bedrooms}
+                    bathrooms={property.bathrooms}
+                    parking={property.parking}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="no-results">
+                <h3 className="no-results-title">No Properties Found</h3>
+                <p className="no-results-text">
+                  Try adjusting your filters to see more properties
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </main>
 
