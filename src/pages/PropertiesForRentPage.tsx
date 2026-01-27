@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import VerticalPropertyCard from '../components/VerticalPropertyCard'
@@ -8,6 +8,7 @@ import './PropertiesForRentPage.css'
 import PageHeader from '../components/PageHeader'
 
 function PropertiesForRentPage() {
+  const [searchParams] = useSearchParams()
   const [selectedLocation, setSelectedLocation] = useState('')
   const [selectedType, setSelectedType] = useState('All Types')
   const [minBaths, setMinBaths] = useState('')
@@ -19,6 +20,23 @@ function PropertiesForRentPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<'horizontal' | 'vertical'>('vertical') // 'horizontal' for hamburger, 'vertical' for grid
   const itemsPerPage = 9 // 3 rows x 3 columns
+
+  // Initialize state from URL query parameters
+  useEffect(() => {
+    const searchParam = searchParams.get('search')
+    const typeParam = searchParams.get('type')
+    const locationParam = searchParams.get('location')
+
+    if (searchParam) {
+      setSearchQuery(searchParam)
+    }
+    if (typeParam) {
+      setSelectedType(typeParam)
+    }
+    if (locationParam) {
+      setSelectedLocation(locationParam)
+    }
+  }, [searchParams])
 
   const propertyTypes = ['All Types', 'Condominium', 'Apartment', 'House', 'Bed Space', 'Commercial Spaces', 'Office Spaces', 'Studio', 'TownHouse', 'WareHouse', 'Dormitory', 'Farm Land']
   const locations = ['Metro Manila', 'Makati City', 'BGC', 'Quezon City', 'Mandaluyong', 'Pasig', 'Cebu City', 'Davao City', 'Lapulapu', 'Manila']
@@ -250,7 +268,11 @@ function PropertiesForRentPage() {
       const priceB = parseInt(b.price.replace(/[^0-9]/g, ''))
       return priceB - priceA
     } else if (sortBy === 'newest') {
+      // Newest to oldest (most recent first)
       return new Date(b.date).getTime() - new Date(a.date).getTime()
+    } else if (sortBy === 'oldest') {
+      // Oldest to newest (oldest first)
+      return new Date(a.date).getTime() - new Date(b.date).getTime()
     }
     return 0
   })
@@ -271,11 +293,7 @@ function PropertiesForRentPage() {
       <Navbar />
       {/* Page Header */}
       <PageHeader title="Properties for Rent" />
-      <div className="properties-breadcrumbs">
-            <Link to="/" className="breadcrumb-link">Home</Link>
-            <span className="breadcrumb-separator">&gt;</span>
-            <span className="breadcrumb-current">Properties</span>
-          </div>
+      
       {/* Main Content Layout */}
       <main className="properties-main-layout">
         {/* Left Sidebar - Filters & Categories */}
@@ -346,8 +364,7 @@ function PropertiesForRentPage() {
                     onChange={(e) => setPriceMin(e.target.value)}
                   />
                   <div className="price-range-separator">
-                    <span>T</span>
-                    <span>o</span>
+                    <span>To</span>
                   </div>
                   <input 
                     type="text" 
@@ -368,8 +385,6 @@ function PropertiesForRentPage() {
                 />
               </div>
             </div>
-
-            <button className="apply-filter-btn">Apply</button>
           </div>
 
           {/* List by Categories Section */}
@@ -426,17 +441,9 @@ function PropertiesForRentPage() {
             >
               <option value="price-low">Price Low to High</option>
               <option value="price-high">Price High to Low</option>
-              <option value="newest">Sort by:</option>
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
             </select>
-            <button 
-              className="sort-dropdown-btn"
-              onClick={() => setSortBy('newest')}
-            >
-              Newest
-              <svg style={{ marginLeft: '8px', display: 'inline-block' }} width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L6 6L11 1" stroke="#666666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
             <button 
               className="hamburger-menu-btn" 
               aria-label="Menu"
@@ -483,6 +490,7 @@ function PropertiesForRentPage() {
                         bedrooms={property.bedrooms}
                         bathrooms={property.bathrooms}
                         parking={property.parking}
+                        propertySize={`${(property.bedrooms * 15 + property.bathrooms * 5)} sqft`}
                       />
                     ) : (
                       <VerticalPropertyCard
@@ -498,6 +506,7 @@ function PropertiesForRentPage() {
                         bedrooms={property.bedrooms}
                         bathrooms={property.bathrooms}
                         parking={property.parking}
+                        propertySize={`${(property.bedrooms * 15 + property.bathrooms * 5)} sqft`}
                       />
                     )
                   )}

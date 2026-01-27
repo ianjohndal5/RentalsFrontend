@@ -249,23 +249,73 @@
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  position: relative;
+  cursor: help;
 }
 
 .vertical-property-feature-item:last-child {
   border-right: none;
 }
 
+.feature-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .vertical-property-feature-item svg {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
-.vertical-property-feature-item span {
+.vertical-property-feature-item:hover svg {
+  transform: scale(1.1);
+}
+
+.vertical-property-feature-item span:not(.feature-tooltip) {
   color: #374151;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 600;
+}
+
+/* Tooltip styling */
+.feature-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: #111827;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1000;
+  margin-bottom: 4px;
+}
+
+.feature-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #111827;
+}
+
+.vertical-property-feature-item:hover .feature-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Responsive adjustments - Keep vertical layout on all screen sizes */

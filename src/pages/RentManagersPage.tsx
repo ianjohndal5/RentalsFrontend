@@ -73,11 +73,7 @@ function RentManagersPage() {
       <PageHeader title="RENT MANAGERS" />
 
       {/* Breadcrumb */}
-      <div className="properties-breadcrumbs">
-        <Link to="/" className="breadcrumb-link">Home</Link>
-        <span className="breadcrumb-separator">&gt;</span>
-        <span className="breadcrumb-current">Rent Managers</span>
-      </div>
+      
 
       {/* Main Content */}
       <main className="managers-main-content">

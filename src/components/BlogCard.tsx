@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './BlogCard.css'
 
 interface BlogCardProps {
@@ -24,7 +25,8 @@ function BlogCard({
   size = 'small',
 }: BlogCardProps) {
   return (
-    <article className={`blog-card blog-card-${size}`}>
+    <Link to={link} style={{ textDecoration: 'none', display: 'block' }}>
+      <article className={`blog-card blog-card-${size}`}>
       {size === 'large' ? (
         <>
           <img
@@ -55,12 +57,12 @@ function BlogCard({
               </div>
             </div>
             <div className="blog-read-more-wrapper">
-              <a href={link} className={`read-more-link read-more-${size}`}>
+              <span className={`read-more-link read-more-${size}`}>
                 Read More
                 <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 1L19 8.5L12 16M19 8.5H1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </a>
+              </span>
             </div>
           </div>
         </>
@@ -94,17 +96,18 @@ function BlogCard({
               </div>
             </div>
             <div className="blog-read-more-wrapper">
-              <a href={link} className={`read-more-link read-more-${size}`}>
+              <span className={`read-more-link read-more-${size}`}>
                 Read More
                 <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 1L19 8.5L12 16M19 8.5H1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </a>
+              </span>
             </div>
           </div>
         </>
       )}
     </article>
+    </Link>
   )
 }
 

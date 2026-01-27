@@ -5,5 +5,7 @@ export { default as PropertyDetailsPage } from './PropertyDetailsPage'
 export { default as RentManagersPage } from './RentManagersPage'
 export { default as RentManagerDetailsPage } from './RentManagerDetailsPage'
 export { default as BlogPage } from './BlogPage'
+export { default as BlogDetailsPage } from './BlogDetailsPage'
+export { default as NewsPage } from './NewsPage'
 export { default as ContactUsPage } from './ContactUsPage'
 

@@ -6,9 +6,9 @@
 }
 
 .blogs-container {
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 104px;
+  padding: 0 80px;
 }
 
 /* Section Header */
@@ -116,5 +116,26 @@
   background: #205ed7;
   width: 12px;
   height: 12px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .blogs-container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .blogs-container {
+    padding: 0 20px;
+  }
+
+  .blogs-section .section-title {
+    font-size: 28px;
+  }
+
+  .blogs-section .section-subtitle {
+    font-size: 16px;
+  }
 }
 

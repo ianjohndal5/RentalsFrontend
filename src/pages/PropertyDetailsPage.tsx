@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import PageHeader from '../components/PageHeader'
 import VerticalPropertyCard from '../components/VerticalPropertyCard'
 import './PropertyDetailsPage.css'
 
@@ -32,8 +33,8 @@ function PropertyDetailsPage() {
     fullDescription: `Solinea is an Alveo multi-tower development in Cebu City that offers a master-planned city resort living environment. The development features landscaped parks, kid's play areas, a multi-experiential pool, a clubhouse with a gym, function room, and game room. It also includes upscale retail shops and restaurants. The property is strategically located near major business districts and offers easy access to transportation hubs.`,
     images: [
       '/assets/property-main.png',
-      '/assets/property-1.jpg',
-      '/assets/property-2.jpg'
+      '/assets/property-main.png',
+      '/assets/property-main.png'
     ],
     rentManager: {
       name: 'Jonathan And...',
@@ -64,7 +65,8 @@ function PropertyDetailsPage() {
       rentManagerRole: 'Rent Manager',
       bedrooms: 4,
       bathrooms: 2,
-      parking: 2
+      parking: 2,
+      propertySize: '24 sqft'
     },
     {
       id: 3,
@@ -77,7 +79,8 @@ function PropertyDetailsPage() {
       rentManagerRole: 'Senior Rent Manager',
       bedrooms: 2,
       bathrooms: 2,
-      parking: 1
+      parking: 1,
+      propertySize: '45 sqft'
     },
     {
       id: 4,
@@ -90,7 +93,8 @@ function PropertyDetailsPage() {
       rentManagerRole: 'Property Specialist',
       bedrooms: 1,
       bathrooms: 1,
-      parking: 0
+      parking: 0,
+      propertySize: '28 sqft'
     }
   ]
 
@@ -113,13 +117,8 @@ function PropertyDetailsPage() {
     <div className="property-details-page">
       <Navbar />
       
-      {/* Property Details Banner */}
-      <div className="property-details-banner">
-        <div className="property-details-banner-content">
-          <h1 className="property-details-banner-title">PROPERTY DETAILS</h1>
-          <div className="property-details-banner-accent"></div>
-        </div>
-      </div>
+      {/* Page Header */}
+      <PageHeader title="Property Details" />
 
       {/* Breadcrumbs */}
       <div className="property-details-breadcrumbs">
@@ -347,6 +346,7 @@ function PropertyDetailsPage() {
                   bedrooms={prop.bedrooms}
                   bathrooms={prop.bathrooms}
                   parking={prop.parking}
+                  propertySize={prop.propertySize}
                 />
               </div>
             ))}

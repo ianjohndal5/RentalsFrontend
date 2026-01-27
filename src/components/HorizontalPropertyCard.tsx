@@ -13,6 +13,7 @@ interface HorizontalPropertyCardProps {
   bedrooms?: number
   bathrooms?: number
   parking?: number
+  propertySize?: string
 }
 
 function HorizontalPropertyCard({
@@ -27,6 +28,7 @@ function HorizontalPropertyCard({
   bedrooms = 4,
   bathrooms = 2,
   parking = 2,
+  propertySize = '24 sqft',
 }: HorizontalPropertyCardProps) {
   const navigate = useNavigate()
 
@@ -109,27 +111,46 @@ function HorizontalPropertyCard({
           </div>
         </div>
         <div className="horizontal-property-features">
-          <div className="horizontal-property-feature-item">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 20V14M3 14V4H7L10 7H14V14M3 14H14M14 14V20" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <rect x="5" y="16" width="2" height="2" fill="#6b7280"/>
-              <rect x="9" y="16" width="2" height="2" fill="#6b7280"/>
-            </svg>
+          <div className="horizontal-property-feature-item" title="Bedrooms">
+            <div className="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3H5C3.89543 3 3 3.89543 3 5Z" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 9H21" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M7 13H7.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M11 13H11.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M15 13H15.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M19 13H19.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="feature-tooltip">Bedrooms</span>
+            </div>
             <span>{bedrooms}</span>
           </div>
-          <div className="horizontal-property-feature-item">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 7H15M9 11H15M9 15H15" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 12.9995 3.16613 13.9581 3.46927 14.85L3 21L9.15 20.5307C10.0419 20.8339 11.0005 21 12 21C16.9706 21 21 16.9706 21 12Z" stroke="#6b7280" strokeWidth="2"/>
-            </svg>
+          <div className="horizontal-property-feature-item" title="Bathrooms">
+            <div className="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 2V6M16 2V6" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M3 6H21C22.1046 6 23 6.89543 23 8V20C23 21.1046 22.1046 22 21 22H3C1.89543 22 1 21.1046 1 20V8C1 6.89543 1.89543 6 3 6Z" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M6 12H6.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 12H18.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M6 16H6.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 16H18.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="feature-tooltip">Bathrooms</span>
+            </div>
             <span>{bathrooms}</span>
           </div>
-          <div className="horizontal-property-feature-item">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 17V7C5 5.89543 5.89543 5 7 5H17C18.1046 5 19 5.89543 19 7V17C19 18.1046 18.1046 19 17 19H7C5.89543 19 5 18.1046 5 17Z" stroke="#6b7280" strokeWidth="2"/>
-              <path d="M9 12L12 9M12 9L15 12M12 9V15" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-            <span>{parking}</span>
+          <div className="horizontal-property-feature-item" title="Property Size">
+            <div className="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3H21V21H3V3Z" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 9H21" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M9 3V21" stroke="#6b7280" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12 9H12.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 15H12.01" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="feature-tooltip">Property Size</span>
+            </div>
+            <span>{propertySize}</span>
           </div>
         </div>
       </div>

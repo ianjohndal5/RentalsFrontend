@@ -6,6 +6,12 @@
   min-height: auto;
 }
 
+.testimonials-section .max-w-6xl {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 80px;
+}
+
 .testimonials-title {
   color: #111827;
   font-family: 'Inter', sans-serif;
@@ -59,5 +65,26 @@
   background: #205ed7;
   width: 12px;
   height: 12px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .testimonials-section .max-w-6xl {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .testimonials-section .max-w-6xl {
+    padding: 0 20px;
+  }
+
+  .testimonials-title {
+    font-size: 28px;
+  }
+
+  .testimonials-section .section-subtitle {
+    font-size: 16px;
+  }
 }
 
