@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import React, { useState, useRef } from 'react'
+import { registerAgent, type AgentRegistrationData } from '../services/api'
 import './RegisterModal.css'
 
 interface RegisterModalProps {
@@ -8,7 +9,13 @@ interface RegisterModalProps {
 
 function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
   const [currentStep, setCurrentStep] = useState(1)
-  const [formData, setFormData] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [licenseFile, setLicenseFile] = useState<File | null>(null)
+  const [fileName, setFileName] = useState<string>('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [formData, setFormData] = useState<Omit<AgentRegistrationData, 'licenseType'> & { licenseType: string }>({
     // Step 1 - Personal Information
     firstName: '',
     lastName: '',
@@ -42,7 +49,120 @@ function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
     }))
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      // Validate file type
+      const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png']
+      if (!validTypes.includes(file.type)) {
+        setSubmitError('Invalid file type. Please upload PDF, JPG, or PNG file.')
+        return
+      }
+      // Validate file size (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        setSubmitError('File size exceeds 10MB limit.')
+        return
+      }
+      setLicenseFile(file)
+      setFileName(file.name)
+      setSubmitError(null)
+    }
+  }
+
+  const handleFileUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const file = e.dataTransfer.files?.[0]
+    if (file) {
+      const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png']
+      if (!validTypes.includes(file.type)) {
+        setSubmitError('Invalid file type. Please upload PDF, JPG, or PNG file.')
+        return
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        setSubmitError('File size exceeds 10MB limit.')
+        return
+      }
+      setLicenseFile(file)
+      setFileName(file.name)
+      setSubmitError(null)
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+
+  const validateStep1 = (): boolean => {
+    const errors: string[] = []
+    
+    if (!formData.firstName.trim()) {
+      errors.push('First name is required')
+    }
+    if (!formData.lastName.trim()) {
+      errors.push('Last name is required')
+    }
+    if (!formData.email.trim()) {
+      errors.push('Email is required')
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.push('Please enter a valid email address')
+    }
+    if (!formData.password.trim()) {
+      errors.push('Password is required')
+    } else if (formData.password.length < 8) {
+      errors.push('Password must be at least 8 characters')
+    }
+    if (!formData.phone || !formData.phone.trim()) {
+      errors.push('Phone number is required')
+    }
+    if (!formData.dateOfBirth) {
+      errors.push('Date of birth is required')
+    }
+    
+    if (errors.length > 0) {
+      setSubmitError(errors.join(', '))
+      return false
+    }
+    
+    setSubmitError(null)
+    return true
+  }
+
+  const validateStep2 = (): boolean => {
+    // Step 2 fields are all optional, so it's always valid
+    // But we can add validation if needed in the future
+    setSubmitError(null)
+    return true
+  }
+
   const handleNext = () => {
+    // Clear any previous errors
+    setSubmitError(null)
+    
+    if (currentStep === 1) {
+      if (!validateStep1()) {
+        // Scroll to top to show error message
+        const modalContent = document.querySelector('.register-modal-content')
+        if (modalContent) {
+          modalContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+        return // Don't proceed if validation fails
+      }
+    } else if (currentStep === 2) {
+      if (!validateStep2()) {
+        // Scroll to top to show error message
+        const modalContent = document.querySelector('.register-modal-content')
+        if (modalContent) {
+          modalContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+        return // Don't proceed if validation fails
+      }
+    }
+    
+    // If validation passes, proceed to next step
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1)
     }
@@ -54,10 +174,120 @@ function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Handle submission logic here
+    setIsSubmitting(true)
+    setSubmitError(null)
+    setSubmitSuccess(false)
+
+    try {
+      // Validate licenseType before submitting
+      if (formData.licenseType !== 'broker' && formData.licenseType !== 'salesperson') {
+        setSubmitError('Please select a valid license type.')
+        setIsSubmitting(false)
+        return
+      }
+
+      // Validate file upload
+      if (!licenseFile) {
+        setSubmitError('Please upload your PRC License Copy.')
+        setIsSubmitting(false)
+        return
+      }
+
+      const registrationData: AgentRegistrationData = {
+        ...formData,
+        licenseType: formData.licenseType as 'broker' | 'salesperson',
+      }
+
+      const response = await registerAgent(registrationData, licenseFile)
+      
+      if (response.success) {
+        setSubmitSuccess(true)
+        // Reset form after successful submission
+        setTimeout(() => {
+          setFormData({
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            phone: '',
+            dateOfBirth: '',
+            agencyName: '',
+            officeAddress: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            prcLicenseNumber: '',
+            licenseType: '',
+            expirationDate: '',
+            yearsOfExperience: '',
+            agreeToTerms: false,
+          })
+          setLicenseFile(null)
+          setFileName('')
+          setCurrentStep(1)
+          setSubmitSuccess(false)
+          onClose()
+        }, 3000)
+      } else {
+        setSubmitError(response.message || 'Registration failed. Please try again.')
+      }
+    } catch (error: any) {
+      console.error('Registration error:', error)
+      console.error('Error response:', error.response)
+      console.error('Error message:', error.message)
+      
+      // Handle network errors
+      if (!error.response) {
+        setSubmitError('Network error: Unable to connect to server. Please check if the backend server is running.')
+        setIsSubmitting(false)
+        return
+      }
+      
+      // Handle validation errors (422)
+      if (error.response?.status === 422 && error.response?.data?.errors) {
+        const errors = error.response.data.errors
+        const errorMessages = Object.values(errors).flat().join(', ')
+        setSubmitError(errorMessages)
+      } 
+      // Handle server errors (500)
+      else if (error.response?.status === 500) {
+        const errorData = error.response?.data
+        let errorMessage = 'Server error occurred. Please try again later.'
+        
+        // Try to get the actual error message
+        if (errorData?.error) {
+          errorMessage = errorData.error
+        } else if (errorData?.message) {
+          errorMessage = errorData.message
+        }
+        
+        // Show more helpful messages for common errors
+        if (errorMessage.includes('Base table or view not found') || errorMessage.includes('table not found')) {
+          errorMessage = 'Database table not found. Please run: php artisan migrate'
+        } else if (errorMessage.includes('Unknown column')) {
+          errorMessage = 'Database column mismatch. Please check your migration.'
+        } else if (errorMessage.includes('Connection refused') || errorMessage.includes('Access denied')) {
+          errorMessage = 'Database connection failed. Please check your database credentials.'
+        }
+        
+        setSubmitError(`Server error: ${errorMessage}`)
+      }
+      // Handle other errors
+      else if (error.response?.data?.message) {
+        setSubmitError(error.response.data.message)
+      } 
+      // Handle other status codes
+      else if (error.response?.status) {
+        setSubmitError(`Error ${error.response.status}: ${error.message || 'An error occurred. Please try again.'}`)
+      }
+      else {
+        setSubmitError(error.message || 'An error occurred. Please try again.')
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -85,6 +315,34 @@ function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
         <div className="register-modal-content">
           <h2 className="register-title">Agent Registration</h2>
           <p className="register-subtitle">Join our network of certified real estate professionals</p>
+
+          {/* Success Message */}
+          {submitSuccess && (
+            <div className="alert alert-success" style={{ 
+              padding: '12px 16px', 
+              marginBottom: '20px', 
+              backgroundColor: '#d4edda', 
+              color: '#155724', 
+              borderRadius: '4px',
+              border: '1px solid #c3e6cb'
+            }}>
+              Registration successful! Your application is pending approval. This window will close shortly.
+            </div>
+          )}
+
+          {/* Error Message */}
+          {submitError && (
+            <div className="alert alert-error" style={{ 
+              padding: '12px 16px', 
+              marginBottom: '20px', 
+              backgroundColor: '#f8d7da', 
+              color: '#721c24', 
+              borderRadius: '4px',
+              border: '1px solid #f5c6cb'
+            }}>
+              {submitError}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="register-form">
             {/* Step 1 - Personal Information */}
@@ -318,13 +576,39 @@ function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="upload">Upload PRC License Copy *</label>
-                      <div className="file-upload">
-                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                          <path d="M24 32V16M24 16L18 22M24 16L30 22M38 32V38C38 39.1046 37.1046 40 36 40H12C10.8954 40 10 39.1046 10 38V32" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        <p className="upload-text">Click to upload or drag and drop</p>
-                        <p className="upload-hint">PDF, JPG, PNG up to 10MB</p>
+                      <label htmlFor="licenseDocument">Upload PRC License Copy *</label>
+                      <input
+                        type="file"
+                        id="licenseDocument"
+                        ref={fileInputRef}
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                      />
+                      <div 
+                        className="file-upload"
+                        onClick={handleFileUploadClick}
+                        onDrop={handleFileDrop}
+                        onDragOver={handleDragOver}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {fileName ? (
+                          <div style={{ textAlign: 'center' }}>
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style={{ marginBottom: '8px' }}>
+                              <path d="M14 18L24 8L34 18M24 8V32" stroke="#205ED7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <p className="upload-text" style={{ color: '#205ED7', fontWeight: '600' }}>{fileName}</p>
+                            <p className="upload-hint" style={{ fontSize: '12px', marginTop: '4px' }}>Click to change file</p>
+                          </div>
+                        ) : (
+                          <>
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                              <path d="M24 32V16M24 16L18 22M24 16L30 22M38 32V38C38 39.1046 37.1046 40 36 40H12C10.8954 40 10 39.1046 10 38V32" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <p className="upload-text">Click to upload or drag and drop</p>
+                            <p className="upload-hint">PDF, JPG, PNG up to 10MB</p>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -389,8 +673,12 @@ function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
                   <button type="button" className="btn-secondary" onClick={onClose}>
                     Cancel
                   </button>
-                  <button type="submit" className="btn-primary">
-                    Submit Application
+                  <button 
+                    type="submit" 
+                    className="btn-primary"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Application'}
                   </button>
                 </>
               )}
