@@ -22,6 +22,7 @@ class Blog extends Model
 
     protected $casts = [
         'published_at' => 'datetime',
+        'read_time' => 'integer',
     ];
 }
 

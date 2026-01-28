@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { registerAgent, type AgentRegistrationData } from '../services/api'
+import { agentsApi, type AgentRegistrationData } from '../api'
 import './RegisterModal.css'
 
 interface RegisterModalProps {
@@ -200,7 +200,7 @@ function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
         licenseType: formData.licenseType as 'broker' | 'salesperson',
       }
 
-      const response = await registerAgent(registrationData, licenseFile)
+      const response = await agentsApi.register(registrationData, licenseFile || undefined)
       
       if (response.success) {
         setSubmitSuccess(true)

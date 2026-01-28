@@ -26,8 +26,20 @@ class BlogController extends Controller
     )]
     public function index()
     {
-        $blogs = Blog::latest()->take(10)->get();
-        return response()->json($blogs);
+        try {
+            $blogs = Blog::orderBy('created_at', 'desc')
+                ->take(10)
+                ->get();
+            
+            return response()->json($blogs);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching blogs: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
+            return response()->json([
+                'error' => 'Failed to fetch blogs',
+                'message' => config('app.debug') ? $e->getMessage() : 'An error occurred'
+            ], 500);
+        }
     }
 
     #[OA\Get(
