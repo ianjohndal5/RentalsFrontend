@@ -8,4 +8,8 @@ export { default as BlogPage } from './BlogPage'
 export { default as BlogDetailsPage } from './BlogDetailsPage'
 export { default as NewsPage } from './NewsPage'
 export { default as ContactUsPage } from './ContactUsPage'
+export { default as AdminDashboard } from './AdminDashboard'
+export { default as AgentsPage } from './AgentsPage'
+export { default as PropertiesPage } from './PropertiesPage'
+export { default as RevenuePage } from './RevenuePage'
 

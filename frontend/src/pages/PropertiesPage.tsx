@@ -1,0 +1,244 @@
+import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { 
+  FiBarChart2, 
+  FiUsers, 
+  FiDollarSign,
+  FiBell,
+  FiLayers
+} from 'react-icons/fi'
+import './AdminDashboard.css'
+
+interface Property {
+  id: string
+  propertyId: string
+  propertyName: string
+  type: string
+  location: string
+  status: 'published' | 'draft' | 'occupied' | 'under-review'
+  dateCreated: string
+}
+
+function PropertiesPage() {
+  const location = useLocation()
+  const [activeNav, setActiveNav] = useState('properties')
+  const [filter, setFilter] = useState('all')
+
+  useEffect(() => {
+    if (location.pathname.includes('/agents')) setActiveNav('agents')
+    else if (location.pathname.includes('/properties')) setActiveNav('properties')
+    else if (location.pathname.includes('/revenue')) setActiveNav('revenue')
+    else if (location.pathname === '/admin') setActiveNav('dashboard')
+  }, [location.pathname])
+
+  // Property data matching the image
+  const properties: Property[] = [
+    {
+      id: '1',
+      propertyId: 'PROP-502',
+      propertyName: 'Skyline Studio',
+      type: 'Condominium',
+      location: 'Barangay Bel-Air',
+      status: 'published',
+      dateCreated: '12-8-2025'
+    },
+    {
+      id: '2',
+      propertyId: 'PROP-512',
+      propertyName: 'Highrise Complex',
+      type: 'Condominium',
+      location: 'Barangay Guadalupe',
+      status: 'draft',
+      dateCreated: '11-4-2025'
+    },
+    {
+      id: '3',
+      propertyId: 'PROP-546',
+      propertyName: 'Reach Front',
+      type: 'Apartment',
+      location: 'Barangay Batasan',
+      status: 'occupied',
+      dateCreated: '10-27-2025'
+    },
+    {
+      id: '4',
+      propertyId: 'PROP-509',
+      propertyName: 'Between Edges Co.',
+      type: 'Condominium',
+      location: 'Barangay Lahug',
+      status: 'under-review',
+      dateCreated: '8-19-2025'
+    }
+  ]
+
+  const filteredProperties = properties // Filter logic can be added here
+
+  const getStatusDisplay = (status: string) => {
+    switch (status) {
+      case 'published':
+        return 'Published'
+      case 'draft':
+        return 'Draft'
+      case 'occupied':
+        return 'Occupied'
+      case 'under-review':
+        return 'Under Review'
+      default:
+        return status
+    }
+  }
+
+  return (
+    <div className="admin-dashboard">
+      {/* Sidebar */}
+      <aside className="admin-sidebar">
+        <div className="sidebar-logo">
+          <div className="logo-container">
+            <img
+              src="/assets/rentals-logo-hero-13c7b5.png"
+              alt="Rentals.ph logo"
+              className="logo-image"
+            />
+          </div>
+        </div>
+        <nav className="sidebar-nav">
+          <Link 
+            to="/admin" 
+            className={`nav-item ${activeNav === 'dashboard' ? 'active' : ''}`}
+            onClick={() => setActiveNav('dashboard')}
+          >
+            <FiBarChart2 className="nav-icon" />
+            <span>Dashboard</span>
+          </Link>
+          <Link 
+            to="/admin/agents" 
+            className={`nav-item ${activeNav === 'agents' ? 'active' : ''}`}
+            onClick={() => setActiveNav('agents')}
+          >
+            <FiUsers className="nav-icon" />
+            <span>Agents</span>
+          </Link>
+          <Link 
+            to="/admin/properties" 
+            className={`nav-item ${activeNav === 'properties' ? 'active' : ''}`}
+            onClick={() => setActiveNav('properties')}
+          >
+            <FiLayers className="nav-icon" />
+            <span>Properties</span>
+          </Link>
+          <Link 
+            to="/admin/revenue" 
+            className={`nav-item ${activeNav === 'revenue' ? 'active' : ''}`}
+            onClick={() => setActiveNav('revenue')}
+          >
+            <FiDollarSign className="nav-icon" />
+            <span>Revenue</span>
+          </Link>
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="admin-main">
+        {/* Header */}
+        <header className="admin-header">
+          <div className="header-content">
+            <div>
+              <h1>Dashboard Overview</h1>
+              <p className="welcome-text">Welcome back, Admin</p>
+            </div>
+            <div className="header-right">
+              <FiBell className="notification-icon" />
+              <div className="user-profile">
+                <div className="profile-avatar">
+                  <img src="/assets/profile-placeholder.png" alt="Admin" onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.nextElementSibling?.classList.remove('hidden');
+                  }} />
+                  <div className="avatar-fallback hidden">JD</div>
+                </div>
+                <span className="user-name">John Admin</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Properties Section */}
+        <div className="properties-section">
+          <h2 className="properties-title">Properties</h2>
+          
+          <div className="properties-filters">
+            <label className="filter-option">
+              <input 
+                type="radio" 
+                name="propertyFilter" 
+                value="all" 
+                checked={filter === 'all'}
+                onChange={(e) => setFilter(e.target.value)}
+              />
+              <span>All(23)</span>
+            </label>
+            <label className="filter-option">
+              <input 
+                type="radio" 
+                name="propertyFilter" 
+                value="newest" 
+                checked={filter === 'newest'}
+                onChange={(e) => setFilter(e.target.value)}
+              />
+              <span>Newest(12)</span>
+            </label>
+            <label className="filter-option">
+              <input 
+                type="radio" 
+                name="propertyFilter" 
+                value="oldest" 
+                checked={filter === 'oldest'}
+                onChange={(e) => setFilter(e.target.value)}
+              />
+              <span>Oldest(67)</span>
+            </label>
+          </div>
+
+          {/* Properties Table */}
+          <div className="properties-table-container">
+            <table className="properties-table">
+              <thead>
+                <tr>
+                  <th>Property ID</th>
+                  <th>Property Name</th>
+                  <th>Type</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th>Date Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProperties.map((property) => (
+                  <tr key={property.id}>
+                    <td className="property-id">{property.propertyId}</td>
+                    <td className="property-name">{property.propertyName}</td>
+                    <td className="property-type">{property.type}</td>
+                    <td className="property-location">{property.location}</td>
+                    <td>
+                      <span className={`property-status-indicator ${property.status}`}>
+                        <span className="property-status-dot"></span>
+                        <span className="property-status-text">
+                          {getStatusDisplay(property.status)}
+                        </span>
+                      </span>
+                    </td>
+                    <td className="property-date">{property.dateCreated}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}
+
+export default PropertiesPage
+

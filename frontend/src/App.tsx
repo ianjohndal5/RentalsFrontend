@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { HomePage, AboutPage, PropertiesForRentPage, RentManagersPage, RentManagerDetailsPage, BlogPage, BlogDetailsPage, ContactUsPage, PropertyDetailsPage, NewsPage } from './pages'
+import { HomePage, AboutPage, PropertiesForRentPage, RentManagersPage, RentManagerDetailsPage, BlogPage, BlogDetailsPage, ContactUsPage, PropertyDetailsPage, NewsPage, AdminDashboard, AgentsPage, PropertiesPage, RevenuePage } from './pages'
 
 function App() {
   return (
@@ -15,6 +15,10 @@ function App() {
         <Route path="/blog/:id" element={<BlogDetailsPage />} />
         <Route path="/news" element={<NewsPage />} />
         <Route path="/contact" element={<ContactUsPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/agents" element={<AgentsPage />} />
+        <Route path="/admin/properties" element={<PropertiesPage />} />
+        <Route path="/admin/revenue" element={<RevenuePage />} />
       </Routes>
     </Router>
   )
