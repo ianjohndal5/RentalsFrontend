@@ -15,26 +15,42 @@ class AgentApproval extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'agent_id',
-        'admin_id',
+        'user_id',
+        'approved_by_user_id',
         'action',
         'notes',
     ];
 
     /**
-     * Get the agent that was approved/rejected.
+     * Get the user (agent) that was approved/rejected.
      */
-    public function agent()
+    public function user()
     {
-        return $this->belongsTo(Agent::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * Get the admin who made the approval/rejection.
+     * Get the agent that was approved/rejected (alias for user).
+     */
+    public function agent()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the user (admin) who made the approval/rejection.
+     */
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by_user_id');
+    }
+
+    /**
+     * Get the admin who made the approval/rejection (alias for approvedBy).
      */
     public function admin()
     {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(User::class, 'approved_by_user_id');
     }
 }
 

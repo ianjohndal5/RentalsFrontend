@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agent;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use OpenApi\Attributes as OA;
 
 #[OA\Info(
@@ -118,7 +119,7 @@ class AgentController extends Controller
                 // Personal Information
                 'firstName' => 'required|string|max:255',
                 'lastName' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:agents,email',
+                'email' => 'required|string|email|max:255|unique:users,email',
                 'password' => 'required|string|min:8',
                 'phone' => 'nullable|string|max:20',
                 'dateOfBirth' => 'nullable|date',
@@ -131,7 +132,7 @@ class AgentController extends Controller
                 'zipCode' => 'nullable|string|max:20',
                 
                 // PRC Certification
-                'prcLicenseNumber' => 'required|string|max:255|unique:agents,prc_license_number',
+                'prcLicenseNumber' => 'required|string|max:255|unique:users,prc_license_number',
                 'licenseType' => 'required|in:broker,salesperson',
                 'expirationDate' => 'required|date|after:today',
                 'yearsOfExperience' => 'nullable|string|max:50',
@@ -163,15 +164,16 @@ class AgentController extends Controller
                 $licenseDocumentPath = $file->storeAs($directory, $fileName, 'public');
             }
 
-            // Create the agent
-            // Note: Password is automatically hashed by the 'hashed' cast in the Agent model
-            $agent = Agent::create([
+            // Create the user (agent)
+            // Note: Password is automatically hashed by the 'hashed' cast in the User model
+            $userData = [
                 'first_name' => $request->firstName,
                 'last_name' => $request->lastName,
                 'email' => $request->email,
                 'password' => $request->password, // Will be automatically hashed by the model cast
                 'phone' => $request->phone,
                 'date_of_birth' => $request->dateOfBirth,
+                'role' => 'agent',
                 'agency_name' => $request->agencyName,
                 'office_address' => $request->officeAddress,
                 'city' => $request->city,
@@ -184,7 +186,15 @@ class AgentController extends Controller
                 'license_document_path' => $licenseDocumentPath,
                 'status' => 'pending', // New agents start with pending status
                 'verified' => false, // New agents are not verified by default
-            ]);
+                'is_active' => true,
+            ];
+            
+            // Add name field if the column exists (for backward compatibility before migration)
+            if (Schema::hasColumn('users', 'name')) {
+                $userData['name'] = $request->firstName . ' ' . $request->lastName;
+            }
+            
+            $agent = User::create($userData);
 
             // Return success response
             return response()->json([
@@ -352,8 +362,10 @@ class AgentController extends Controller
                 ], 422);
             }
 
-            // Find the agent by email
-            $agent = Agent::where('email', $request->email)->first();
+            // Find the user (agent) by email
+            $agent = User::where('email', $request->email)
+                ->where('role', 'agent')
+                ->first();
 
             // Check if agent exists
             if (!$agent) {
@@ -487,21 +499,29 @@ class AgentController extends Controller
     )]
     public function show(Request $request): JsonResponse
     {
-        $agent = $request->user();
+        $user = $request->user();
+        
+        // Ensure user is an agent
+        if (!$user->isAgent()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Access denied. Agent authentication required.',
+            ], 403);
+        }
         
         return response()->json([
             'success' => true,
             'data' => [
-                'id' => $agent->id,
-                'first_name' => $agent->first_name,
-                'last_name' => $agent->last_name,
-                'email' => $agent->email,
-                'phone' => $agent->phone,
-                'agency_name' => $agent->agency_name,
-                'prc_license_number' => $agent->prc_license_number,
-                'license_type' => $agent->license_type,
-                'status' => $agent->status,
-                'verified' => $agent->verified,
+                'id' => $user->id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'agency_name' => $user->agency_name,
+                'prc_license_number' => $user->prc_license_number,
+                'license_type' => $user->license_type,
+                'status' => $user->status,
+                'verified' => $user->verified,
             ],
         ]);
     }
