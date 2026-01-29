@@ -1,10 +1,25 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import AgentSidebar from '../components/AgentSidebar'
+
 import { 
+  FiBell,
+  FiPlus,
+  FiList,
+  FiBarChart2,
+  FiFileText,
+  FiEdit3,
+  FiMail,
+  FiUser,
+  FiDownload,
+  FiCreditCard,
+  FiLock,
+  FiLogOut,
   FiSearch,
   FiRefreshCw,
-  FiCheckSquare
+  FiCheckSquare,
+  FiBookOpen
 } from 'react-icons/fi'
-import AgentLayout from '../components/AgentLayout'
 import './AgentInbox.css'
 
 interface InboxItem {
@@ -95,8 +110,40 @@ function AgentInbox() {
   }
 
   return (
-    <AgentLayout>
-      <div className="inbox-container">
+    <div className="agent-inbox">
+      <AgentSidebar/>
+
+      {/* Main Content */}
+      <main className="agent-main">
+        {/* Header */}
+        <header className="agent-header">
+          <div className="header-content">
+            <div>
+              <h1>Dashboard</h1>
+              <p className="welcome-text">Welcome back, manage your rental properties.</p>
+            </div>
+            <div className="header-right">
+              <FiBell className="notification-icon" />
+              <div className="user-profile">
+                <div className="profile-avatar">
+                  <img src="/assets/profile-placeholder.png" alt="John Anderson" onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.nextElementSibling?.classList.remove('hidden');
+                  }} />
+                  <div className="avatar-fallback hidden">JA</div>
+                </div>
+                <div className="user-info">
+                  <span className="user-name">John Anderson</span>
+                  <span className="user-role">Property Owner</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Inbox Content */}
+        <div className="inbox-container">
           <h2 className="inbox-title">Inbox</h2>
 
           {/* Search Bar */}
@@ -178,7 +225,8 @@ function AgentInbox() {
             ))}
           </div>
         </div>
-    </AgentLayout>
+      </main>
+    </div>
   )
 }
 

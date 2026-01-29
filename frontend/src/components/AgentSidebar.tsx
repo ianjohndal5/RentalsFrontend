@@ -29,7 +29,7 @@ function AgentSidebar() {
   }
 
   return (
-    <aside className="agent-sidebar">
+    <aside className="">
       <div className="sidebar-logo">
         <div className="logo-container">
           <img
