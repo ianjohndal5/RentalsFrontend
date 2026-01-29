@@ -17,9 +17,26 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'phone',
+        'date_of_birth',
+        'role',
+        'agency_name',
+        'office_address',
+        'city',
+        'state',
+        'zip_code',
+        'prc_license_number',
+        'license_type',
+        'expiration_date',
+        'years_of_experience',
+        'license_document_path',
+        'status',
+        'verified',
+        'is_active',
     ];
 
     /**
@@ -41,8 +58,92 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'date_of_birth' => 'date',
+            'expiration_date' => 'date',
             'password' => 'hashed',
+            'verified' => 'boolean',
+            'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Check if user is an agent.
+     */
+    public function isAgent(): bool
+    {
+        return $this->role === 'agent';
+    }
+
+    /**
+     * Check if user is an admin (any admin role).
+     */
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin', 'moderator']);
+    }
+
+    /**
+     * Check if user is a super admin.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if admin can approve agents.
+     */
+    public function canApproveAgents(): bool
+    {
+        return in_array($this->role, ['super_admin', 'admin']);
+    }
+
+    /**
+     * Get all approvals/rejections for this user (if agent).
+     */
+    public function approvals()
+    {
+        return $this->hasMany(AgentApproval::class, 'user_id');
+    }
+
+    /**
+     * Get the latest approval/rejection for this user (if agent).
+     */
+    public function latestApproval()
+    {
+        return $this->hasOne(AgentApproval::class, 'user_id')->latestOfMany();
+    }
+
+    /**
+     * Get all agent approvals made by this user (if admin).
+     */
+    public function agentApprovals()
+    {
+        return $this->hasMany(AgentApproval::class, 'approved_by_user_id');
+    }
+
+    /**
+     * Scope to get only agents.
+     */
+    public function scopeAgents($query)
+    {
+        return $query->where('role', 'agent');
+    }
+
+    /**
+     * Scope to get only admins.
+     */
+    public function scopeAdmins($query)
+    {
+        return $query->whereIn('role', ['admin', 'super_admin', 'moderator']);
     }
 }
 

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Agent;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
@@ -30,7 +30,9 @@ class FixAgentPassword extends Command
         $email = $this->argument('email');
         $approve = $this->option('approve');
 
-        $agent = Agent::where('email', $email)->first();
+        $agent = User::where('email', $email)
+            ->where('role', 'agent')
+            ->first();
 
         if (!$agent) {
             $this->error("Agent with email {$email} not found.");

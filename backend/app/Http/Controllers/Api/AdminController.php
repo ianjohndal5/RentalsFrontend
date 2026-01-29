@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
-use App\Models\Agent;
+use App\Models\User;
 use App\Models\AgentApproval;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -31,13 +30,13 @@ use OpenApi\Attributes as OA;
 class AdminController extends Controller
 {
     /**
-     * Ensure the authenticated user is an Admin instance.
+     * Ensure the authenticated user is an Admin.
      */
-    protected function ensureAdmin(Request $request): Admin
+    protected function ensureAdmin(Request $request): User
     {
         $user = $request->user();
         
-        if (!$user instanceof Admin) {
+        if (!$user->isAdmin()) {
             abort(403, 'Access denied. Admin authentication required.');
         }
 
@@ -109,7 +108,9 @@ class AdminController extends Controller
             ], 422);
         }
 
-        $admin = Admin::where('email', $request->email)->first();
+        $admin = User::where('email', $request->email)
+            ->whereIn('role', ['admin', 'super_admin', 'moderator'])
+            ->first();
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
             return response()->json([
@@ -185,7 +186,8 @@ class AdminController extends Controller
     {
         $this->ensureAdmin($request);
 
-        $pendingAgents = Agent::where('status', 'pending')
+        $pendingAgents = User::where('role', 'agent')
+            ->where('status', 'pending')
             ->select([
                 'id',
                 'first_name',
@@ -235,7 +237,8 @@ class AdminController extends Controller
     {
         $this->ensureAdmin($request);
 
-        $agent = Agent::with('latestApproval.admin')
+        $agent = User::where('role', 'agent')
+            ->with('latestApproval.approvedBy')
             ->findOrFail($id);
 
         return response()->json([
@@ -309,7 +312,7 @@ class AdminController extends Controller
             ], 422);
         }
 
-        $agent = Agent::findOrFail($id);
+        $agent = User::where('role', 'agent')->findOrFail($id);
 
         // Check if agent is already processed
         if ($agent->status !== 'pending') {
@@ -326,8 +329,8 @@ class AdminController extends Controller
 
         // Create approval record
         AgentApproval::create([
-            'agent_id' => $agent->id,
-            'admin_id' => $admin->id,
+            'user_id' => $agent->id,
+            'approved_by_user_id' => $admin->id,
             'action' => 'approved',
             'notes' => $request->notes,
         ]);
@@ -336,7 +339,7 @@ class AdminController extends Controller
             'success' => true,
             'message' => 'Agent approved successfully',
             'data' => [
-                'agent' => $agent->fresh(['latestApproval.admin']),
+                'agent' => $agent->fresh(['latestApproval.approvedBy']),
             ],
         ]);
     }
@@ -407,7 +410,7 @@ class AdminController extends Controller
             ], 422);
         }
 
-        $agent = Agent::findOrFail($id);
+        $agent = User::where('role', 'agent')->findOrFail($id);
 
         // Check if agent is already processed
         if ($agent->status !== 'pending') {
@@ -423,8 +426,8 @@ class AdminController extends Controller
 
         // Create rejection record
         AgentApproval::create([
-            'agent_id' => $agent->id,
-            'admin_id' => $admin->id,
+            'user_id' => $agent->id,
+            'approved_by_user_id' => $admin->id,
             'action' => 'rejected',
             'notes' => $request->notes,
         ]);
@@ -433,7 +436,7 @@ class AdminController extends Controller
             'success' => true,
             'message' => 'Agent rejected successfully',
             'data' => [
-                'agent' => $agent->fresh(['latestApproval.admin']),
+                'agent' => $agent->fresh(['latestApproval.approvedBy']),
             ],
         ]);
     }
@@ -465,7 +468,8 @@ class AdminController extends Controller
 
         $status = $request->query('status'); // Optional filter by status
 
-        $query = Agent::with('latestApproval.admin');
+        $query = User::where('role', 'agent')
+            ->with('latestApproval.approvedBy');
 
         if ($status) {
             $query->where('status', $status);
