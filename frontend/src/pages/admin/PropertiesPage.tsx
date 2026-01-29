@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import AppSidebar from '../../components/common/AppSidebar'
 import { 
   FiBarChart2, 
   FiUsers, 
@@ -20,16 +21,7 @@ interface Property {
 }
 
 function PropertiesPage() {
-  const location = useLocation()
-  const [activeNav, setActiveNav] = useState('properties')
   const [filter, setFilter] = useState('all')
-
-  useEffect(() => {
-    if (location.pathname.includes('/agents')) setActiveNav('agents')
-    else if (location.pathname.includes('/properties')) setActiveNav('properties')
-    else if (location.pathname.includes('/revenue')) setActiveNav('revenue')
-    else if (location.pathname === '/admin') setActiveNav('dashboard')
-  }, [location.pathname])
 
   // Property data matching the image
   const properties: Property[] = [
@@ -90,52 +82,7 @@ function PropertiesPage() {
 
   return (
     <div className="admin-dashboard">
-      {/* Sidebar */}
-      <aside className="admin-sidebar">
-        <div className="sidebar-logo">
-          <div className="logo-container">
-            <img
-              src="/assets/rentals-logo-hero-13c7b5.png"
-              alt="Rentals.ph logo"
-              className="logo-image"
-            />
-          </div>
-        </div>
-        <nav className="sidebar-nav">
-          <Link 
-            to="/admin" 
-            className={`nav-item ${activeNav === 'dashboard' ? 'active' : ''}`}
-            onClick={() => setActiveNav('dashboard')}
-          >
-            <FiBarChart2 className="nav-icon" />
-            <span>Dashboard</span>
-          </Link>
-          <Link 
-            to="/admin/agents" 
-            className={`nav-item ${activeNav === 'agents' ? 'active' : ''}`}
-            onClick={() => setActiveNav('agents')}
-          >
-            <FiUsers className="nav-icon" />
-            <span>Agents</span>
-          </Link>
-          <Link 
-            to="/admin/properties" 
-            className={`nav-item ${activeNav === 'properties' ? 'active' : ''}`}
-            onClick={() => setActiveNav('properties')}
-          >
-            <FiLayers className="nav-icon" />
-            <span>Properties</span>
-          </Link>
-          <Link 
-            to="/admin/revenue" 
-            className={`nav-item ${activeNav === 'revenue' ? 'active' : ''}`}
-            onClick={() => setActiveNav('revenue')}
-          >
-            <FiDollarSign className="nav-icon" />
-            <span>Revenue</span>
-          </Link>
-        </nav>
-      </aside>
+      <AppSidebar />
 
       {/* Main Content */}
       <main className="admin-main">

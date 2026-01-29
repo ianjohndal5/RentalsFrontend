@@ -17,9 +17,20 @@ export interface LoginResponse {
     token?: string
     user?: {
       id: number
-      name: string
+      name?: string
+      first_name?: string
+      last_name?: string
       email: string
       status?: string
+      role?: string
+    }
+    admin?: {
+      id: number
+      name?: string
+      first_name?: string
+      last_name?: string
+      email: string
+      role?: string
     }
   }
   errors?: Record<string, string[]>
@@ -35,6 +46,19 @@ export const authApi = {
       return response.data
     } catch (error: any) {
       console.error('Login API call error:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Login admin
+   */
+  adminLogin: async (credentials: LoginCredentials): Promise<LoginResponse> => {
+    try {
+      const response = await apiClient.post<LoginResponse>('/admin/login', credentials)
+      return response.data
+    } catch (error: any) {
+      console.error('Admin login API call error:', error)
       throw error
     }
   },

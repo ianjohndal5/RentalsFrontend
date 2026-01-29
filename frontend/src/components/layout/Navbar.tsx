@@ -9,25 +9,32 @@ function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
-  const [isAgentLoggedIn, setIsAgentLoggedIn] = useState(false)
-  const [agentName, setAgentName] = useState('Agent')
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
+  const [userName, setUserName] = useState('User')
+  const [userRole, setUserRole] = useState<'agent' | 'admin'>('agent')
   const location = useLocation()
   const navigate = useNavigate()
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   const checkAuthStatus = () => {
-    // Check if agent is logged in
+    // Check if user is logged in (agent or admin)
     const authToken = localStorage.getItem('auth_token')
+    const role = localStorage.getItem('user_role') || localStorage.getItem('agent_role')
     const agentStatus = localStorage.getItem('agent_status')
     
-    if (authToken && agentStatus) {
-      setIsAgentLoggedIn(true)
-      // Try to get agent name from localStorage or use default
-      const storedName = localStorage.getItem('agent_name') || 'Agent'
-      setAgentName(storedName)
+    // For agents, check if they have agent_status
+    // For admins, just check if they have auth_token and role is admin
+    if (authToken && (role === 'admin' || (role === 'agent' && agentStatus))) {
+      setIsUserLoggedIn(true)
+      // Try to get user name from localStorage or use default
+      const storedName = localStorage.getItem('user_name') || localStorage.getItem('agent_name') || 
+        (role === 'admin' ? 'Admin' : 'Agent')
+      setUserName(storedName)
+      setUserRole(role === 'admin' ? 'admin' : 'agent')
     } else {
-      setIsAgentLoggedIn(false)
-      setAgentName('Agent')
+      setIsUserLoggedIn(false)
+      setUserName('User')
+      setUserRole('agent')
     }
   }
 
@@ -84,14 +91,18 @@ function Navbar() {
     localStorage.removeItem('agent_status')
     localStorage.removeItem('auth_token')
     localStorage.removeItem('agent_name')
+    localStorage.removeItem('agent_role')
+    localStorage.removeItem('user_name')
+    localStorage.removeItem('user_role')
     
     // Update state immediately
-    setIsAgentLoggedIn(false)
-    setAgentName('Agent')
+    setIsUserLoggedIn(false)
+    setUserName('User')
+    setUserRole('agent')
     setShowUserMenu(false)
     
-    // If currently on agent pages, redirect to home and reload
-    if (location.pathname.startsWith('/agent')) {
+    // If currently on agent or admin pages, redirect to home and reload
+    if (location.pathname.startsWith('/agent') || location.pathname.startsWith('/admin')) {
       navigate('/')
       // Small delay to ensure navigation happens before reload
       setTimeout(() => {
@@ -141,7 +152,7 @@ function Navbar() {
           <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}>
             CONTACT US
           </Link>
-          {isAgentLoggedIn ? (
+          {isUserLoggedIn ? (
             <div className="navbar-user-profile-wrapper" ref={userMenuRef}>
               <button 
                 className="navbar-user-profile-btn"
@@ -152,7 +163,7 @@ function Navbar() {
                   <div className="navbar-profile-avatar">
                     <img 
                       src="/assets/profile-placeholder.png" 
-                      alt={agentName}
+                      alt={userName}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
                         target.style.display = 'none'
@@ -160,12 +171,14 @@ function Navbar() {
                       }} 
                     />
                     <div className="navbar-avatar-fallback hidden">
-                      {getInitials(agentName)}
+                      {getInitials(userName)}
                     </div>
                   </div>
                   <div className="navbar-user-info">
-                    <span className="navbar-user-name">{agentName}</span>
-                    <span className="navbar-user-role">Agent</span>
+                    <span className="navbar-user-name">{userName}</span>
+                    <span className="navbar-user-role">
+                      {userRole === 'admin' ? 'Admin' : 'Agent'}
+                    </span>
                   </div>
                   <FiChevronDown className={`navbar-user-menu-chevron ${showUserMenu ? 'open' : ''}`} />
                 </div>
@@ -176,23 +189,25 @@ function Navbar() {
                   <button 
                     className="navbar-user-menu-item" 
                     onClick={() => {
-                      navigate('/agent')
+                      navigate(userRole === 'admin' ? '/admin' : '/agent')
                       setShowUserMenu(false)
                     }}
                   >
                     <FiHome className="navbar-user-menu-icon" />
                     <span>Dashboard</span>
                   </button>
-                  <button 
-                    className="navbar-user-menu-item" 
-                    onClick={() => {
-                      navigate('/agent/account')
-                      setShowUserMenu(false)
-                    }}
-                  >
-                    <FiUser className="navbar-user-menu-icon" />
-                    <span>Account</span>
-                  </button>
+                  {userRole === 'agent' && (
+                    <button 
+                      className="navbar-user-menu-item" 
+                      onClick={() => {
+                        navigate('/agent/account')
+                        setShowUserMenu(false)
+                      }}
+                    >
+                      <FiUser className="navbar-user-menu-icon" />
+                      <span>Account</span>
+                    </button>
+                  )}
                   <button 
                     className="navbar-user-menu-item logout" 
                     onClick={handleLogout}

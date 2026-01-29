@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import AgentSidebar from '../../components/agent/AgentSidebar'
+import AppSidebar from '../../components/common/AppSidebar'
 
 import { 
   FiBell,
@@ -64,7 +64,7 @@ function AgentsPage() {
 
   return (
     <div className="admin-dashboard">
-      <AgentSidebar/>
+      <AppSidebar/>
 
       {/* Main Content */}
       <main className="admin-main">

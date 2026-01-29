@@ -1,4 +1,4 @@
-import AgentSidebar from '../../components/agent/AgentSidebar'
+import AppSidebar from '../../components/common/AppSidebar'
 import { 
   FiUsers, 
   FiHome, 
@@ -12,8 +12,7 @@ import './AdminDashboard.css'
 function AdminDashboard() {
   return (
     <div className="admin-dashboard">
-      <AgentSidebar/>
-
+      <AppSidebar/>
       {/* Main Content */}
       <main className="admin-main">
         {/* Header */}

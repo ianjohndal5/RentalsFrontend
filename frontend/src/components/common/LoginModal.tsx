@@ -24,41 +24,83 @@ function LoginModal({ isOpen, onClose, onRegisterClick }: LoginModalProps) {
     setLoginError(null)
 
     try {
-      const response = await authApi.login({
-        email,
-        password,
-        remember: rememberMe,
-      })
+      // Try admin login first
+      let response: any = null
+      let isAdmin = false
+      
+      try {
+        response = await authApi.adminLogin({
+          email,
+          password,
+          remember: rememberMe,
+        })
+        isAdmin = true
+      } catch (adminError: any) {
+        // If admin login fails (401 or other error), try agent login
+        if (adminError.response?.status === 401 || adminError.response?.status === 404) {
+          try {
+            response = await authApi.login({
+              email,
+              password,
+              remember: rememberMe,
+            })
+            isAdmin = false
+          } catch (agentError: any) {
+            // Both logins failed
+            throw agentError
+          }
+        } else {
+          // Other error from admin login, throw it
+          throw adminError
+        }
+      }
 
       if (response.success && response.data?.token) {
         // Store token and proceed with login
         localStorage.setItem('auth_token', response.data.token)
         
-        // Store agent name if available
-        if (response.data?.user?.name) {
-          localStorage.setItem('agent_name', response.data.user.name)
-        } else if (response.data?.user?.first_name && response.data?.user?.last_name) {
-          const fullName = `${response.data.user.first_name} ${response.data.user.last_name}`
-          localStorage.setItem('agent_name', fullName)
+        // For admin login, check admin object, otherwise check user object
+        const userData = isAdmin ? response.data?.admin : response.data?.user
+        
+        // Store user name if available
+        const userName = userData?.name || 
+          (userData?.first_name && userData?.last_name 
+            ? `${userData.first_name} ${userData.last_name}` 
+            : null)
+        
+        if (userName) {
+          localStorage.setItem('agent_name', userName)
+          localStorage.setItem('user_name', userName) // Also store as generic user_name
         }
         
-        // Check if account status is processing/pending and store it
-        if (response.data?.user?.status === 'processing' || 
-            response.data?.user?.status === 'pending' ||
-            response.data?.user?.status === 'under_review') {
-          localStorage.setItem('agent_registration_status', 'processing')
-          localStorage.setItem('agent_registered_email', email)
-          localStorage.setItem('agent_status', response.data.user.status)
-        } else {
-          // Clear processing status if account is approved
-          localStorage.removeItem('agent_registration_status')
-          localStorage.removeItem('agent_registered_email')
-          localStorage.setItem('agent_status', response.data.user.status || 'active')
+        // Store user role (admin or agent)
+        const userRole = isAdmin ? 'admin' : (userData?.role || 'agent')
+        localStorage.setItem('agent_role', userRole)
+        localStorage.setItem('user_role', userRole) // Also store as generic user_role
+        
+        // Check if account status is processing/pending and store it (only for agents)
+        if (userRole === 'agent' && !isAdmin) {
+          if (userData?.status === 'processing' || 
+              userData?.status === 'pending' ||
+              userData?.status === 'under_review') {
+            localStorage.setItem('agent_registration_status', 'processing')
+            localStorage.setItem('agent_registered_email', email)
+            localStorage.setItem('agent_status', userData.status)
+          } else {
+            // Clear processing status if account is approved
+            localStorage.removeItem('agent_registration_status')
+            localStorage.removeItem('agent_registered_email')
+            localStorage.setItem('agent_status', userData?.status || 'active')
+          }
         }
         
         onClose()
-        // Redirect to agent dashboard
-        window.location.href = '/agent'
+        // Redirect based on role
+        if (userRole === 'admin') {
+          window.location.href = '/admin'
+        } else {
+          window.location.href = '/agent'
+        }
       } else {
         setLoginError(response.message || 'Login failed. Please try again.')
       }
@@ -70,7 +112,7 @@ function LoginModal({ isOpen, onClose, onRegisterClick }: LoginModalProps) {
       } else if (error.message) {
         setLoginError(error.message)
       } else {
-        setLoginError('An error occurred. Please try again.')
+        setLoginError('Invalid email or password. Please try again.')
       }
     } finally {
       setIsSubmitting(false)
