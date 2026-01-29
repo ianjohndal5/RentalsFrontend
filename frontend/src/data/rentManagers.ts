@@ -8,6 +8,7 @@ export interface RentManagerListing {
   bedrooms: number
   bathrooms: number
   parking: number
+  location?: string
 }
 
 export interface RentManagerProfile {

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
-import PageHeader from '../components/PageHeader'
+import Navbar from '../components/layout/Navbar'
+import Footer from '../components/layout/Footer'
+import PageHeader from '../components/layout/PageHeader'
 import { rentManagers } from '../data/rentManagers'
 import './RentManagersPage.css'
 

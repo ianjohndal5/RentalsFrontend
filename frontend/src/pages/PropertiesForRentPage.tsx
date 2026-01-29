@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
-import VerticalPropertyCard from '../components/VerticalPropertyCard'
-import HorizontalPropertyCard from '../components/HorizontalPropertyCard'
+import Navbar from '../components/layout/Navbar'
+import Footer from '../components/layout/Footer'
+import VerticalPropertyCard from '../components/common/VerticalPropertyCard'
+import HorizontalPropertyCard from '../components/common/HorizontalPropertyCard'
 import './PropertiesForRentPage.css'
-import PageHeader from '../components/PageHeader'
+import PageHeader from '../components/layout/PageHeader'
 
 function PropertiesForRentPage() {
   const [searchParams] = useSearchParams()
@@ -491,6 +491,7 @@ function PropertiesForRentPage() {
                         bathrooms={property.bathrooms}
                         parking={property.parking}
                         propertySize={`${(property.bedrooms * 15 + property.bathrooms * 5)} sqft`}
+                        location={property.location}
                       />
                     ) : (
                       <VerticalPropertyCard
@@ -507,6 +508,7 @@ function PropertiesForRentPage() {
                         bathrooms={property.bathrooms}
                         parking={property.parking}
                         propertySize={`${(property.bedrooms * 15 + property.bathrooms * 5)} sqft`}
+                        location={property.location}
                       />
                     )
                   )}
@@ -616,6 +618,7 @@ function PropertiesForRentPage() {
                 bedrooms={property.bedrooms}
                 bathrooms={property.bathrooms}
                 parking={property.parking}
+                location={property.location}
               />
             ))}
           </div>
@@ -643,6 +646,7 @@ function PropertiesForRentPage() {
                 bedrooms={property.bedrooms}
                 bathrooms={property.bathrooms}
                 parking={property.parking}
+                location={property.location}
               />
             ))}
           </div>

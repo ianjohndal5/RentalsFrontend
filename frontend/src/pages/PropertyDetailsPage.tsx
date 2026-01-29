@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
-import PageHeader from '../components/PageHeader'
-import VerticalPropertyCard from '../components/VerticalPropertyCard'
+import Navbar from '../components/layout/Navbar'
+import Footer from '../components/layout/Footer'
+import PageHeader from '../components/layout/PageHeader'
+import VerticalPropertyCard from '../components/common/VerticalPropertyCard'
 import './PropertyDetailsPage.css'
 
 function PropertyDetailsPage() {

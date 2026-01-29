@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
-import HorizontalPropertyCard from '../components/HorizontalPropertyCard'
-import VerticalPropertyCard from '../components/VerticalPropertyCard'
+import Navbar from '../components/layout/Navbar'
+import Footer from '../components/layout/Footer'
+import HorizontalPropertyCard from '../components/common/HorizontalPropertyCard'
+import VerticalPropertyCard from '../components/common/VerticalPropertyCard'
 import { getRentManagerById } from '../data/rentManagers'
-import PageHeader from '../components/PageHeader'
+import PageHeader from '../components/layout/PageHeader'
 import './RentManagerDetailsPage.css'
 
 function RentManagerDetailsPage() {
@@ -79,7 +79,7 @@ function RentManagerDetailsPage() {
     // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(p => 
+      filtered = filtered.filter(p =>
         p.title.toLowerCase().includes(query) ||
         p.propertyType.toLowerCase().includes(query)
       )
@@ -90,7 +90,7 @@ function RentManagerDetailsPage() {
       filtered = filtered.filter(p => {
         const priceStr = p.price.replace(/[₱$,]/g, '').replace('/Month', '').trim()
         const price = parseFloat(priceStr) || 0
-        
+
         switch (priceFilter) {
           case 'under-20k':
             return price < 20000
@@ -152,7 +152,7 @@ function RentManagerDetailsPage() {
         }
         return date.getTime()
       }
-      
+
       const dateA = parseDate(a.date)
       const dateB = parseDate(b.date)
       return sortOrder === 'newest' ? dateB - dateA : dateA - dateB
@@ -183,10 +183,10 @@ function RentManagerDetailsPage() {
                 <div className="rm-profile-photo" aria-hidden="true">
                   <div className="rm-photo-placeholder">
                     <svg width="100%" height="100%" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="400" height="300" fill="#f0f0f0"/>
-                      <circle cx="200" cy="120" r="50" fill="#205ED7"/>
-                      <circle cx="200" cy="100" r="20" fill="white"/>
-                      <path d="M150 200C150 180 170 160 200 160C230 160 250 180 250 200V220H150V200Z" fill="white"/>
+                      <rect width="400" height="300" fill="#f0f0f0" />
+                      <circle cx="200" cy="120" r="50" fill="#205ED7" />
+                      <circle cx="200" cy="100" r="20" fill="white" />
+                      <path d="M150 200C150 180 170 160 200 160C230 160 250 180 250 200V220H150V200Z" fill="white" />
                     </svg>
                   </div>
                 </div>
@@ -298,15 +298,15 @@ function RentManagerDetailsPage() {
                 <div className="rm-listing-controls">
                   <div className="rm-search-wrap">
                     <span className="rm-search-icon" aria-hidden="true">🔍</span>
-                    <input 
-                      className="rm-search" 
-                      placeholder="Search properties by name, location" 
+                    <input
+                      className="rm-search"
+                      placeholder="Search properties by name, location"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
                   <div className="rm-filters-row">
-                    <select 
+                    <select
                       className="rm-select"
                       value={priceFilter}
                       onChange={(e) => setPriceFilter(e.target.value)}
@@ -318,7 +318,7 @@ function RentManagerDetailsPage() {
                       <option value="60k-80k">₱60,000 - ₱80,000</option>
                       <option value="over-80k">Over ₱80,000</option>
                     </select>
-                    <select 
+                    <select
                       className="rm-select"
                       value={sortOrder}
                       onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest')}
@@ -326,7 +326,7 @@ function RentManagerDetailsPage() {
                       <option value="newest">Newest First</option>
                       <option value="oldest">Oldest First</option>
                     </select>
-                    <button 
+                    <button
                       className={`rm-more-filters ${showMoreFilters ? 'active' : ''}`}
                       type="button"
                       onClick={() => setShowMoreFilters(!showMoreFilters)}
@@ -334,40 +334,40 @@ function RentManagerDetailsPage() {
                       More Filters
                     </button>
                     <div className="rm-view-toggle-container">
-                      <button 
+                      <button
                         className={`rm-view-btn ${viewMode === 'horizontal' ? 'active' : ''}`}
                         type="button"
                         aria-label="List View"
                         onClick={() => setViewMode('horizontal')}
                       >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                       </button>
-                      <button 
+                      <button
                         className={`rm-view-btn ${viewMode === 'vertical' ? 'active' : ''}`}
                         type="button"
                         aria-label="Grid View"
                         onClick={() => setViewMode('vertical')}
                       >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                          <rect x="14" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                          <rect x="3" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                          <rect x="14" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
+                          <rect x="3" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
+                          <rect x="14" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
+                          <rect x="3" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
+                          <rect x="14" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
                         </svg>
                       </button>
                     </div>
                   </div>
-                  
+
                   {showMoreFilters && (
                     <div className="rm-more-filters-panel">
                       <div className="rm-filter-group">
                         <label className="rm-filter-label">Property Type</label>
-                        <select 
+                        <select
                           className="rm-select"
                           value={moreFilters.propertyType}
-                          onChange={(e) => setMoreFilters({...moreFilters, propertyType: e.target.value})}
+                          onChange={(e) => setMoreFilters({ ...moreFilters, propertyType: e.target.value })}
                         >
                           <option value="all">All Types</option>
                           <option value="Condominium">Condominium</option>
@@ -381,10 +381,10 @@ function RentManagerDetailsPage() {
                       </div>
                       <div className="rm-filter-group">
                         <label className="rm-filter-label">Bedrooms</label>
-                        <select 
+                        <select
                           className="rm-select"
                           value={moreFilters.bedrooms}
-                          onChange={(e) => setMoreFilters({...moreFilters, bedrooms: e.target.value})}
+                          onChange={(e) => setMoreFilters({ ...moreFilters, bedrooms: e.target.value })}
                         >
                           <option value="all">All</option>
                           <option value="0">0</option>
@@ -396,10 +396,10 @@ function RentManagerDetailsPage() {
                       </div>
                       <div className="rm-filter-group">
                         <label className="rm-filter-label">Bathrooms</label>
-                        <select 
+                        <select
                           className="rm-select"
                           value={moreFilters.bathrooms}
-                          onChange={(e) => setMoreFilters({...moreFilters, bathrooms: e.target.value})}
+                          onChange={(e) => setMoreFilters({ ...moreFilters, bathrooms: e.target.value })}
                         >
                           <option value="all">All</option>
                           <option value="1">1</option>
@@ -409,10 +409,10 @@ function RentManagerDetailsPage() {
                       </div>
                       <div className="rm-filter-group">
                         <label className="rm-filter-label">Parking</label>
-                        <select 
+                        <select
                           className="rm-select"
                           value={moreFilters.parking}
-                          onChange={(e) => setMoreFilters({...moreFilters, parking: e.target.value})}
+                          onChange={(e) => setMoreFilters({ ...moreFilters, parking: e.target.value })}
                         >
                           <option value="all">All</option>
                           <option value="0">0</option>
@@ -420,7 +420,7 @@ function RentManagerDetailsPage() {
                           <option value="2">2+</option>
                         </select>
                       </div>
-                      <button 
+                      <button
                         className="rm-clear-filters"
                         type="button"
                         onClick={() => {
@@ -440,41 +440,43 @@ function RentManagerDetailsPage() {
 
                 <div className={`rm-listings ${viewMode === 'vertical' ? 'rm-listings-grid' : ''}`}>
                   {filteredAndSortedProperties.length > 0 ? (
-                    filteredAndSortedProperties.map((p) => 
-                    viewMode === 'horizontal' ? (
-                      <HorizontalPropertyCard
-                        key={p.id}
-                        id={p.id}
-                        propertyType={p.propertyType}
-                        date={p.date}
-                        price={p.price}
-                        title={p.title}
-                        image={p.image}
-                        rentManagerName={manager.name}
-                        rentManagerRole={manager.role}
-                        bedrooms={p.bedrooms}
-                        bathrooms={p.bathrooms}
-                        parking={p.parking}
-                        propertySize={`${(p.bedrooms * 15 + p.bathrooms * 5)} sqft`}
-                      />
-                    ) : (
-                      <VerticalPropertyCard
-                        key={p.id}
-                        id={p.id}
-                        propertyType={p.propertyType}
-                        date={p.date}
-                        price={p.price}
-                        title={p.title}
-                        image={p.image}
-                        rentManagerName={manager.name}
-                        rentManagerRole={manager.role}
-                        bedrooms={p.bedrooms}
-                        bathrooms={p.bathrooms}
-                        parking={p.parking}
-                        propertySize={`${(p.bedrooms * 15 + p.bathrooms * 5)} sqft`}
-                      />
-                    )
-                  )) : (
+                    filteredAndSortedProperties.map((p) =>
+                      viewMode === 'horizontal' ? (
+                        <HorizontalPropertyCard
+                          key={p.id}
+                          id={p.id}
+                          propertyType={p.propertyType}
+                          date={p.date}
+                          price={p.price}
+                          title={p.title}
+                          image={p.image}
+                          rentManagerName={manager.name}
+                          rentManagerRole={manager.role}
+                          bedrooms={p.bedrooms}
+                          bathrooms={p.bathrooms}
+                          parking={p.parking}
+                          propertySize={`${(p.bedrooms * 15 + p.bathrooms * 5)} sqft`}
+                          location={p.location || manager.location}
+                        />
+                      ) : (
+                        <VerticalPropertyCard
+                          key={p.id}
+                          id={p.id}
+                          propertyType={p.propertyType}
+                          date={p.date}
+                          price={p.price}
+                          title={p.title}
+                          image={p.image}
+                          rentManagerName={manager.name}
+                          rentManagerRole={manager.role}
+                          bedrooms={p.bedrooms}
+                          bathrooms={p.bathrooms}
+                          parking={p.parking}
+                          propertySize={`${(p.bedrooms * 15 + p.bathrooms * 5)} sqft`}
+                          location={p.location || manager.location}
+                        />
+                      )
+                    )) : (
                     <div className="rm-empty-state">
                       <p>No properties found matching your filters.</p>
                     </div>
@@ -521,10 +523,10 @@ function RentManagerDetailsPage() {
                       comment: 'Great service! The team was helpful and knowledgeable about the area. The property we rented is perfect for our needs.',
                     },
                   ]
-                  
+
                   const overallRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
                   const roundedRating = Math.round(overallRating * 10) / 10
-                  
+
                   return (
                     <>
                       <div className="rm-overall-rating">
@@ -541,7 +543,7 @@ function RentManagerDetailsPage() {
                             } else if (starValue === Math.ceil(overallRating) && overallRating % 1 !== 0) {
                               fillPercentage = (overallRating % 1) * 100
                             }
-                            
+
                             return (
                               <div key={index} className="rm-star-wrapper">
                                 <svg
@@ -553,7 +555,7 @@ function RentManagerDetailsPage() {
                                 >
                                   <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#D1D5DB" strokeWidth="1" />
                                 </svg>
-                                <div 
+                                <div
                                   className="rm-star-fill"
                                   style={{ width: `${fillPercentage}%` }}
                                 >
@@ -574,38 +576,38 @@ function RentManagerDetailsPage() {
                       </div>
                       <div className="rm-reviews-list">
                         {reviews.map((review) => (
-                    <div key={review.id} className="rm-review-card">
-                      <div className="rm-review-header">
-                        <div className="rm-reviewer-info">
-                          <div className="rm-reviewer-avatar">
-                            {review.reviewerName.charAt(0)}
+                          <div key={review.id} className="rm-review-card">
+                            <div className="rm-review-header">
+                              <div className="rm-reviewer-info">
+                                <div className="rm-reviewer-avatar">
+                                  {review.reviewerName.charAt(0)}
+                                </div>
+                                <div className="rm-reviewer-details">
+                                  <div className="rm-reviewer-name">{review.reviewerName}</div>
+                                  <div className="rm-review-date">{review.date}</div>
+                                </div>
+                              </div>
+                              <div className="rm-review-rating">
+                                {[...Array(5)].map((_, index) => (
+                                  <svg
+                                    key={index}
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill={index < review.rating ? '#FBBF24' : '#E5E7EB'}
+                                    stroke={index < review.rating ? '#FBBF24' : '#D1D5DB'}
+                                    strokeWidth="1"
+                                  >
+                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                  </svg>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="rm-review-comment">
+                              {review.comment}
+                            </div>
                           </div>
-                          <div className="rm-reviewer-details">
-                            <div className="rm-reviewer-name">{review.reviewerName}</div>
-                            <div className="rm-review-date">{review.date}</div>
-                          </div>
-                        </div>
-                        <div className="rm-review-rating">
-                          {[...Array(5)].map((_, index) => (
-                            <svg
-                              key={index}
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill={index < review.rating ? '#FBBF24' : '#E5E7EB'}
-                              stroke={index < review.rating ? '#FBBF24' : '#D1D5DB'}
-                              strokeWidth="1"
-                            >
-                              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                            </svg>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="rm-review-comment">
-                        {review.comment}
-                      </div>
-                    </div>
-                  ))}
+                        ))}
                       </div>
                     </>
                   )

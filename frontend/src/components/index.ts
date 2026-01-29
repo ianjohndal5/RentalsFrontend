@@ -1,16 +1,34 @@
-export { default as Hero } from './Hero'
-export { default as FeaturedProperties } from './FeaturedProperties'
-export { default as Testimonials } from './Testimonials'
-export { default as Blogs } from './Blogs'
-export { default as Footer } from './Footer'
-export { default as Navbar } from './Navbar'
-export { default as Partners } from './Partners'
-export { default as PageHeader } from './PageHeader'
-export { default as PropertiesForRent } from './PropertiesForRent'
-export { default as VerticalPropertyCard } from './VerticalPropertyCard'
-export { default as HorizontalPropertyCard } from './HorizontalPropertyCard'
-export { default as TestimonialCard } from './TestimonialCard'
-export { default as BlogCard } from './BlogCard'
-export { default as LoginModal } from './LoginModal'
-export { default as RegisterModal } from './RegisterModal'
+// Layout components
+export {
+    Navbar,
+    Footer,
+    PageHeader
+} from './layout'
+
+// Home components
+export {
+    Hero,
+    FeaturedProperties,
+    Testimonials,
+    Blogs,
+    Partners,
+    PropertiesForRent
+} from './home'
+
+// Common components
+export {
+    VerticalPropertyCard,
+    HorizontalPropertyCard,
+    TestimonialCard,
+    BlogCard,
+    LoginModal,
+    RegisterModal
+} from './common'
+
+// Agent components
+export {
+    AgentHeader,
+    AgentSidebar,
+    AgentLayout
+} from './agent'
 

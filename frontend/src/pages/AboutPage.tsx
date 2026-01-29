@@ -1,7 +1,7 @@
-import Navbar from '../components/Navbar'
-import Testimonials from '../components/Testimonials'
-import Footer from '../components/Footer'
-import Partners from '../components/Partners'
+import Navbar from '../components/layout/Navbar'
+import Testimonials from '../components/home/Testimonials'
+import Footer from '../components/layout/Footer'
+import Partners from '../components/home/Partners'
 import './AboutPage.css'
 
 function AboutPage() {

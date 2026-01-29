@@ -1,3 +1,4 @@
+// Public pages
 export { default as HomePage } from './HomePage'
 export { default as AboutPage } from './AboutPage'
 export { default as PropertiesForRentPage } from './PropertiesForRentPage'
@@ -8,28 +9,36 @@ export { default as BlogPage } from './BlogPage'
 export { default as BlogDetailsPage } from './BlogDetailsPage'
 export { default as NewsPage } from './NewsPage'
 export { default as ContactUsPage } from './ContactUsPage'
-export { default as AdminDashboard } from './AdminDashboard'
-export { default as AgentsPage } from './AgentsPage'
-export { default as PropertiesPage } from './PropertiesPage'
-export { default as RevenuePage } from './RevenuePage'
-export { default as AgentDashboard } from './AgentDashboard'
-export { default as AgentEditProfile } from './AgentEditProfile'
-export { default as AgentMyProfile } from './AgentMyProfile'
-export { default as AgentInbox } from './AgentInbox'
-export { default as AgentDownloadables } from './AgentDownloadables'
-export { default as AgentDigitalCard } from './AgentDigitalCard'
-export { default as AgentChangePassword } from './AgentChangePassword'
-export { default as AgentMyListings } from './AgentMyListings'
-export { default as AgentRentalTracker } from './AgentRentalTracker'
-export { default as AgentRentEstimate } from './AgentRentEstimate'
-export { default as AgentShareBlogs } from './AgentShareBlogs'
-export { default as AgentCreateListingCategory } from './AgentCreateListingCategory'
-export { default as AgentCreateListingDetails } from './AgentCreateListingDetails'
-export { default as AgentCreateListingLocation } from './AgentCreateListingLocation'
-export { default as AgentCreateListingPropertyImages } from './AgentCreateListingPropertyImages'
-export { default as AgentCreateListingPricing } from './AgentCreateListingPricing'
-export { default as AgentCreateListingAttributes } from './AgentCreateListingAttributes'
-export { default as AgentCreateListingOwnerInfo } from './AgentCreateListingOwnerInfo'
-export { default as AgentCreateListingPublish } from './AgentCreateListingPublish'
+
+// Admin pages
+export {
+    AdminDashboard,
+    AgentsPage,
+    PropertiesPage,
+    RevenuePage
+} from './admin'
+
+// Agent pages
+export {
+    AgentDashboard,
+    AgentEditProfile,
+    AgentMyProfile,
+    AgentInbox,
+    AgentDownloadables,
+    AgentDigitalCard,
+    AgentChangePassword,
+    AgentMyListings,
+    AgentRentalTracker,
+    AgentRentEstimate,
+    AgentShareBlogs,
+    AgentCreateListingCategory,
+    AgentCreateListingDetails,
+    AgentCreateListingLocation,
+    AgentCreateListingPropertyImages,
+    AgentCreateListingPricing,
+    AgentCreateListingAttributes,
+    AgentCreateListingOwnerInfo,
+    AgentCreateListingPublish
+} from './agent'
 
 

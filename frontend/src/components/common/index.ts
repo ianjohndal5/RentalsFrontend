@@ -1,0 +1,6 @@
+export { default as VerticalPropertyCard } from './VerticalPropertyCard'
+export { default as HorizontalPropertyCard } from './HorizontalPropertyCard'
+export { default as TestimonialCard } from './TestimonialCard'
+export { default as BlogCard } from './BlogCard'
+export { default as LoginModal } from './LoginModal'
+export { default as RegisterModal } from './RegisterModal'

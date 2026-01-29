@@ -1,0 +1,4 @@
+export { default as AdminDashboard } from './AdminDashboard'
+export { default as AgentsPage } from './AgentsPage'
+export { default as PropertiesPage } from './PropertiesPage'
+export { default as RevenuePage } from './RevenuePage'
