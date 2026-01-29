@@ -42,7 +42,7 @@ function PropertiesForRentPage() {
   const locations = ['Metro Manila', 'Makati City', 'BGC', 'Quezon City', 'Mandaluyong', 'Pasig', 'Cebu City', 'Davao City', 'Lapulapu', 'Manila']
   const bathOptions = ['1', '2', '3', '4+']
   const bedOptions = ['1', '2', '3', '4+']
-  
+
   // Category counts (matching the design)
   const categories = [
     { name: 'Apartments', count: 10 },
@@ -241,19 +241,19 @@ function PropertiesForRentPage() {
     const locationMatch = !selectedLocation || property.location === selectedLocation
     const bathMatch = !minBaths || property.bathrooms >= parseInt(minBaths)
     const bedMatch = !minBeds || property.bedrooms >= parseInt(minBeds)
-    
+
     let priceMatch = true
     if (priceMin || priceMax) {
       const price = parseInt(property.price.replace(/[^0-9]/g, ''))
       if (priceMin) priceMatch = priceMatch && price >= parseInt(priceMin)
       if (priceMax) priceMatch = priceMatch && price <= parseInt(priceMax)
     }
-    
-    const searchMatch = !searchQuery || 
+
+    const searchMatch = !searchQuery ||
       property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       property.propertyType.toLowerCase().includes(searchQuery.toLowerCase()) ||
       property.location.toLowerCase().includes(searchQuery.toLowerCase())
-    
+
     return typeMatch && locationMatch && bathMatch && bedMatch && priceMatch && searchMatch
   })
 
@@ -293,7 +293,7 @@ function PropertiesForRentPage() {
       <Navbar />
       {/* Page Header */}
       <PageHeader title="Properties for Rent" />
-      
+
       {/* Main Content Layout */}
       <main className="properties-main-layout">
         {/* Left Sidebar - Filters & Categories */}
@@ -302,7 +302,7 @@ function PropertiesForRentPage() {
           <div className="advance-search-section">
             <h2 className="section-title">Advance Search</h2>
             <div className="filter-group">
-              <select 
+              <select
                 className="filter-select"
                 value={selectedLocation}
                 onChange={(e) => setSelectedLocation(e.target.value)}
@@ -315,7 +315,7 @@ function PropertiesForRentPage() {
             </div>
 
             <div className="filter-group">
-              <select 
+              <select
                 className="filter-select"
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
@@ -327,7 +327,7 @@ function PropertiesForRentPage() {
             </div>
 
             <div className="filter-group">
-              <select 
+              <select
                 className="filter-select"
                 value={minBaths}
                 onChange={(e) => setMinBaths(e.target.value)}
@@ -340,7 +340,7 @@ function PropertiesForRentPage() {
             </div>
 
             <div className="filter-group">
-              <select 
+              <select
                 className="filter-select"
                 value={minBeds}
                 onChange={(e) => setMinBeds(e.target.value)}
@@ -356,8 +356,8 @@ function PropertiesForRentPage() {
               <label className="price-range-label">Price Range</label>
               <div className="price-range-inputs-container">
                 <div className="price-range-inputs">
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="price-input"
                     placeholder="T"
                     value={priceMin}
@@ -366,18 +366,18 @@ function PropertiesForRentPage() {
                   <div className="price-range-separator">
                     <span>To</span>
                   </div>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="price-input"
                     placeholder="O"
                     value={priceMax}
                     onChange={(e) => setPriceMax(e.target.value)}
                   />
                 </div>
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="200000" 
+                <input
+                  type="range"
+                  min="0"
+                  max="200000"
                   step="1000"
                   value={priceMin || 0}
                   onChange={(e) => setPriceMin(e.target.value)}
@@ -416,58 +416,58 @@ function PropertiesForRentPage() {
         {/* Right Main Content */}
         <div className="properties-main-content">
           {/* Breadcrumbs */}
-          
+
 
           {/* Top Search Bar */}
           <div className="top-search-bar-container">
             <div className="top-search-bar">
-            <div className="search-input-container">
-              <svg className="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="11" cy="11" r="8" stroke="#666" strokeWidth="2"/>
-                <path d="m21 21-4.35-4.35" stroke="#666" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              <input 
-                type="text" 
-                className="main-search-input"
-                placeholder="Search here..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+              <div className="search-input-container">
+                <svg className="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="11" cy="11" r="8" stroke="#666" strokeWidth="2" />
+                  <path d="m21 21-4.35-4.35" stroke="#666" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                <input
+                  type="text"
+                  className="main-search-input"
+                  placeholder="Search here..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <select
+                className="sort-dropdown-btn"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="price-low">Price Low to High</option>
+                <option value="price-high">Price High to Low</option>
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+              </select>
+              <button
+                className="hamburger-menu-btn"
+                aria-label="Menu"
+                onClick={() => setViewMode('horizontal')}
+                style={{ backgroundColor: viewMode === 'horizontal' ? '#8B4513' : '#ffffff' }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 12H21M3 6H21M3 18H21" stroke="#333" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+              <button
+                className="grid-view-btn"
+                aria-label="Grid View"
+                onClick={() => setViewMode('vertical')}
+                style={{ backgroundColor: viewMode === 'vertical' ? '#8B4513' : '#ffffff' }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
+                  <rect x="14" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
+                  <rect x="3" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
+                  <rect x="14" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
+                </svg>
+              </button>
             </div>
-            <select 
-              className="sort-dropdown-btn"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="price-low">Price Low to High</option>
-              <option value="price-high">Price High to Low</option>
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-            </select>
-            <button 
-              className="hamburger-menu-btn" 
-              aria-label="Menu"
-              onClick={() => setViewMode('horizontal')}
-              style={{ backgroundColor: viewMode === 'horizontal' ? '#8B4513' : '#ffffff' }}
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 12H21M3 6H21M3 18H21" stroke="#333" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </button>
-            <button 
-              className="grid-view-btn" 
-              aria-label="Grid View"
-              onClick={() => setViewMode('vertical')}
-              style={{ backgroundColor: viewMode === 'vertical' ? '#8B4513' : '#ffffff' }}
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
-                <rect x="14" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
-                <rect x="3" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
-                <rect x="14" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none"/>
-              </svg>
-            </button>
-          </div>
           </div>
 
           {/* Properties Grid Container */}
@@ -475,7 +475,7 @@ function PropertiesForRentPage() {
             {paginatedProperties.length > 0 ? (
               <>
                 <div className={viewMode === 'horizontal' ? 'properties-list' : 'properties-grid'}>
-                  {paginatedProperties.map(property => 
+                  {paginatedProperties.map(property =>
                     viewMode === 'horizontal' ? (
                       <HorizontalPropertyCard
                         key={property.id}
@@ -513,7 +513,7 @@ function PropertiesForRentPage() {
                 </div>
                 {totalPages > 1 && (
                   <div className="pagination">
-                    <button 
+                    <button
                       className="pagination-arrow"
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
@@ -523,7 +523,7 @@ function PropertiesForRentPage() {
                     </button>
                     {currentPage > 2 && (
                       <>
-                        <button 
+                        <button
                           className="pagination-number"
                           onClick={() => setCurrentPage(1)}
                         >
@@ -533,20 +533,20 @@ function PropertiesForRentPage() {
                       </>
                     )}
                     {currentPage > 1 && (
-                      <button 
+                      <button
                         className="pagination-number"
                         onClick={() => setCurrentPage(currentPage - 1)}
                       >
                         {currentPage - 1}
                       </button>
                     )}
-                    <button 
+                    <button
                       className="pagination-number active"
                     >
                       {currentPage}
                     </button>
                     {currentPage < totalPages && (
-                      <button 
+                      <button
                         className="pagination-number"
                         onClick={() => setCurrentPage(currentPage + 1)}
                       >
@@ -556,7 +556,7 @@ function PropertiesForRentPage() {
                     {currentPage < totalPages - 1 && (
                       <>
                         {currentPage < totalPages - 2 && <span className="pagination-ellipsis">...</span>}
-                        <button 
+                        <button
                           className="pagination-number"
                           onClick={() => setCurrentPage(totalPages)}
                         >
@@ -564,7 +564,7 @@ function PropertiesForRentPage() {
                         </button>
                       </>
                     )}
-                    <button 
+                    <button
                       className="pagination-arrow"
                       onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages}
@@ -597,7 +597,7 @@ function PropertiesForRentPage() {
                 Handpicked properties from our verified agents
               </p>
             </div>
-           
+
           </div>
         </div>
         <div className="featured-properties-carousel-wrapper">

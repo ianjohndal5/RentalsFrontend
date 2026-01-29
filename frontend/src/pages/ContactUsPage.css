@@ -20,7 +20,8 @@
   left: 50%;
   margin-left: -50vw;
   width: 100vw;
-  height: 55vh; /* Less than half page height */
+  height: 55vh;
+  /* Less than half page height */
   background-image: url('/assets/background-contactus.png');
   background-size: cover;
   background-position: center;
@@ -165,7 +166,7 @@
   background: #1a4db3;
   box-shadow: 0px 6px 20px rgba(32, 94, 215, 0.4);
   transform: translateY(-2px);
-  
+
 }
 
 /* Contact Info Section */
@@ -297,7 +298,7 @@
 
   .contact-submit-btn {
     width: 100%;
-    
+
   }
 
   .contact-background-illustration {
@@ -325,4 +326,3 @@
     height: 30vh;
   }
 }
-
