@@ -1,12 +1,26 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import AgentSidebar from '../components/AgentSidebar'
 import {
+  FiBarChart2,
+  FiBell,
+  FiBookOpen,
   FiChevronDown,
+  FiCreditCard,
+  FiDownload,
+  FiEdit3,
+  FiFileText,
+  FiList,
+  FiLock,
+  FiLogOut,
+  FiMail,
+  FiPlus,
+  FiUser,
   FiArrowLeft,
   FiArrowRight,
   FiCheck
 } from 'react-icons/fi'
-import AgentLayout from '../components/AgentLayout'
+import './AgentDashboard.css'
 import './AgentCreateListingCategory.css'
 import './AgentCreateListingDetails.css'
 
@@ -70,7 +84,40 @@ export default function AgentCreateListingDetails() {
   const [lotArea, setLotArea] = useState<number>(0)
 
   return (
-    <AgentLayout title="Dashboard" subtitle="Welcome back, manage your rental properties">
+    <div className="agent-dashboard">
+      <AgentSidebar/>
+     
+
+      <main className="agent-main">
+        <header className="agent-header">
+          <div className="header-content">
+            <div>
+              <h1>Dashboard</h1>
+              <p className="welcome-text">Welcome back, manage your rental properties</p>
+            </div>
+            <div className="header-right">
+              <FiBell className="notification-icon" />
+              <div className="user-profile">
+                <div className="profile-avatar">
+                  <img
+                    src="/assets/profile-placeholder.png"
+                    alt="John Anderson"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                      target.nextElementSibling?.classList.remove('hidden')
+                    }}
+                  />
+                  <div className="avatar-fallback hidden">JA</div>
+                </div>
+                <div className="user-info">
+                  <span className="user-name">John Anderson</span>
+                  <span className="user-role">Property Owner</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
 
         <div className="aclc-breadcrumb">
           <span className="aclc-breadcrumb-strong">Create Listing</span>
@@ -265,7 +312,8 @@ export default function AgentCreateListingDetails() {
             </button>
           </div>
         </div>
-    </AgentLayout>
+      </main>
+    </div>
   )
 }
 
