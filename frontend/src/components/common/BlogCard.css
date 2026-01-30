@@ -211,3 +211,175 @@
   opacity: 0.8;
 }
 
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .blog-card {
+    height: auto;
+    min-height: 400px;
+  }
+
+  .blog-card-small .blog-image {
+    height: 220px;
+  }
+
+  .blog-card-small .blog-card-content {
+    padding: 16px 20px;
+  }
+
+  .blog-overlay {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    padding: 24px 32px;
+    gap: 8px;
+  }
+
+  .blog-category {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .blog-read-time {
+    font-size: 11px;
+  }
+
+  .blog-title {
+    font-size: 16px;
+  }
+
+  .blog-card-small .blog-title {
+    font-size: 18px;
+  }
+
+  .blog-card-large .blog-title {
+    font-size: 16px;
+  }
+
+  .blog-excerpt {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .blog-card-small .blog-excerpt {
+    font-size: 13px;
+  }
+
+  .blog-card-large .blog-excerpt {
+    font-size: 14px;
+  }
+
+  .blog-meta-row {
+    gap: 40px;
+    margin-bottom: 10px;
+  }
+
+  .blog-author,
+  .blog-date {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .blog-author svg,
+  .blog-date svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .read-more-link {
+    font-size: 16px;
+  }
+
+  .blog-card-small .read-more-link {
+    font-size: 18px;
+  }
+
+  .blog-card-large .read-more-link {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-card {
+    min-height: 360px;
+  }
+
+  .blog-card-small .blog-image {
+    height: 180px;
+  }
+
+  .blog-card-small .blog-card-content {
+    padding: 14px 16px;
+  }
+
+  .blog-overlay {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 20px 24px;
+    gap: 6px;
+  }
+
+  .blog-category {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .blog-read-time {
+    font-size: 10px;
+  }
+
+  .blog-title {
+    font-size: 15px;
+  }
+
+  .blog-card-small .blog-title {
+    font-size: 17px;
+  }
+
+  .blog-card-large .blog-title {
+    font-size: 15px;
+  }
+
+  .blog-excerpt {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .blog-card-small .blog-excerpt {
+    font-size: 12px;
+  }
+
+  .blog-card-large .blog-excerpt {
+    font-size: 13px;
+  }
+
+  .blog-meta-row {
+    gap: 30px;
+    margin-bottom: 8px;
+  }
+
+  .blog-author,
+  .blog-date {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .blog-author svg,
+  .blog-date svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .read-more-link {
+    font-size: 15px;
+  }
+
+  .blog-card-small .read-more-link {
+    font-size: 16px;
+  }
+
+  .blog-card-large .read-more-link {
+    font-size: 15px;
+  }
+}
+

@@ -461,11 +461,11 @@
   }
 
   .featured-article-image {
-    height: 250px;
+    height: 200px;
   }
 
   .featured-article-content {
-    padding: 20px;
+    padding: 16px;
   }
 
   .featured-article-title {
@@ -483,21 +483,21 @@
 
   .trending-article-card {
     flex-direction: column;
-    padding: 16px;
+    padding: 12px;
   }
 
   .trending-article-image {
     width: 100%;
-    height: 180px;
+    height: 150px;
   }
 
   .blog-articles-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 16px;
   }
 
   .blog-article-content {
-    padding: 16px;
+    padding: 12px;
   }
 
   .blog-newsletter-section {
@@ -581,11 +581,11 @@
   }
 
   .trending-article-card {
-    padding: 12px;
+    padding: 10px;
   }
 
   .trending-article-image {
-    height: 150px;
+    height: 130px;
   }
 
   .trending-article-title {
