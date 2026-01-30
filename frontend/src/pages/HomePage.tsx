@@ -10,18 +10,24 @@ import '../styles/landing.css'
 function HomePage() {
   return (
     <div className="landing-page">
-      {/* Temporary testing links */}
+      {/* Temporary testing links - floating overlay */}
       <div style={{ 
-        padding: '10px', 
-        backgroundColor: '#f0f0f0', 
-        textAlign: 'center',
-        borderBottom: '1px solid #ddd'
+        position: 'fixed',
+        top: '10px',
+        right: '10px',
+        padding: '10px 15px', 
+        backgroundColor: 'rgba(240, 240, 240, 0.9)', 
+        borderRadius: '5px',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+        zIndex: 9999,
+        display: 'flex',
+        gap: '15px'
       }}>
-        <Link to="/admin" style={{ marginRight: '20px', color: '#007bff', textDecoration: 'none' }}>
-          Admin Dashboard
+        <Link to="/admin" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '500' }}>
+          Admin
         </Link>
-        <Link to="/agent" style={{ color: '#007bff', textDecoration: 'none' }}>
-          Agent Dashboard
+        <Link to="/agent" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '500' }}>
+          Agent
         </Link>
       </div>
       <Navbar />
