@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import AppSidebar from '../../components/common/AppSidebar'
+import DashboardHeader from '../../components/common/DashboardHeader'
 
 import { 
-  FiBell,
   FiRefreshCw
 } from 'react-icons/fi'
 import './AdminDashboard.css'
@@ -69,28 +69,14 @@ function AgentsPage() {
       {/* Main Content */}
       <main className="admin-main">
         {/* Header */}
-        <header className="admin-header">
-          <div className="header-content">
-            <div>
-              <h1>Dashboard Overview</h1>
-              <p className="welcome-text">Welcome back, Admin</p>
-            </div>
-            <div className="header-right">
-              <FiBell className="notification-icon" />
-              <div className="user-profile">
-                <div className="profile-avatar">
-                  <img src="/assets/profile-placeholder.png" alt="Admin" onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                    target.nextElementSibling?.classList.remove('hidden');
-                  }} />
-                  <div className="avatar-fallback hidden">JD</div>
-                </div>
-                <span className="user-name">John Admin</span>
-              </div>
-            </div>
-          </div>
-        </header>
+        <DashboardHeader
+          title="Dashboard Overview"
+          subtitle="Welcome back, Admin"
+          userName={localStorage.getItem('admin_name') || 'John Admin'}
+          userRole="Administrator"
+          showNotifications={true}
+          avatarFallback="JD"
+        />
 
         {/* Agents Section */}
         <div className="agents-section">
