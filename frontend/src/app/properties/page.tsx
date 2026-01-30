@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
@@ -9,7 +9,10 @@ import HorizontalPropertyCard from '../../components/common/HorizontalPropertyCa
 import '../../pages-old/PropertiesForRentPage.css'
 import PageHeader from '../../components/layout/PageHeader'
 
-export default function PropertiesForRentPage() {
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
+function PropertiesContent() {
   const searchParams = useSearchParams()
   const [selectedLocation, setSelectedLocation] = useState('')
   const [selectedType, setSelectedType] = useState('All Types')
@@ -406,6 +409,21 @@ export default function PropertiesForRentPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function PropertiesForRentPage() {
+  return (
+    <Suspense fallback={
+      <div className="properties-for-rent-page">
+        <Navbar />
+        <PageHeader title="Properties for Rent" />
+        <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
+        <Footer />
+      </div>
+    }>
+      <PropertiesContent />
+    </Suspense>
   )
 }
 
