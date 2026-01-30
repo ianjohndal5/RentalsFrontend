@@ -318,78 +318,320 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* Responsive adjustments - Keep vertical layout on all screen sizes */
+/* =========================
+   MOBILE-SPECIFIC STYLES (≤768px)
+   Different perspective and layout optimized for mobile
+========================= */
 @media (max-width: 768px) { 
+  /* Card Container - Mobile Optimized */
   .vertical-property-card {
     max-width: 100%;
     width: 100%;
     height: auto;
-    min-height: 520px;
+    min-height: auto;
     flex-direction: column;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08), 0px 2px 4px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e5e7eb;
+    overflow: visible;
+    margin-bottom: 16px;
+  }
+
+  .vertical-property-card:hover {
+    transform: none; /* Disable hover transform on mobile */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08), 0px 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .vertical-property-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  /* Image - Mobile Optimized */
+  .vertical-property-image {
+    height: 220px;
+    border-radius: 16px 16px 0 0;
+    object-fit: cover;
+  }
+
+  .vertical-property-card:hover .vertical-property-image {
+    transform: none; /* Disable hover scale on mobile */
+  }
+  
+  /* Content - Mobile Optimized Spacing */
+  .vertical-property-content {
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  /* Header Row - Mobile Layout */
+  .vertical-property-header-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .vertical-property-type {
+    font-size: 11px;
+    padding: 4px 8px;
+    background: #EFF6FF;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .vertical-property-date {
+    font-size: 11px;
+    margin-left: auto;
+  }
+  
+  /* Price Row - Mobile Optimized */
+  .vertical-property-price-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .vertical-property-price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #205ED7;
+  }
+
+  /* Contact Icons - Mobile Positioned Differently */
+  .vertical-property-contact-icons {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+
+  .vertical-property-contact-icons svg {
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+  }
+
+  .vertical-property-contact-icons svg:active {
+    transform: scale(0.95);
+    background: #f3f4f6;
+  }
+
+  /* Like Button - Mobile Positioned */
+  .vertical-property-like {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+
+  .vertical-property-like svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .vertical-property-like:active {
+    transform: scale(0.95);
+    background: #fef2f2;
+  }
+  
+  /* Title - Mobile Optimized */
+  .vertical-property-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0;
+    -webkit-line-clamp: 2;
+    max-height: 44px;
+    color: #111827;
+  }
+
+  /* Rent Manager Badge - Mobile Optimized */
+  .vertical-rent-manager-badge {
+    padding: 12px;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    margin-top: 4px;
+  }
+
+  .vertical-rent-manager-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .vertical-rent-manager-name {
+    font-size: 14px;
+  }
+
+  .vertical-rent-manager-role {
+    font-size: 12px;
+  }
+
+  /* Features Bar - Mobile Optimized */
+  .vertical-property-features {
+    height: auto;
+    min-height: 60px;
+    border-top: 1px solid #E5E7EB;
+    background: #FAFAFA;
+    padding: 12px 8px;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .vertical-property-feature-item {
+    flex: 1 1 calc(33.333% - 8px);
+    min-width: 80px;
+    padding: 10px 6px;
+    flex-direction: column;
+    gap: 6px;
+    border-right: 1px solid #E5E7EB;
+    border-bottom: none;
+    background: transparent;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .vertical-property-feature-item:active {
+    background: #F3F4F6;
+  }
+
+  .vertical-property-feature-item:nth-child(3n) {
+    border-right: none;
+  }
+
+  .vertical-property-feature-item svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .vertical-property-feature-item span:not(.feature-tooltip) {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  /* Hide tooltips on mobile - not needed with touch */
+  .feature-tooltip {
+    display: none;
+  }
+}
+
+/* =========================
+   SMALL MOBILE OPTIMIZATION (≤480px)
+   Further optimized for smaller screens
+========================= */
+@media (max-width: 480px) {
+  .vertical-property-card {
+    border-radius: 12px;
+    margin-bottom: 12px;
   }
   
   .vertical-property-image {
-    height: 280px;
+    height: 200px;
+    border-radius: 12px 12px 0 0;
   }
   
   .vertical-property-content {
-    padding: 16px;
-    gap: 8px;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .vertical-property-type {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .vertical-property-date {
+    font-size: 10px;
   }
   
   .vertical-property-price {
     font-size: 22px;
   }
+
+  .vertical-property-contact-icons {
+    top: 10px;
+    right: 10px;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .vertical-property-contact-icons svg {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+
+  .vertical-property-like {
+    top: 10px;
+    left: 10px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .vertical-property-like svg {
+    width: 18px;
+    height: 18px;
+  }
   
   .vertical-property-title {
     font-size: 15px;
+    max-height: 42px;
   }
 
-  .vertical-property-location {
+  .vertical-rent-manager-badge {
+    padding: 10px;
+  }
+
+  .vertical-rent-manager-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .vertical-rent-manager-name {
     font-size: 13px;
   }
 
-  .vertical-property-features {
-    gap: 8px;
-  }
-
-  .vertical-property-feature-item {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .vertical-property-card {
-    min-height: 480px;
-  }
-  
-  .vertical-property-image {
-    height: 240px;
-  }
-  
-  .vertical-property-content {
-    padding: 12px;
-    gap: 6px;
-  }
-  
-  .vertical-property-price {
-    font-size: 20px;
-  }
-  
-  .vertical-property-title {
-    font-size: 14px;
-  }
-
-  .vertical-property-location {
-    font-size: 12px;
-  }
-
-  .vertical-property-features {
-    gap: 6px;
-  }
-
-  .vertical-property-feature-item {
+  .vertical-rent-manager-role {
     font-size: 11px;
-    padding: 4px 8px;
+  }
+
+  .vertical-property-features {
+    padding: 10px 6px;
+    min-height: 70px;
+  }
+
+  .vertical-property-feature-item {
+    flex: 1 1 calc(33.333% - 6px);
+    min-width: 70px;
+    padding: 8px 4px;
+    gap: 4px;
+  }
+
+  .vertical-property-feature-item svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .vertical-property-feature-item span:not(.feature-tooltip) {
+    font-size: 13px;
   }
 }
