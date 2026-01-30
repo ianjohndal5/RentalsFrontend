@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar'
+import Footer from '../components/layout/Footer'
 import './BlogPage.css'
 
 function BlogPage() {
@@ -234,6 +235,7 @@ function BlogPage() {
           </form>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
