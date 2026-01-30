@@ -758,11 +758,12 @@
 
   .metrics-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
   }
 
   .tools-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .header-content {
@@ -771,11 +772,11 @@
   }
 
   .content-grid {
-    gap: 16px;
+    gap: 12px;
   }
 
   .section-card {
-    padding: 16px;
+    padding: 14px;
   }
 
   .listing-item {
@@ -846,14 +847,14 @@
   }
 
   .metric-card {
-    padding: 16px;
-    gap: 12px;
+    padding: 14px;
+    gap: 10px;
   }
 
   .metric-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 
   .metric-content h3 {

@@ -153,12 +153,12 @@
 @media (max-width: 768px) {
   .testimonial-card {
     width: 100%;
-    max-width: 320px;
-    min-height: 380px;
+    max-width: 300px;
+    min-height: 340px;
   }
 
   .testimonial-content-wrapper {
-    padding: 50px 28px 50px 28px;
+    padding: 40px 20px 40px 20px;
   }
 
   .testimonial-text {
@@ -167,14 +167,14 @@
   }
 
   .testimonial-avatar {
-    width: 75px;
-    height: 75px;
-    bottom: 80px;
+    width: 65px;
+    height: 65px;
+    bottom: 70px;
   }
 
   .testimonial-bottom-section {
-    height: 140px;
-    padding-bottom: 15px;
+    height: 120px;
+    padding-bottom: 12px;
   }
 
   .testimonial-name {
@@ -186,12 +186,12 @@
   }
 
   .testimonial-name-group {
-    padding-top: 45px;
+    padding-top: 35px;
   }
 
   .testimonial-card-style-1 .testimonial-names-group {
-    gap: 20px;
-    padding-top: 45px;
+    gap: 16px;
+    padding-top: 35px;
   }
 
   .testimonial-card-style-1 .testimonial-name {
@@ -206,7 +206,7 @@
 @media (max-width: 480px) {
   .testimonial-card {
     max-width: 100%;
-    min-height: 360px;
+    min-height: 320px;
   }
 
   .testimonial-content-wrapper {

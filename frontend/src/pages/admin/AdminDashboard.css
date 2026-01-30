@@ -532,7 +532,7 @@
 
   .metrics-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
   }
 
   .header-content {
@@ -541,7 +541,11 @@
   }
 
   .chart-card {
-    padding: 16px;
+    padding: 14px;
+  }
+
+  .list-card {
+    padding: 14px;
   }
 
   .chart-container {
@@ -603,14 +607,14 @@
   }
 
   .metric-card {
-    padding: 16px;
-    gap: 12px;
+    padding: 14px;
+    gap: 10px;
   }
 
   .metric-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 
   .metric-content h3 {

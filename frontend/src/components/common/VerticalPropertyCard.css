@@ -349,7 +349,7 @@
   
   /* Image - Mobile Optimized */
   .vertical-property-image {
-    height: 220px;
+    height: 180px;
     border-radius: 16px 16px 0 0;
     object-fit: cover;
   }
@@ -360,14 +360,14 @@
   
   /* Content - Mobile Optimized Spacing */
   .vertical-property-content {
-    padding: 16px;
-    gap: 12px;
+    padding: 12px;
+    gap: 10px;
   }
   
   /* Header Row - Mobile Layout */
   .vertical-property-header-row {
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
 
   .vertical-property-type {
@@ -387,7 +387,7 @@
   .vertical-property-price-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
   }
   
   .vertical-property-price {
@@ -545,13 +545,13 @@
   }
   
   .vertical-property-image {
-    height: 200px;
+    height: 150px;
     border-radius: 12px 12px 0 0;
   }
   
   .vertical-property-content {
-    padding: 14px;
-    gap: 10px;
+    padding: 10px;
+    gap: 8px;
   }
 
   .vertical-property-type {

@@ -275,11 +275,11 @@
   }
   
   .vertical-property-image {
-    height: 280px;
+    height: 180px;
   }
   
   .vertical-property-content {
-    padding: 16px;
+    padding: 12px;
     gap: 8px;
   }
   

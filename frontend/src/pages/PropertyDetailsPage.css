@@ -744,18 +744,18 @@
 
   .property-overview-section,
   .nearby-landmarks-section {
-    padding: 24px;
+    padding: 20px;
   }
 
   .property-title-card,
   .property-details-card,
   .property-amenities-card,
   .property-inquiry-form-card {
-    padding: 20px;
+    padding: 16px;
   }
 
   .similar-properties-section {
-    padding: 40px 24px;
+    padding: 32px 20px;
   }
 
   .similar-properties-title {
@@ -764,7 +764,7 @@
   }
 
   .similar-property-card {
-    width: 300px;
+    width: 280px;
   }
 }
 
@@ -785,7 +785,23 @@
     font-size: 22px;
   }
 
+  .property-overview-section,
+  .nearby-landmarks-section {
+    padding: 16px;
+  }
+
+  .property-title-card,
+  .property-details-card,
+  .property-amenities-card,
+  .property-inquiry-form-card {
+    padding: 14px;
+  }
+
+  .similar-properties-section {
+    padding: 24px 16px;
+  }
+
   .similar-property-card {
-    width: 280px;
+    width: 260px;
   }
 }
