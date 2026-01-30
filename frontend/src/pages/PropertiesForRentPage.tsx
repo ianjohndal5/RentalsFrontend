@@ -19,6 +19,7 @@ function PropertiesForRentPage() {
   const [sortBy, setSortBy] = useState('newest')
   const [currentPage, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<'horizontal' | 'vertical'>('vertical') // 'horizontal' for hamburger, 'vertical' for grid
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false) // For mobile sidebar toggle
   const itemsPerPage = 9 // 3 rows x 3 columns
 
   // Initialize state from URL query parameters
@@ -294,10 +295,28 @@ function PropertiesForRentPage() {
       {/* Page Header */}
       <PageHeader title="Properties for Rent" />
 
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="properties-sidebar-overlay"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Content Layout */}
       <main className="properties-main-layout">
         {/* Left Sidebar - Filters & Categories */}
-        <div className="properties-sidebar">
+        <div className={`properties-sidebar ${isSidebarOpen ? 'mobile-open' : ''}`}>
+          {/* Close button for mobile */}
+          <button 
+            className="sidebar-close-btn"
+            onClick={() => setIsSidebarOpen(false)}
+            aria-label="Close filters"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="#333" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
           {/* Advance Search Section */}
           <div className="advance-search-section">
             <h2 className="section-title">Advance Search</h2>
@@ -446,9 +465,9 @@ function PropertiesForRentPage() {
               </select>
               <button
                 className="hamburger-menu-btn"
-                aria-label="Menu"
-                onClick={() => setViewMode('horizontal')}
-                style={{ backgroundColor: viewMode === 'horizontal' ? '#8B4513' : '#ffffff' }}
+                aria-label="Toggle Filters Menu"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                style={{ backgroundColor: isSidebarOpen ? '#8B4513' : '#ffffff' }}
               >
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 12H21M3 6H21M3 18H21" stroke="#333" strokeWidth="2" strokeLinecap="round" />
