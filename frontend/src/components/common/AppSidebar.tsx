@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './AppSidebar.css'
 import {
@@ -15,12 +15,16 @@ import {
   FiDollarSign,
   FiLayers,
   FiMessageCircle,
+  FiMenu,
+  FiX,
 } from 'react-icons/fi'
 
 
 function AppSidebar() {
   const location = useLocation()
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const sidebarRef = useRef<HTMLElement>(null)
   
   // Determine if we're on admin or agent routes
   const isAdminRoute = location.pathname.startsWith('/admin')
@@ -67,6 +71,37 @@ function AppSidebar() {
       clearInterval(interval)
     }
   }, [isAgentRoute])
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [location.pathname])
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        // Check if click is on the mobile menu button (which is outside sidebar)
+        const target = event.target as HTMLElement
+        if (!target.closest('.mobile-menu-toggle')) {
+          setIsMobileMenuOpen(false)
+        }
+      }
+    }
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
 
   const isActive = (path: string) => {
     if (path === '/agent') {
@@ -247,22 +282,49 @@ function AppSidebar() {
     </>
   )
 
-  return (
-    <aside className={`app-sidebar ${isAdminRoute ? 'admin-sidebar' : 'agent-sidebar'}`}>
-      <div className="sidebar-logo">
-        <div className="logo-container">
-          <img
-            src="/assets/rentals-logo-hero-13c7b5.png"
-            alt="Rentals.ph logo"
-            className="logo-image"
-          />
-        </div>
-      </div>
+  const handleNavClick = () => {
+    setIsMobileMenuOpen(false)
+  }
 
-      <nav className="sidebar-nav">
-        {isAdminRoute ? renderAdminSidebar() : renderAgentSidebar()}
-      </nav>
-    </aside>
+  return (
+    <>
+      {/* Mobile Menu Toggle Button */}
+      <button 
+        className="mobile-menu-toggle"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        aria-label="Toggle menu"
+      >
+        {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+      </button>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-sidebar-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside 
+        ref={sidebarRef}
+        className={`app-sidebar ${isAdminRoute ? 'admin-sidebar' : 'agent-sidebar'} ${isMobileMenuOpen ? 'mobile-open' : ''}`}
+      >
+        <div className="sidebar-logo">
+          <div className="logo-container">
+            <img
+              src="/assets/rentals-logo-hero-13c7b5.png"
+              alt="Rentals.ph logo"
+              className="logo-image"
+            />
+          </div>
+        </div>
+
+        <nav className="sidebar-nav" onClick={handleNavClick}>
+          {isAdminRoute ? renderAdminSidebar() : renderAgentSidebar()}
+        </nav>
+      </aside>
+    </>
   )
 }
 

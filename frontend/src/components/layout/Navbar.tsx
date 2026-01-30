@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { FiUser, FiLogOut, FiChevronDown, FiHome } from 'react-icons/fi'
+import { FiUser, FiLogOut, FiChevronDown, FiHome, FiMenu, FiX } from 'react-icons/fi'
 import './Navbar.css'
 import LoginModal from '../common/LoginModal'
 import RegisterModal from '../common/RegisterModal'
@@ -9,12 +9,14 @@ function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [userName, setUserName] = useState('User')
   const [userRole, setUserRole] = useState<'agent' | 'admin'>('agent')
   const location = useLocation()
   const navigate = useNavigate()
   const userMenuRef = useRef<HTMLDivElement>(null)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
 
   const checkAuthStatus = () => {
     // Check if user is logged in (agent or admin)
@@ -64,16 +66,24 @@ function Navbar() {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setShowUserMenu(false)
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false)
+      }
     }
 
-    if (showUserMenu) {
+    if (showUserMenu || isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [showUserMenu])
+  }, [showUserMenu, isMobileMenuOpen])
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [location.pathname])
 
   const handleLoginClick = () => {
     setIsLoginOpen(true)
@@ -124,102 +134,201 @@ function Navbar() {
 
   return (
     <>
-      <header className="navbar-container flex items-center justify-between">
-        <div className="flex items-center gap-4 ">
-          <img
-            src="/assets/rentals-logo-hero-13c7b5.png"
-            alt="Rentals.ph logo"
-            className="h-[60px] w-auto mr-10"
-          />
-        </div>
+      <header className="navbar-container">
+        <div className="navbar-wrapper">
+          <div className="navbar-logo-section">
+            <img
+              src="/assets/rentals-logo-hero-13c7b5.png"
+              alt="Rentals.ph logo"
+              className="navbar-logo"
+            />
+          </div>
 
-        <nav className="flex items-center gap-2">
-          <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>
-            HOME
-          </Link>
-          <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}>
-            ABOUT US
-          </Link>
-          <Link to="/properties" className={`nav-link ${location.pathname === '/properties' ? 'active' : ''}`}>
-            PROPERTIES
-          </Link>
-          <Link to="/rent-managers" className={`nav-link ${location.pathname === '/rent-managers' ? 'active' : ''}`}>
-            RENT MANAGERS
-          </Link>
-          <Link to="/blog" className={`nav-link ${location.pathname === '/blog' ? 'active' : ''}`}>
-            BLOG
-          </Link>
-          <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}>
-            CONTACT US
-          </Link>
-          {isUserLoggedIn ? (
-            <div className="navbar-user-profile-wrapper" ref={userMenuRef}>
-              <button 
-                className="navbar-user-profile-btn"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                aria-label="User menu"
-              >
-                <div className="navbar-user-profile">
-                  <div className="navbar-profile-avatar">
-                    <img 
-                      src="/assets/profile-placeholder.png" 
-                      alt={userName}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.style.display = 'none'
-                        target.nextElementSibling?.classList.remove('hidden')
-                      }} 
-                    />
-                    <div className="navbar-avatar-fallback hidden">
-                      {getInitials(userName)}
+          {/* Desktop Navigation */}
+          <nav className="navbar-desktop">
+            <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>
+              HOME
+            </Link>
+            <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}>
+              ABOUT US
+            </Link>
+            <Link to="/properties" className={`nav-link ${location.pathname === '/properties' ? 'active' : ''}`}>
+              PROPERTIES
+            </Link>
+            <Link to="/rent-managers" className={`nav-link ${location.pathname === '/rent-managers' ? 'active' : ''}`}>
+              RENT MANAGERS
+            </Link>
+            <Link to="/blog" className={`nav-link ${location.pathname === '/blog' ? 'active' : ''}`}>
+              BLOG
+            </Link>
+            <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}>
+              CONTACT US
+            </Link>
+            {isUserLoggedIn ? (
+              <div className="navbar-user-profile-wrapper" ref={userMenuRef}>
+                <button 
+                  className="navbar-user-profile-btn"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  aria-label="User menu"
+                >
+                  <div className="navbar-user-profile">
+                    <div className="navbar-profile-avatar">
+                      <img 
+                        src="/assets/profile-placeholder.png" 
+                        alt={userName}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.style.display = 'none'
+                          target.nextElementSibling?.classList.remove('hidden')
+                        }} 
+                      />
+                      <div className="navbar-avatar-fallback hidden">
+                        {getInitials(userName)}
+                      </div>
                     </div>
+                    <div className="navbar-user-info">
+                      <span className="navbar-user-name">{userName}</span>
+                      <span className="navbar-user-role">
+                        {userRole === 'admin' ? 'Admin' : 'Agent'}
+                      </span>
+                    </div>
+                    <FiChevronDown className={`navbar-user-menu-chevron ${showUserMenu ? 'open' : ''}`} />
                   </div>
-                  <div className="navbar-user-info">
-                    <span className="navbar-user-name">{userName}</span>
-                    <span className="navbar-user-role">
-                      {userRole === 'admin' ? 'Admin' : 'Agent'}
-                    </span>
-                  </div>
-                  <FiChevronDown className={`navbar-user-menu-chevron ${showUserMenu ? 'open' : ''}`} />
-                </div>
-              </button>
-              
-              {showUserMenu && (
-                <div className="navbar-user-menu-dropdown">
-                  <button 
-                    className="navbar-user-menu-item" 
-                    onClick={() => {
-                      navigate(userRole === 'admin' ? '/admin' : '/agent')
-                      setShowUserMenu(false)
-                    }}
-                  >
-                    <FiHome className="navbar-user-menu-icon" />
-                    <span>Dashboard</span>
-                  </button>
-                  {userRole === 'agent' && (
+                </button>
+                
+                {showUserMenu && (
+                  <div className="navbar-user-menu-dropdown">
                     <button 
                       className="navbar-user-menu-item" 
                       onClick={() => {
-                        navigate('/agent/account')
+                        navigate(userRole === 'admin' ? '/admin' : '/agent')
                         setShowUserMenu(false)
                       }}
                     >
-                      <FiUser className="navbar-user-menu-icon" />
-                      <span>Account</span>
+                      <FiHome className="navbar-user-menu-icon" />
+                      <span>Dashboard</span>
                     </button>
-                  )}
-                  <button 
-                    className="navbar-user-menu-item logout" 
-                    onClick={handleLogout}
-                  >
-                    <FiLogOut className="navbar-user-menu-icon" />
-                    <span>Logout</span>
-                  </button>
+                    {userRole === 'agent' && (
+                      <button 
+                        className="navbar-user-menu-item" 
+                        onClick={() => {
+                          navigate('/agent/account')
+                          setShowUserMenu(false)
+                        }}
+                      >
+                        <FiUser className="navbar-user-menu-icon" />
+                        <span>Account</span>
+                      </button>
+                    )}
+                    <button 
+                      className="navbar-user-menu-item logout" 
+                      onClick={handleLogout}
+                    >
+                      <FiLogOut className="navbar-user-menu-icon" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button className="login-button" onClick={handleLoginClick}>
+                Login/Register
+              </button>
+            )}
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <button 
+            className="navbar-mobile-toggle"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        <nav className={`navbar-mobile ${isMobileMenuOpen ? 'open' : ''}`} ref={mobileMenuRef}>
+          <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            HOME
+          </Link>
+          <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            ABOUT US
+          </Link>
+          <Link to="/properties" className={`nav-link ${location.pathname === '/properties' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            PROPERTIES
+          </Link>
+          <Link to="/rent-managers" className={`nav-link ${location.pathname === '/rent-managers' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            RENT MANAGERS
+          </Link>
+          <Link to="/blog" className={`nav-link ${location.pathname === '/blog' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            BLOG
+          </Link>
+          <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            CONTACT US
+          </Link>
+          {isUserLoggedIn ? (
+            <div className="navbar-mobile-user-section">
+              <div className="navbar-mobile-user-profile">
+                <div className="navbar-profile-avatar">
+                  <img 
+                    src="/assets/profile-placeholder.png" 
+                    alt={userName}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                      target.nextElementSibling?.classList.remove('hidden')
+                    }} 
+                  />
+                  <div className="navbar-avatar-fallback hidden">
+                    {getInitials(userName)}
+                  </div>
                 </div>
+                <div className="navbar-user-info">
+                  <span className="navbar-user-name">{userName}</span>
+                  <span className="navbar-user-role">
+                    {userRole === 'admin' ? 'Admin' : 'Agent'}
+                  </span>
+                </div>
+              </div>
+              <button 
+                className="navbar-mobile-menu-item" 
+                onClick={() => {
+                  navigate(userRole === 'admin' ? '/admin' : '/agent')
+                  setIsMobileMenuOpen(false)
+                }}
+              >
+                <FiHome className="navbar-user-menu-icon" />
+                <span>Dashboard</span>
+              </button>
+              {userRole === 'agent' && (
+                <button 
+                  className="navbar-mobile-menu-item" 
+                  onClick={() => {
+                    navigate('/agent/account')
+                    setIsMobileMenuOpen(false)
+                  }}
+                >
+                  <FiUser className="navbar-user-menu-icon" />
+                  <span>Account</span>
+                </button>
               )}
+              <button 
+                className="navbar-mobile-menu-item logout" 
+                onClick={() => {
+                  handleLogout()
+                  setIsMobileMenuOpen(false)
+                }}
+              >
+                <FiLogOut className="navbar-user-menu-icon" />
+                <span>Logout</span>
+              </button>
             </div>
           ) : (
-            <button className="login-button" onClick={handleLoginClick}>
+            <button className="login-button mobile-login-button" onClick={() => {
+              handleLoginClick()
+              setIsMobileMenuOpen(false)
+            }}>
               Login/Register
             </button>
           )}

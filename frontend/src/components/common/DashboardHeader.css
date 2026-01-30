@@ -176,9 +176,66 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .dashboard-header {
+    margin-bottom: 24px;
+  }
+
   .header-content {
     flex-direction: column;
     gap: 16px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 24px;
+  }
+
+  .welcome-text {
+    font-size: 13px;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .user-profile {
+    gap: 10px;
+  }
+
+  .profile-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-name {
+    font-size: 13px;
+  }
+
+  .user-role {
+    font-size: 11px;
+  }
+
+  .user-menu-dropdown {
+    right: 0;
+    left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 20px;
+  }
+
+  .user-info {
+    display: none; /* Hide user info text on very small screens, show only avatar */
+  }
+
+  .user-profile {
+    gap: 0;
+  }
+
+  .user-menu-chevron {
+    display: none;
   }
 }
 

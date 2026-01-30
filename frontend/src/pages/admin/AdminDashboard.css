@@ -524,22 +524,86 @@
 }
 
 @media (max-width: 768px) {
-  .admin-sidebar {
-    width: 200px;
-  }
-
   .admin-main {
-    margin-left: 200px;
+    margin-left: 0;
     padding: 16px;
+    padding-top: 80px; /* Space for mobile menu button */
   }
 
   .metrics-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .header-content {
     flex-direction: column;
     gap: 16px;
+  }
+
+  .chart-card {
+    padding: 16px;
+  }
+
+  .chart-container {
+    height: 200px;
+  }
+
+  .pie-chart-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pie-chart {
+    width: 150px;
+    height: 150px;
+  }
+
+  .list-card {
+    padding: 16px;
+  }
+
+  .list-item {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .item-info h4 {
+    font-size: 13px;
+  }
+
+  .item-info p {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-main {
+    padding: 12px;
+    padding-top: 70px;
+  }
+
+  .metric-card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .metric-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .metric-value {
+    font-size: 24px;
+  }
+
+  .chart-card h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .list-header h2 {
+    font-size: 16px;
   }
 }
 
