@@ -464,26 +464,36 @@ function PropertiesForRentPage() {
                 <option value="oldest">Oldest First</option>
               </select>
               <button
-                className="hamburger-menu-btn"
+                className="filter-menu-btn"
                 aria-label="Toggle Filters Menu"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                style={{ backgroundColor: isSidebarOpen ? '#8B4513' : '#ffffff' }}
+                style={{ backgroundColor: isSidebarOpen ? '#FE8E0A' : '#ffffff' }}
               >
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 12H21M3 6H21M3 18H21" stroke="#333" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M3 6H21M3 12H21M3 18H21" stroke={isSidebarOpen ? "#ffffff" : "#333"} strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+              <button
+                className="hamburger-menu-btn"
+                aria-label="List View"
+                onClick={() => setViewMode('horizontal')}
+                style={{ backgroundColor: viewMode === 'horizontal' ? '#FE8E0A' : '#ffffff' }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 12H21M3 6H21M3 18H21" stroke={viewMode === 'horizontal' ? "#ffffff" : "#333"} strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
               <button
                 className="grid-view-btn"
                 aria-label="Grid View"
                 onClick={() => setViewMode('vertical')}
-                style={{ backgroundColor: viewMode === 'vertical' ? '#8B4513' : '#ffffff' }}
+                style={{ backgroundColor: viewMode === 'vertical' ? '#FE8E0A' : '#ffffff' }}
               >
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
-                  <rect x="14" y="3" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
-                  <rect x="3" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
-                  <rect x="14" y="14" width="7" height="7" stroke="#333" strokeWidth="2" fill="none" />
+                  <rect x="3" y="3" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
+                  <rect x="14" y="3" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
+                  <rect x="3" y="14" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
+                  <rect x="14" y="14" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
                 </svg>
               </button>
             </div>

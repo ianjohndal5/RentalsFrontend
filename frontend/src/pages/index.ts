@@ -15,7 +15,8 @@ export {
     AdminDashboard,
     AgentsPage,
     PropertiesPage,
-    RevenuePage
+    RevenuePage,
+    UserManagementPage
 } from './admin'
 
 // Agent pages

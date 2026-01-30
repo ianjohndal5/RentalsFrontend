@@ -14,6 +14,7 @@ import {
   AgentsPage,
   PropertiesPage,
   RevenuePage,
+  UserManagementPage,
   AgentDashboard,
   AgentAccount,
   AgentEditProfile,
@@ -54,6 +55,7 @@ function App() {
         <Route path="/admin/agents" element={<AgentsPage />} />
         <Route path="/admin/properties" element={<PropertiesPage />} />
         <Route path="/admin/revenue" element={<RevenuePage />} />
+        <Route path="/admin/users" element={<UserManagementPage />} />
         <Route path="/agent" element={<AgentDashboard />} />
         <Route path="/agent/account" element={<AgentAccount />} />
         <Route path="/agent/create-listing" element={<AgentCreateListingCategory />} />

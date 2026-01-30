@@ -251,6 +251,13 @@ function AppSidebar() {
         <FiDollarSign className="nav-icon" />
         <span>Revenue</span>
       </Link>
+      <Link
+        to="/admin/users"
+        className={`nav-item ${isActive('/admin/users') ? 'active' : ''}`}
+      >
+        <FiUsers className="nav-icon" />
+        <span>Users</span>
+      </Link>
 
       <div className="nav-section public-pages-section">
         <h3 className="nav-section-title">Public Pages</h3>
