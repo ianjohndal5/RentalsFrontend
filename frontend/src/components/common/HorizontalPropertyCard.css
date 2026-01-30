@@ -436,7 +436,7 @@
     line-height: 1.2;
   }
 
-  /* Contact Icons - Mobile Compact */
+  /* Contact Icons - Mobile Compact: All icons grouped together on right */
   .horizontal-property-contact-icons {
     position: absolute;
     top: 8px;
@@ -449,15 +449,28 @@
     border-radius: 8px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    display: flex;
+    align-items: center;
   }
 
-  .horizontal-property-contact-icons svg {
+  .horizontal-property-contact-icons svg,
+  .horizontal-property-contact-icons .horizontal-property-like {
     width: 28px;
     height: 28px;
     padding: 6px;
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .horizontal-property-contact-icons .horizontal-property-like {
+    margin: 0;
+    padding: 6px;
   }
 
   .horizontal-property-contact-icons svg:active {
@@ -465,24 +478,22 @@
     background: #f3f4f6;
   }
 
-  /* Like Button - Mobile Compact */
+  /* Like Button - Mobile: Keep inside contact-icons group */
   .horizontal-property-like {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    position: static;
+    width: auto;
+    height: auto;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
   }
 
   .horizontal-property-like svg {
-    width: 16px;
-    height: 16px;
+    width: 28px;
+    height: 28px;
   }
 
   .horizontal-property-like:active {
@@ -658,16 +669,16 @@
     padding: 4px;
   }
 
-  .horizontal-property-like {
-    top: 6px;
-    left: 6px;
-    width: 28px;
-    height: 28px;
+  .horizontal-property-like svg {
+    width: 24px;
+    height: 24px;
   }
 
-  .horizontal-property-like svg {
-    width: 14px;
-    height: 14px;
+  .horizontal-property-contact-icons svg,
+  .horizontal-property-contact-icons .horizontal-property-like {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
   }
 
   .horizontal-property-features {

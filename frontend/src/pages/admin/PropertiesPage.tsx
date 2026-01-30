@@ -142,11 +142,11 @@ function PropertiesPage() {
               <tbody>
                 {filteredProperties.map((property) => (
                   <tr key={property.id}>
-                    <td className="property-id">{property.propertyId}</td>
-                    <td className="property-name">{property.propertyName}</td>
-                    <td className="property-type">{property.type}</td>
-                    <td className="property-location">{property.location}</td>
-                    <td>
+                    <td className="property-id" data-label="Property ID">{property.propertyId}</td>
+                    <td className="property-name" data-label="Property Name">{property.propertyName}</td>
+                    <td className="property-type" data-label="Type">{property.type}</td>
+                    <td className="property-location" data-label="Location">{property.location}</td>
+                    <td data-label="Status">
                       <span className={`property-status-indicator ${property.status}`}>
                         <span className="property-status-dot"></span>
                         <span className="property-status-text">
@@ -154,7 +154,7 @@ function PropertiesPage() {
                         </span>
                       </span>
                     </td>
-                    <td className="property-date">{property.dateCreated}</td>
+                    <td className="property-date" data-label="Date Created">{property.dateCreated}</td>
                   </tr>
                 ))}
               </tbody>

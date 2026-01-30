@@ -137,9 +137,9 @@ function AgentsPage() {
               <tbody>
                 {filteredAgents.map((agent) => (
                   <tr key={agent.id}>
-                    <td className="agent-name">{agent.name}</td>
-                    <td className="agent-id">{agent.agentId}</td>
-                    <td>
+                    <td className="agent-name" data-label="Agent Name">{agent.name}</td>
+                    <td className="agent-id" data-label="Agent ID">{agent.agentId}</td>
+                    <td data-label="Status">
                       <span className={`status-indicator ${agent.status}`}>
                         <span className="status-dot"></span>
                         <span className="status-text">
@@ -147,9 +147,9 @@ function AgentsPage() {
                         </span>
                       </span>
                     </td>
-                    <td className="total-listings">{agent.totalListings} Listings</td>
-                    <td className="last-active">{agent.lastActive}</td>
-                    <td className="date-joined">{agent.dateJoined}</td>
+                    <td className="total-listings" data-label="Total Listings">{agent.totalListings} Listings</td>
+                    <td className="last-active" data-label="Last Active">{agent.lastActive}</td>
+                    <td className="date-joined" data-label="Date Joined">{agent.dateJoined}</td>
                   </tr>
                 ))}
               </tbody>

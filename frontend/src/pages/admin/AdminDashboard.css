@@ -520,6 +520,7 @@
   .charts-row,
   .lists-row {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
@@ -592,11 +593,43 @@
   }
 
   .chart-card h2 {
-    font-size: 16px;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .chart-container {
+    height: 160px;
+  }
+
+  .line-chart {
+    min-width: 350px;
+  }
+
+  .pie-chart {
+    width: 120px;
+    height: 120px;
+  }
+
+  .pie-legend {
+    gap: 10px;
+  }
+
+  .legend-item {
+    font-size: 11px;
+    gap: 6px;
+  }
+
+  .legend-color {
+    width: 10px;
+    height: 10px;
+  }
+
+  .legend-percent {
+    font-size: 10px;
   }
 
   .list-header h2 {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -827,28 +860,113 @@
 
 /* Responsive for Agents Page */
 @media (max-width: 768px) {
+  .agents-section {
+    padding: 16px;
+  }
+
   .agents-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .agents-title {
+    font-size: 20px;
   }
 
   .agents-controls {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .filter-options {
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px;
   }
 
-  .agents-table {
+  .filter-option {
     font-size: 12px;
   }
 
+  .refresh-button {
+    padding: 6px;
+  }
+
+  .refresh-icon {
+    font-size: 18px;
+  }
+
+  /* Convert table to card layout on mobile */
+  .agents-table-container {
+    overflow-x: visible;
+  }
+
+  .agents-table,
+  .agents-table thead,
+  .agents-table tbody,
+  .agents-table tr,
   .agents-table th,
   .agents-table td {
-    padding: 12px 8px;
+    display: block;
+    width: 100%;
+  }
+
+  .agents-table thead {
+    display: none;
+  }
+
+  .agents-table tbody tr {
+    display: block;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .agents-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .agents-table td {
+    padding: 8px 0;
+    border: none;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .agents-table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6B7280;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .agent-name {
+    font-size: 14px;
+  }
+
+  .agent-id {
+    font-size: 12px;
+  }
+
+  .status-indicator {
+    justify-content: flex-end;
+  }
+
+  .total-listings,
+  .last-active,
+  .date-joined {
+    font-size: 12px;
   }
 }
 
@@ -996,19 +1114,95 @@
 
 /* Responsive for Properties Page */
 @media (max-width: 768px) {
+  .properties-section {
+    padding: 16px;
+  }
+
+  .properties-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
   .properties-filters {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
+    margin-bottom: 16px;
   }
 
-  .properties-table {
+  .filter-option {
     font-size: 12px;
   }
 
+  /* Convert table to card layout on mobile */
+  .properties-table-container {
+    overflow-x: visible;
+  }
+
+  .properties-table,
+  .properties-table thead,
+  .properties-table tbody,
+  .properties-table tr,
   .properties-table th,
   .properties-table td {
-    padding: 12px 8px;
+    display: block;
+    width: 100%;
+  }
+
+  .properties-table thead {
+    display: none;
+  }
+
+  .properties-table tbody tr {
+    display: block;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .properties-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .properties-table td {
+    padding: 8px 0;
+    border: none;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .properties-table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6B7280;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .property-id {
+    font-size: 12px;
+  }
+
+  .property-name {
+    font-size: 14px;
+  }
+
+  .property-type,
+  .property-location,
+  .property-date {
+    font-size: 12px;
+  }
+
+  .property-status-indicator {
+    justify-content: flex-end;
   }
 }
 
@@ -1139,13 +1333,114 @@
 
 /* Responsive for Revenue Page */
 @media (max-width: 768px) {
-  .transaction-table {
+  .revenue-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .transaction-section {
+    margin-top: 24px;
+  }
+
+  .transaction-card {
+    padding: 16px;
+  }
+
+  .transaction-card h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* Convert table to card layout on mobile */
+  .transaction-table-container {
+    overflow-x: visible;
+  }
+
+  .transaction-table,
+  .transaction-table thead,
+  .transaction-table tbody,
+  .transaction-table tr,
+  .transaction-table th,
+  .transaction-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .transaction-table thead {
+    display: none;
+  }
+
+  .transaction-table tbody tr {
+    display: block;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .transaction-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .transaction-table td {
+    padding: 8px 0;
+    border: none;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .transaction-table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6B7280;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .transaction-id,
+  .transaction-date,
+  .transaction-entity,
+  .transaction-description,
+  .transaction-amount {
     font-size: 12px;
   }
 
-  .transaction-table th,
-  .transaction-table td {
-    padding: 12px 8px;
+  .status-badge {
+    justify-self: flex-end;
+  }
+}
+
+/* Small mobile optimization */
+@media (max-width: 480px) {
+  .agents-section,
+  .properties-section,
+  .transaction-card {
+    padding: 12px;
+  }
+
+  .agents-title,
+  .properties-title,
+  .revenue-title {
+    font-size: 18px;
+  }
+
+  .agents-table td:before,
+  .properties-table td:before,
+  .transaction-table td:before {
+    font-size: 10px;
+  }
+
+  .agent-name,
+  .property-name,
+  .transaction-entity {
+    font-size: 13px;
   }
 }
 

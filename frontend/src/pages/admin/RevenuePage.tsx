@@ -211,22 +211,22 @@ function RevenuePage() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="transaction-id">TR-9901</td>
-                    <td className="transaction-date">Jan 28, 2026</td>
-                    <td className="transaction-entity">Sofia Lim</td>
-                    <td className="transaction-description">Booking Deposit</td>
-                    <td className="transaction-amount">P45,000</td>
-                    <td>
+                    <td className="transaction-id" data-label="Transaction ID">TR-9901</td>
+                    <td className="transaction-date" data-label="Date">Jan 28, 2026</td>
+                    <td className="transaction-entity" data-label="Entity">Sofia Lim</td>
+                    <td className="transaction-description" data-label="Description">Booking Deposit</td>
+                    <td className="transaction-amount" data-label="Amount">P45,000</td>
+                    <td data-label="Status">
                       <span className="status-badge successful">Successful</span>
                     </td>
                   </tr>
                   <tr>
-                    <td className="transaction-id">TR-9902</td>
-                    <td className="transaction-date">Jan 27, 2026</td>
-                    <td className="transaction-entity">Juan Dela Cruz</td>
-                    <td className="transaction-description">Pro Plan (Monthly)</td>
-                    <td className="transaction-amount">P1,499</td>
-                    <td>
+                    <td className="transaction-id" data-label="Transaction ID">TR-9902</td>
+                    <td className="transaction-date" data-label="Date">Jan 27, 2026</td>
+                    <td className="transaction-entity" data-label="Entity">Juan Dela Cruz</td>
+                    <td className="transaction-description" data-label="Description">Pro Plan (Monthly)</td>
+                    <td className="transaction-amount" data-label="Amount">P1,499</td>
+                    <td data-label="Status">
                       <span className="status-badge successful">Successful</span>
                     </td>
                   </tr>
