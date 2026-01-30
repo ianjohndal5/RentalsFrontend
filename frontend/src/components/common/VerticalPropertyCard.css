@@ -344,4 +344,52 @@
   .vertical-property-title {
     font-size: 15px;
   }
+
+  .vertical-property-location {
+    font-size: 13px;
+  }
+
+  .vertical-property-features {
+    gap: 8px;
+  }
+
+  .vertical-property-feature-item {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vertical-property-card {
+    min-height: 480px;
+  }
+  
+  .vertical-property-image {
+    height: 240px;
+  }
+  
+  .vertical-property-content {
+    padding: 12px;
+    gap: 6px;
+  }
+  
+  .vertical-property-price {
+    font-size: 20px;
+  }
+  
+  .vertical-property-title {
+    font-size: 14px;
+  }
+
+  .vertical-property-location {
+    font-size: 12px;
+  }
+
+  .vertical-property-features {
+    gap: 6px;
+  }
+
+  .vertical-property-feature-item {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
 }
