@@ -1,8 +1,5 @@
 'use client'
 
-// Force dynamic rendering for this page
-export const dynamic = 'force-dynamic'
-
 import { useMemo, useState } from 'react'
 import AppSidebar from '../../../components/common/AppSidebar'
 import AgentHeader from '../../../components/agent/AgentHeader'
