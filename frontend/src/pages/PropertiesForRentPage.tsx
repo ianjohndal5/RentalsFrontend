@@ -436,6 +436,20 @@ function PropertiesForRentPage() {
         <div className="properties-main-content">
           {/* Breadcrumbs */}
 
+          {/* Mobile Filter Button - Above Search Bar */}
+          <button
+            className={`mobile-filter-btn ${isSidebarOpen ? 'active' : ''}`}
+            aria-label="Toggle Filters Menu"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 6H2M22 12H2M22 18H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="6" cy="6" r="2" fill="currentColor" />
+              <circle cx="6" cy="12" r="2" fill="currentColor" />
+              <circle cx="6" cy="18" r="2" fill="currentColor" />
+            </svg>
+            <span>Filters</span>
+          </button>
 
           {/* Top Search Bar */}
           <div className="top-search-bar-container">
@@ -463,16 +477,6 @@ function PropertiesForRentPage() {
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
               </select>
-              <button
-                className="filter-menu-btn"
-                aria-label="Toggle Filters Menu"
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                style={{ backgroundColor: isSidebarOpen ? '#FE8E0A' : '#ffffff' }}
-              >
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 6H21M3 12H21M3 18H21" stroke={isSidebarOpen ? "#ffffff" : "#333"} strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
               <button
                 className="hamburger-menu-btn"
                 aria-label="List View"
