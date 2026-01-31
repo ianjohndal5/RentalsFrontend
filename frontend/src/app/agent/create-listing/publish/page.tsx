@@ -8,6 +8,7 @@ import { useCreateListing } from '../../../../contexts/CreateListingContext'
 import api from '../../../../lib/api'
 import { compressImage } from '../../../../utils/imageCompression'
 import { uploadWithProgress } from '../../../../utils/uploadProgress'
+import { getApiBaseUrl } from '../../../../config/api'
 
 import {
   FiCheck,
@@ -480,7 +481,7 @@ export default function AgentCreateListingPublish() {
                   }
                   
                   // Step 3: Upload with progress tracking
-                  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
+                  const API_BASE_URL = getApiBaseUrl()
                   const token = localStorage.getItem('auth_token')
                   
                   const response = await uploadWithProgress(

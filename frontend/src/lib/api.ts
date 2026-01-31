@@ -1,4 +1,7 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
+import { getApiBaseUrl } from '../config/api'
+
+// Get API base URL (respects USE_LOCAL_API env var to switch between local and remote)
+const API_BASE_URL = getApiBaseUrl()
 
 export interface ApiResponse<T> {
   success: boolean

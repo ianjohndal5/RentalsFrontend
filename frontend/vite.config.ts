@@ -1,6 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// Helper to get proxy target based on USE_LOCAL_API env var
+// Default: local backend, set USE_LOCAL_API=false to use Railway
+const getProxyTarget = () => {
+  if (process.env.VITE_API_BASE_URL) {
+    return process.env.VITE_API_BASE_URL
+  }
+  const useRemoteApi = process.env.USE_LOCAL_API === 'false' || process.env.USE_LOCAL_API === '0'
+  return useRemoteApi ? 'https://rentalsbackend-production.up.railway.app' : 'http://localhost:8000'
+}
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -13,9 +23,9 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: process.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000',
+        target: getProxyTarget(),
         changeOrigin: true,
-        secure: false,
+        secure: process.env.USE_LOCAL_API === 'false' || process.env.USE_LOCAL_API === '0',
         rewrite: (path) => path, // Keep /api prefix
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
