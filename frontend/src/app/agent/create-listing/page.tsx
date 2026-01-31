@@ -7,8 +7,8 @@ export default function AgentCreateListing() {
   const router = useRouter()
 
   useEffect(() => {
-    // Redirect to category page
-    router.push('/agent/create-listing/category')
+    // Redirect to streamlined basic info page
+    router.push('/agent/create-listing/basic-info')
   }, [router])
 
   return null

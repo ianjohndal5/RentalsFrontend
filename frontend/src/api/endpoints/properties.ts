@@ -44,5 +44,23 @@ export const propertiesApi = {
     const response = await apiClient.get<Property>(`/properties/${id}`)
     return response.data
   },
+
+  /**
+   * Create a new property (requires authentication)
+   */
+  create: async (propertyData: FormData): Promise<Property> => {
+    const response = await apiClient.post<Property>('/properties', propertyData)
+    return response.data
+  },
+
+  /**
+   * Create multiple properties at once (bulk create - requires authentication)
+   */
+  bulkCreate: async (properties: Partial<Property>[]): Promise<{ data: Property[], created_count: number }> => {
+    const response = await apiClient.post<{ data: Property[], created_count: number }>('/properties/bulk', {
+      properties,
+    })
+    return response.data
+  },
 }
 

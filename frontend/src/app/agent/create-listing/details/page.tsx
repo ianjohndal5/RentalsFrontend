@@ -11,8 +11,8 @@ import {
   FiArrowRight,
   FiCheck
 } from 'react-icons/fi'
-import '../../../../pages-old/agent/AgentCreateListingCategory.css'
-import '../../../../pages-old/agent/AgentCreateListingDetails.css'
+import '../AgentCreateListingCategory.css'
+import './page.css'
 
 function ProgressRing({ percent }: { percent: number }) {
   const { radius, stroke, normalizedRadius, circumference, strokeDashoffset } = useMemo(() => {
@@ -135,6 +135,8 @@ export default function AgentCreateListingDetails() {
         <div className="section-card aclc-form-card">
           <h2 className="aclc-form-title">Property Details</h2>
 
+          <div className="acld-title-desc-grid">
+            <div>
           <label className="aclc-label" htmlFor="propertyTitle">
             Property Title
           </label>
@@ -145,7 +147,8 @@ export default function AgentCreateListingDetails() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter a title for your property"
           />
-
+            </div>
+            <div>
           <label className="aclc-label" htmlFor="propertyDescription">
             Property Description
           </label>
@@ -187,6 +190,8 @@ export default function AgentCreateListingDetails() {
               placeholder="Describe your property in detail..."
               rows={7}
             />
+              </div>
+            </div>
           </div>
 
           <div className="acld-grid-3">

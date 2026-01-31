@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Navbar from '../../../components/layout/Navbar'
 import Footer from '../../../components/layout/Footer'
 import PageHeader from '../../../components/layout/PageHeader'
-import '../../../pages-old/BlogDetailsPage.css'
+import './page.css'
 
 export default function BlogDetailsPage() {
   const params = useParams()

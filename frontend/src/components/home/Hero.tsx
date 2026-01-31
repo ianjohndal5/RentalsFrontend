@@ -8,7 +8,21 @@ function Hero() {
   const [searchQuery, setSearchQuery] = useState('')
   const [propertyType, setPropertyType] = useState('')
   const [location, setLocation] = useState('')
+  const [minBeds, setMinBeds] = useState('')
+  const [minBaths, setMinBaths] = useState('')
+  const [priceMin, setPriceMin] = useState('')
+  const [priceMax, setPriceMax] = useState('')
   const router = useRouter()
+
+  // Recommended searches
+  const recommendedSearches = [
+    'Condominium For Rent In Cebu',
+    'House & Lot For Rent In Lapulapu',
+    'Studio For Rent In Makati',
+    'Pet Friendly Unit In Manila',
+    '2 Bedroom Apartment In BGC',
+    'Affordable Studio In Quezon City'
+  ]
 
   // Map property types from Hero to PropertiesForRentPage format
   const propertyTypeMap: { [key: string]: string } = {
@@ -47,6 +61,20 @@ function Hero() {
     if (location && locationMap[location]) {
       params.set('location', locationMap[location])
     }
+
+    // Add advanced filters
+    if (minBeds) {
+      params.set('minBeds', minBeds)
+    }
+    if (minBaths) {
+      params.set('minBaths', minBaths)
+    }
+    if (priceMin) {
+      params.set('priceMin', priceMin)
+    }
+    if (priceMax) {
+      params.set('priceMax', priceMax)
+    }
     
     // Navigate to properties page with query parameters
     const queryString = params.toString()
@@ -59,8 +87,14 @@ function Hero() {
     }
   }
 
+  const handleRecommendedSearch = (search: string) => {
+    const params = new URLSearchParams()
+    params.set('search', search)
+    router.push(`/properties?${params.toString()}`)
+  }
+
   return (
-    <section id="home" style={{ position: 'relative', height: '550px', overflow: 'hidden', }}>
+    <section id="home" style={{ position: 'relative', height: '700px', overflow: 'hidden', }}>
       {/* Background image that matches Figma hero */}
       <img
         src="/assets/landing-hero-bg-784ecf.png"
@@ -71,7 +105,7 @@ function Hero() {
       {/* Hero content */}
       <div className="relative z-10 flex flex-col items-center text-center px-4">
         <h2 className="hero-title">
-          FIND YOUR HOME IN THE <br></br> PHILIPPINES
+          FIND YOUR HOME IN THE PHILIPPINES
         </h2>
         <p className="hero-subtitle mt-3 max-w-3xl">
           <span className="hero-subtitle-text">Trusted Rentals, simplified. Start your journey with </span>
@@ -135,6 +169,77 @@ function Hero() {
                 <line x1="15.5" y1="15.5" x2="20" y2="20" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
               </svg>
             </button>
+          </div>
+
+          {/* Advanced Options - Inside search container */}
+          <div className="advanced-options-panel">
+            <div className="advanced-options-grid">
+              <div className="advanced-option-group">
+                <label className="advanced-option-label">Min. Bedrooms</label>
+                <select 
+                  className="advanced-option-select"
+                  value={minBeds}
+                  onChange={(e) => setMinBeds(e.target.value)}
+                >
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                </select>
+              </div>
+
+              <div className="advanced-option-group">
+                <label className="advanced-option-label">Min. Bathrooms</label>
+                <select 
+                  className="advanced-option-select"
+                  value={minBaths}
+                  onChange={(e) => setMinBaths(e.target.value)}
+                >
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                </select>
+              </div>
+
+              <div className="advanced-option-group price-range-group">
+                <label className="advanced-option-label">Price Range</label>
+                <div className="price-range-inputs-wrapper">
+                  <input
+                    type="number"
+                    className="price-range-input"
+                    placeholder="Min"
+                    value={priceMin}
+                    onChange={(e) => setPriceMin(e.target.value)}
+                  />
+                  <span className="price-range-separator">to</span>
+                  <input
+                    type="number"
+                    className="price-range-input"
+                    placeholder="Max"
+                    value={priceMax}
+                    onChange={(e) => setPriceMax(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recommended Searches - Outside search container */}
+        <div className="recommended-searches">
+          <div className="recommended-searches-list">
+            {recommendedSearches.map((search, index) => (
+              <button
+                key={index}
+                className="recommended-search-chip"
+                onClick={() => handleRecommendedSearch(search)}
+              >
+                {search}
+              </button>
+            ))}
           </div>
         </div>
       </div>

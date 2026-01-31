@@ -3,8 +3,8 @@
 import { useMemo, useState } from 'react'
 import AppSidebar from '../../../components/common/AppSidebar'
 import AgentHeader from '../../../components/agent/AgentHeader'
-import '../../../pages-old/agent/AgentDashboard.css'
-import '../../../pages-old/agent/AgentShareBlogs.css'
+import '../page.css'
+import './page.css'
 
 type AgentBlogCard = {
   id: number

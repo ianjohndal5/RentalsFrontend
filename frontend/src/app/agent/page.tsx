@@ -20,7 +20,7 @@ import {
   FiDollarSign,
   FiBookOpen
 } from 'react-icons/fi'
-import '../../pages-old/agent/AgentDashboard.css'
+import './page.css'
 
 export default function AgentDashboard() {
   return (

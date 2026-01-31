@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import AppSidebar from '../../../components/common/AppSidebar'
 import DashboardHeader from '../../../components/common/DashboardHeader'
-import '../../../pages-old/admin/AdminDashboard.css'
+import '../page.css'
 
 interface Property {
   id: string

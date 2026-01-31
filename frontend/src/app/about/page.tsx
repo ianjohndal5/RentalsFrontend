@@ -4,7 +4,7 @@ import Navbar from '../../components/layout/Navbar'
 import Testimonials from '../../components/home/Testimonials'
 import Footer from '../../components/layout/Footer'
 import Partners from '../../components/home/Partners'
-import '../../pages-old/AboutPage.css'
+import './page.css'
 
 export default function AboutPage() {
   return (

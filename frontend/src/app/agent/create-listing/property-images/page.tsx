@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import AppSidebar from '../../../../components/common/AppSidebar'
 import AgentHeader from '../../../../components/agent/AgentHeader'
 import { useCreateListing } from '../../../../contexts/CreateListingContext'
+import { createThumbnail } from '../../../../utils/imageCompression'
 
 import {
   FiArrowLeft,
@@ -13,8 +14,8 @@ import {
   FiUploadCloud,
   FiPlayCircle
 } from 'react-icons/fi'
-import '../../../../pages-old/agent/AgentCreateListingCategory.css'
-import '../../../../pages-old/agent/AgentCreateListingPropertyImages.css'
+import '../AgentCreateListingCategory.css'
+import './page.css'
 
 function ProgressRing({ percent }: { percent: number }) {
   const { radius, stroke, normalizedRadius, circumference, strokeDashoffset } = useMemo(() => {
@@ -66,12 +67,39 @@ export default function AgentCreateListingPropertyImages() {
   const { data, updateData } = useCreateListing()
   const [videoUrl, setVideoUrl] = useState(data.videoUrl)
   const [images, setImages] = useState<File[]>(data.images)
+  const [thumbnails, setThumbnails] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setVideoUrl(data.videoUrl)
     setImages(data.images)
+    
+    // Generate thumbnails for preview (reduces memory usage)
+    const generateThumbnails = async () => {
+      const thumbnailPromises = data.images.map(file => 
+        createThumbnail(file, 200).catch(() => URL.createObjectURL(file))
+      )
+      const newThumbnails = await Promise.all(thumbnailPromises)
+      setThumbnails(newThumbnails)
+    }
+    
+    if (data.images.length > 0) {
+      generateThumbnails()
+    } else {
+      setThumbnails([])
+    }
   }, [data])
+  
+  // Cleanup object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      thumbnails.forEach(url => {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url)
+        }
+      })
+    }
+  }, [thumbnails])
 
   const stepLabels = [
     'Category',
@@ -84,12 +112,18 @@ export default function AgentCreateListingPropertyImages() {
     'Publish'
   ]
 
-  const handleDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
+  const handleDrop: React.DragEventHandler<HTMLDivElement> = async (event) => {
     event.preventDefault()
     event.stopPropagation()
     const files = Array.from(event.dataTransfer.files)
     const imageFiles = files.filter(file => file.type.startsWith('image/'))
     setImages(prev => [...prev, ...imageFiles])
+    
+    // Generate thumbnails for dropped images
+    const newThumbnails = await Promise.all(
+      imageFiles.map(file => createThumbnail(file, 200).catch(() => URL.createObjectURL(file)))
+    )
+    setThumbnails(prev => [...prev, ...newThumbnails])
   }
 
   const handleDragOver: React.DragEventHandler<HTMLDivElement> = (event) => {
@@ -97,16 +131,27 @@ export default function AgentCreateListingPropertyImages() {
     event.stopPropagation()
   }
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const files = Array.from(event.target.files)
       const imageFiles = files.filter(file => file.type.startsWith('image/'))
       setImages(prev => [...prev, ...imageFiles])
+      
+      // Generate thumbnails for new images
+      const newThumbnails = await Promise.all(
+        imageFiles.map(file => createThumbnail(file, 200).catch(() => URL.createObjectURL(file)))
+      )
+      setThumbnails(prev => [...prev, ...newThumbnails])
     }
   }
 
   const handleRemoveImage = (index: number) => {
+    // Cleanup thumbnail URL
+    if (thumbnails[index] && thumbnails[index].startsWith('blob:')) {
+      URL.revokeObjectURL(thumbnails[index])
+    }
     setImages(prev => prev.filter((_, i) => i !== index))
+    setThumbnails(prev => prev.filter((_, i) => i !== index))
   }
 
   return (
@@ -155,7 +200,7 @@ export default function AgentCreateListingPropertyImages() {
           </div>
         </div>
 
-        <div className="section-card acpi-form-card">
+        <div className="section-card aclc-form-card">
           <h2 className="aclc-form-title">Property Gallery</h2>
 
           <div className="acpi-subtitle">Property Images</div>
@@ -191,9 +236,10 @@ export default function AgentCreateListingPropertyImages() {
               {images.map((image, index) => (
                 <div key={index} style={{ position: 'relative', display: 'inline-block' }}>
                   <img
-                    src={URL.createObjectURL(image)}
+                    src={thumbnails[index] || URL.createObjectURL(image)}
                     alt={`Preview ${index + 1}`}
                     style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px' }}
+                    loading="lazy"
                   />
                   <button
                     type="button"
@@ -209,6 +255,11 @@ export default function AgentCreateListingPropertyImages() {
                       width: '24px',
                       height: '24px',
                       cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '18px',
+                      lineHeight: '1',
                     }}
                   >
                     ×

@@ -14,12 +14,17 @@ Route::get('/properties/{id}', [PropertyController::class, 'show']);
 // Protected property routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/properties', [PropertyController::class, 'store']);
+    Route::post('/properties/bulk', [PropertyController::class, 'bulkStore']);
 });
 
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 
 Route::get('/blogs', [BlogController::class, 'index']);
 Route::get('/blogs/{id}', [BlogController::class, 'show']);
+
+// News endpoint (alias for blogs)
+Route::get('/news', [BlogController::class, 'index']);
+Route::get('/news/{id}', [BlogController::class, 'show']);
 
 // Agent routes
 Route::post('/agents/register', [AgentController::class, 'register']);

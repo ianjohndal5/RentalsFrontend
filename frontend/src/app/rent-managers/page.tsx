@@ -6,7 +6,7 @@ import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
 import PageHeader from '../../components/layout/PageHeader'
 import { rentManagers } from '../../data/rentManagers'
-import '../../pages-old/RentManagersPage.css'
+import './page.css'
 
 export default function RentManagersPage() {
   const router = useRouter()

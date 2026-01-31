@@ -9,7 +9,7 @@ import HorizontalPropertyCard from '../../../components/common/HorizontalPropert
 import VerticalPropertyCard from '../../../components/common/VerticalPropertyCard'
 import { getRentManagerById } from '../../../data/rentManagers'
 import PageHeader from '../../../components/layout/PageHeader'
-import '../../../pages-old/RentManagerDetailsPage.css'
+import './page.css'
 
 export default function RentManagerDetailsPage() {
   const params = useParams()

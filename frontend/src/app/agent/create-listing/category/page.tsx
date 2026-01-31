@@ -9,7 +9,7 @@ import {
   FiChevronDown,
   FiArrowRight
 } from 'react-icons/fi'
-import '../../../../pages-old/agent/AgentCreateListingCategory.css'
+import '../AgentCreateListingCategory.css'
 
 function ProgressRing({ percent }: { percent: number }) {
   const { radius, stroke, normalizedRadius, circumference, strokeDashoffset } = useMemo(() => {

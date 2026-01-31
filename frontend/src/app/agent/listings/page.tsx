@@ -10,7 +10,7 @@ import {
   FiSearch,
   FiSlash
 } from 'react-icons/fi'
-import '../../../pages-old/agent/AgentMyListings.css'
+import './page.css'
 
 type ListingStatus = 'active' | 'rented' | 'hidden'
 

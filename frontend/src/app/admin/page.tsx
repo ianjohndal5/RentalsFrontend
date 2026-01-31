@@ -10,7 +10,7 @@ import {
   FiLayers,
   FiCheckCircle
 } from 'react-icons/fi'
-import '../../pages-old/admin/AdminDashboard.css'
+import './page.css'
 
 export default function AdminDashboard() {
   const [userName, setUserName] = useState('John Admin')

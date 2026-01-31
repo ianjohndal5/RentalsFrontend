@@ -8,7 +8,7 @@ import {
   FiSearch,
   FiHelpCircle
 } from 'react-icons/fi'
-import '../../../pages-old/agent/AgentRentalTracker.css'
+import './page.css'
 
 export default function AgentRentalTracker() {
   return (

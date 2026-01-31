@@ -8,7 +8,7 @@ import {
   FiBarChart2,
   FiImage
 } from 'react-icons/fi'
-import '../../../pages-old/agent/AgentDownloadables.css'
+import './page.css'
 
 export default function AgentDownloadables() {
   const handleDownload = (type: string) => {

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
-import '../../pages-old/BlogPage.css'
+import './page.css'
 
 export default function BlogPage() {
   const [currentPage, setCurrentPage] = useState(1)

@@ -15,7 +15,7 @@ import {
   FiX,
   FiSave
 } from 'react-icons/fi'
-import '../../../pages-old/admin/AdminDashboard.css'
+import '../page.css'
 
 interface User {
   id: number

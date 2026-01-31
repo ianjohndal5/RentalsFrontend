@@ -12,9 +12,9 @@ import {
   FiCheck,
   FiUpload
 } from 'react-icons/fi'
-import '../../../../pages-old/agent/AgentCreateListingCategory.css'
-import '../../../../pages-old/agent/AgentCreateListingDetails.css'
-import '../../../../pages-old/agent/AgentCreateListingOwnerInfo.css'
+import '../AgentCreateListingCategory.css'
+import '../details/page.css'
+import './page.css'
 
 function ProgressRing({ percent }: { percent: number }) {
   const { radius, stroke, normalizedRadius, circumference, strokeDashoffset } = useMemo(() => {
@@ -158,7 +158,7 @@ export default function AgentCreateListingOwnerInfo() {
           </div>
         </div>
 
-        <div className="section-card acoi-form-card">
+        <div className="section-card aclc-form-card">
           <h2 className="aclc-form-title">Property Owner Information</h2>
 
           <div className="acoi-section">

@@ -6,7 +6,7 @@ import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
 import VerticalPropertyCard from '../../components/common/VerticalPropertyCard'
 import HorizontalPropertyCard from '../../components/common/HorizontalPropertyCard'
-import '../../pages-old/PropertiesForRentPage.css'
+import './page.css'
 import PageHeader from '../../components/layout/PageHeader'
 import { propertiesApi } from '../../api/endpoints/properties'
 import type { Property } from '../../types'
@@ -38,6 +38,10 @@ function PropertiesContent() {
     const searchParam = searchParams.get('search')
     const typeParam = searchParams.get('type')
     const locationParam = searchParams.get('location')
+    const minBedsParam = searchParams.get('minBeds')
+    const minBathsParam = searchParams.get('minBaths')
+    const priceMinParam = searchParams.get('priceMin')
+    const priceMaxParam = searchParams.get('priceMax')
 
     if (searchParam) {
       setSearchQuery(searchParam)
@@ -47,6 +51,18 @@ function PropertiesContent() {
     }
     if (locationParam) {
       setSelectedLocation(locationParam)
+    }
+    if (minBedsParam) {
+      setMinBeds(minBedsParam)
+    }
+    if (minBathsParam) {
+      setMinBaths(minBathsParam)
+    }
+    if (priceMinParam) {
+      setPriceMin(priceMinParam)
+    }
+    if (priceMaxParam) {
+      setPriceMax(priceMaxParam)
     }
   }, [searchParams])
 

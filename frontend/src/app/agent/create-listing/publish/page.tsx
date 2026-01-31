@@ -6,14 +6,16 @@ import AppSidebar from '../../../../components/common/AppSidebar'
 import AgentHeader from '../../../../components/agent/AgentHeader'
 import { useCreateListing } from '../../../../contexts/CreateListingContext'
 import api from '../../../../lib/api'
+import { compressImage } from '../../../../utils/imageCompression'
+import { uploadWithProgress } from '../../../../utils/uploadProgress'
 
 import {
   FiCheck,
   FiEdit,
   FiArrowLeft
 } from 'react-icons/fi'
-import '../../../../pages-old/agent/AgentCreateListingCategory.css'
-import '../../../../pages-old/agent/AgentCreateListingPublish.css'
+import '../AgentCreateListingCategory.css'
+import './page.css'
 
 function ProgressRing({ percent }: { percent: number }) {
   const { radius, stroke, normalizedRadius, circumference, strokeDashoffset } = useMemo(() => {
@@ -66,6 +68,8 @@ export default function AgentCreateListingPublish() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [isCompressing, setIsCompressing] = useState(false)
 
   useEffect(() => {
     // Check if agent account is processing
@@ -167,7 +171,7 @@ export default function AgentCreateListingPublish() {
           </div>
         </div>
 
-        <div className="section-card acpu-form-card">
+        <div className="section-card aclc-form-card">
           <h2 className="aclc-form-title">Review and Publish</h2>
           
           {/* Error Message */}
@@ -181,6 +185,41 @@ export default function AgentCreateListingPublish() {
               color: '#991B1B'
             }}>
               {submitError}
+            </div>
+          )}
+
+          {/* Upload Progress Bar */}
+          {(isSubmitting || isCompressing) && (
+            <div style={{
+              marginBottom: '1rem',
+              padding: '1rem',
+              backgroundColor: '#F3F4F6',
+              borderRadius: '8px',
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '0.5rem',
+                fontSize: '0.875rem',
+                color: '#6B7280'
+              }}>
+                <span>{isCompressing ? 'Compressing images...' : 'Uploading listing...'}</span>
+                <span>{uploadProgress}%</span>
+              </div>
+              <div style={{
+                width: '100%',
+                height: '8px',
+                backgroundColor: '#E5E7EB',
+                borderRadius: '4px',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  width: `${uploadProgress}%`,
+                  height: '100%',
+                  backgroundColor: '#2563EB',
+                  transition: 'width 0.3s ease',
+                }} />
+              </div>
             </div>
           )}
           
@@ -340,25 +379,50 @@ export default function AgentCreateListingPublish() {
               className="acpu-publish-btn"
               onClick={async () => {
                 setIsSubmitting(true)
+                setIsCompressing(true)
                 setSubmitError(null)
+                setUploadProgress(0)
 
                 try {
-                  // Create FormData for file uploads
+                  // Step 1: Compress images before upload (reduces upload time significantly)
+                  let compressedImage: File | null = null
+                  if (data.images.length > 0) {
+                    try {
+                      compressedImage = await compressImage(data.images[0], {
+                        maxWidth: 1920,
+                        maxHeight: 1920,
+                        quality: 0.85,
+                        maxSizeMB: 2,
+                      })
+                    } catch (compressError) {
+                      console.warn('Image compression failed, using original:', compressError)
+                      compressedImage = data.images[0]
+                    }
+                  }
+                  setIsCompressing(false)
+
+                  // Step 2: Create FormData efficiently
                   const formData = new FormData()
                   
-                  // Basic property info
-                  formData.append('title', data.title)
-                  formData.append('description', data.description)
-                  formData.append('type', data.category)
-                  formData.append('location', data.street || data.city || data.state || data.country)
-                  formData.append('price', data.price)
-                  formData.append('price_type', data.priceType)
-                  formData.append('bedrooms', data.bedrooms.toString())
-                  formData.append('bathrooms', data.bathrooms.toString())
-                  formData.append('garage', data.garage.toString())
-                  formData.append('area', data.floorArea.toString())
-                  formData.append('lot_area', data.lotArea.toString())
-                  formData.append('floor_area_unit', data.floorUnit)
+                  // Basic property info (batch append)
+                  const propertyData = {
+                    title: data.title,
+                    description: data.description,
+                    type: data.category,
+                    location: data.street || data.city || data.state || data.country,
+                    price: data.price,
+                    price_type: data.priceType,
+                    bedrooms: data.bedrooms.toString(),
+                    bathrooms: data.bathrooms.toString(),
+                    garage: data.garage.toString(),
+                    area: data.floorArea.toString(),
+                    lot_area: data.lotArea.toString(),
+                    floor_area_unit: data.floorUnit,
+                  }
+                  
+                  Object.entries(propertyData).forEach(([key, value]) => {
+                    formData.append(key, value)
+                  })
                   
                   // Amenities as JSON string
                   if (data.amenities.length > 0) {
@@ -369,33 +433,45 @@ export default function AgentCreateListingPublish() {
                     formData.append('furnishing', data.furnishing)
                   }
                   
-                  // Location details
-                  if (data.latitude) formData.append('latitude', data.latitude)
-                  if (data.longitude) formData.append('longitude', data.longitude)
-                  if (data.zoom) formData.append('zoom_level', data.zoom)
-                  if (data.country) formData.append('country', data.country)
-                  if (data.state) formData.append('state_province', data.state)
-                  if (data.city) formData.append('city', data.city)
-                  if (data.street) formData.append('street_address', data.street)
+                  // Location details (batch append)
+                  const locationData = {
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    zoom_level: data.zoom,
+                    country: data.country,
+                    state_province: data.state,
+                    city: data.city,
+                    street_address: data.street,
+                  }
+                  
+                  Object.entries(locationData).forEach(([key, value]) => {
+                    if (value) formData.append(key, value)
+                  })
                   
                   // Video URL
                   if (data.videoUrl) {
                     formData.append('video_url', data.videoUrl)
                   }
                   
-                  // Owner information
-                  if (data.ownerFirstname) formData.append('owner_firstname', data.ownerFirstname)
-                  if (data.ownerLastname) formData.append('owner_lastname', data.ownerLastname)
-                  if (data.ownerPhone) formData.append('owner_phone', data.ownerPhone)
-                  if (data.ownerEmail) formData.append('owner_email', data.ownerEmail)
-                  if (data.ownerCountry) formData.append('owner_country', data.ownerCountry)
-                  if (data.ownerState) formData.append('owner_state', data.ownerState)
-                  if (data.ownerCity) formData.append('owner_city', data.ownerCity)
-                  if (data.ownerStreetAddress) formData.append('owner_street_address', data.ownerStreetAddress)
+                  // Owner information (batch append)
+                  const ownerData = {
+                    owner_firstname: data.ownerFirstname,
+                    owner_lastname: data.ownerLastname,
+                    owner_phone: data.ownerPhone,
+                    owner_email: data.ownerEmail,
+                    owner_country: data.ownerCountry,
+                    owner_state: data.ownerState,
+                    owner_city: data.ownerCity,
+                    owner_street_address: data.ownerStreetAddress,
+                  }
                   
-                  // Image upload (first image as main image)
-                  if (data.images.length > 0) {
-                    formData.append('image', data.images[0])
+                  Object.entries(ownerData).forEach(([key, value]) => {
+                    if (value) formData.append(key, value)
+                  })
+                  
+                  // Image upload (use compressed image)
+                  if (compressedImage) {
+                    formData.append('image', compressedImage)
                   }
                   
                   // RAPA document
@@ -403,26 +479,50 @@ export default function AgentCreateListingPublish() {
                     formData.append('rapa_document', data.rapaFile)
                   }
                   
-                  const response = await api.post('/properties', formData)
+                  // Step 3: Upload with progress tracking
+                  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
+                  const token = localStorage.getItem('auth_token')
                   
-                  if (response.success) {
+                  const response = await uploadWithProgress(
+                    `${API_BASE_URL}/properties`,
+                    formData,
+                    token,
+                    (progress) => {
+                      setUploadProgress(progress.percent)
+                    }
+                  )
+                  
+                  const responseData = await response.json()
+                  
+                  if (response.ok && responseData.success) {
                     resetData()
-                    window.alert('Listing published successfully!')
-                    router.push('/agent/listings')
+                    setUploadProgress(100)
+                    setTimeout(() => {
+                      window.alert('Listing published successfully!')
+                      router.push('/agent/listings')
+                    }, 300)
                   } else {
-                    setSubmitError(response.message || 'Failed to publish listing. Please try again.')
+                    setSubmitError(responseData.message || 'Failed to publish listing. Please try again.')
+                    setUploadProgress(0)
                   }
                 } catch (error) {
                   console.error('Error publishing listing:', error)
-                  setSubmitError('An error occurred while publishing. Please try again.')
+                  setSubmitError(error instanceof Error ? error.message : 'An error occurred while publishing. Please try again.')
                 } finally {
                   setIsSubmitting(false)
+                  setIsCompressing(false)
                 }
               }}
               type="button"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isCompressing}
             >
-              <span>{isSubmitting ? 'Publishing...' : 'Publish Listing'}</span>
+              <span>
+                {isCompressing 
+                  ? 'Compressing images...' 
+                  : isSubmitting 
+                    ? `Publishing... ${uploadProgress > 0 ? `${uploadProgress}%` : ''}` 
+                    : 'Publish Listing'}
+              </span>
             </button>
           </div>
         </div>

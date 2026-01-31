@@ -7,8 +7,8 @@ import {
   FiMapPin,
   FiChevronDown
 } from 'react-icons/fi'
-import '../../../pages-old/agent/AgentDashboard.css'
-import '../../../pages-old/agent/AgentRentEstimate.css'
+import '../page.css'
+import './page.css'
 
 export default function AgentRentEstimate() {
   const [propertyType, setPropertyType] = useState('')

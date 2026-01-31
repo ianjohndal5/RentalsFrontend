@@ -10,7 +10,7 @@ import {
   FiAlertCircle,
   FiX
 } from 'react-icons/fi'
-import '../../../pages-old/agent/AgentInbox.css'
+import './page.css'
 
 interface InboxItem {
   id: number

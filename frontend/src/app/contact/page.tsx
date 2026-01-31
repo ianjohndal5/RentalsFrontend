@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
-import '../../pages-old/ContactUsPage.css'
+import './page.css'
 
 export default function ContactUsPage() {
   const [formData, setFormData] = useState({

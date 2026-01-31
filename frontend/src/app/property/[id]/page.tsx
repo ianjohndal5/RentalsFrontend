@@ -7,7 +7,7 @@ import Navbar from '../../../components/layout/Navbar'
 import Footer from '../../../components/layout/Footer'
 import PageHeader from '../../../components/layout/PageHeader'
 import VerticalPropertyCard from '../../../components/common/VerticalPropertyCard'
-import '../../../pages-old/PropertyDetailsPage.css'
+import './page.css'
 
 export default function PropertyDetailsPage() {
   const params = useParams()

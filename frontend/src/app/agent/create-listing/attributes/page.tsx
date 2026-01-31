@@ -10,8 +10,8 @@ import {
   FiArrowRight,
   FiCheck
 } from 'react-icons/fi'
-import '../../../../pages-old/agent/AgentCreateListingCategory.css'
-import '../../../../pages-old/agent/AgentCreateListingAttributes.css'
+import '../AgentCreateListingCategory.css'
+import './page.css'
 
 function ProgressRing({ percent }: { percent: number }) {
   const { radius, stroke, normalizedRadius, circumference, strokeDashoffset } = useMemo(() => {
@@ -144,7 +144,7 @@ export default function AgentCreateListingAttributes() {
           </div>
         </div>
 
-        <div className="section-card acat-form-card">
+        <div className="section-card aclc-form-card">
           <h2 className="aclc-form-title">Attributes</h2>
 
           <div className="acat-section">

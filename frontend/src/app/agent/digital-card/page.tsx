@@ -7,7 +7,7 @@ import {
   FiPhone
 } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import '../../../pages-old/agent/AgentDigitalCard.css'
+import './page.css'
 
 export default function AgentDigitalCard() {
   return (

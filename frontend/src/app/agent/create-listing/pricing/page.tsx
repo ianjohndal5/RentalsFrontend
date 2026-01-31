@@ -12,8 +12,8 @@ import {
   FiCheck,
   FiDollarSign
 } from 'react-icons/fi'
-import '../../../../pages-old/agent/AgentCreateListingCategory.css'
-import '../../../../pages-old/agent/AgentCreateListingPricing.css'
+import '../AgentCreateListingCategory.css'
+import './page.css'
 
 function ProgressRing({ percent }: { percent: number }) {
   const { radius, stroke, normalizedRadius, circumference, strokeDashoffset } = useMemo(() => {
@@ -71,15 +71,12 @@ export default function AgentCreateListingPricing() {
     setPriceType(data.priceType)
   }, [data])
 
+  // Streamlined 4-step flow
   const stepLabels = [
-    'Category',
-    'Details',
-    'Location',
-    'Property Images',
+    'Basic Information',
+    'Visuals & Features',
     'Pricing',
-    'Attributes',
-    'Owner Info',
-    'Publish'
+    'Owner Info & Review'
   ]
 
   return (
@@ -100,7 +97,7 @@ export default function AgentCreateListingPricing() {
 
         <div className="section-card aclc-stepper-card">
           <div className="aclc-stepper-left">
-            <ProgressRing percent={50} />
+            <ProgressRing percent={75} />
             <div className="aclc-stepper-left-text">
               <div className="aclc-stepper-left-title">Completion Status</div>
             </div>
@@ -109,8 +106,8 @@ export default function AgentCreateListingPricing() {
           <div className="aclc-steps">
             {stepLabels.map((label, idx) => {
               const step = idx + 1
-              const isActive = step === 5
-              const isDone = step < 5
+              const isActive = step === 3
+              const isDone = step < 3
               return (
                 <div className="aclc-step" key={label}>
                   <div className="aclc-step-top">
@@ -118,7 +115,7 @@ export default function AgentCreateListingPricing() {
                       {isDone ? <FiCheck /> : step}
                     </div>
                     {step !== stepLabels.length && (
-                      <div className={`aclc-step-line ${step < 5 ? 'done' : ''}`} />
+                      <div className={`aclc-step-line ${step < 3 ? 'done' : ''}`} />
                     )}
                   </div>
                   <div className={`aclc-step-label ${isActive ? 'active' : ''}`}>{label}</div>
@@ -128,7 +125,7 @@ export default function AgentCreateListingPricing() {
           </div>
         </div>
 
-        <div className="section-card acpr-form-card">
+        <div className="section-card aclc-form-card">
           <h2 className="aclc-form-title">Pricing</h2>
 
           <div className="acpr-row">
@@ -175,7 +172,7 @@ export default function AgentCreateListingPricing() {
           <div className="acpr-footer-actions">
             <button
               className="acld-prev-btn"
-              onClick={() => router.push('/agent/create-listing/property-images')}
+              onClick={() => router.push('/agent/create-listing/visuals-features')}
               type="button"
             >
               <FiArrowLeft />
@@ -185,11 +182,11 @@ export default function AgentCreateListingPricing() {
               className="aclc-next-btn"
               onClick={() => {
                 updateData({ price, priceType })
-                router.push('/agent/create-listing/attributes')
+                router.push('/agent/create-listing/owner-review')
               }}
               type="button"
             >
-              <span>Next</span>
+              <span>Next: Owner Info & Review</span>
               <FiArrowRight />
             </button>
           </div>
