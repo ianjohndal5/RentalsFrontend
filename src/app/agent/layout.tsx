@@ -1,3 +1,7 @@
+'use client'
+
+import { ProtectedRoute } from '../../components/common'
+
 // Force dynamic rendering for all agent routes
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -7,6 +11,10 @@ export default function AgentLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <>{children}</>
+  return (
+    <ProtectedRoute requiredRole="agent">
+      {children}
+    </ProtectedRoute>
+  )
 }
 
