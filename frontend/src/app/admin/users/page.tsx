@@ -119,11 +119,11 @@ export default function UserManagementPage() {
     if (!editingUser) return
     
     try {
-      const updateData = { ...formData }
       // Only include password if it's been changed
-      if (!updateData.password) {
-        delete updateData.password
-      }
+      const { password, ...updateDataWithoutPassword } = formData
+      const updateData = password 
+        ? { ...updateDataWithoutPassword, password }
+        : updateDataWithoutPassword
       
       const response = await api.put(`/admin/users/${editingUser.id}`, updateData)
       if (response.success) {
