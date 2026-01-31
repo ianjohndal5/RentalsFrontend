@@ -156,7 +156,7 @@ export default function AgentCreateListingPricing() {
                     id="price-type"
                     className="aclc-select"
                     value={priceType}
-                    onChange={(e) => setPriceType(e.target.value)}
+                    onChange={(e) => setPriceType(e.target.value as 'Monthly' | 'Weekly' | 'Daily' | 'Yearly')}
                   >
                     <option value="Monthly">Monthly</option>
                     <option value="Weekly">Weekly</option>
