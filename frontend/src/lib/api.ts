@@ -18,9 +18,9 @@ async function apiRequest<T>(
 ): Promise<ApiResponse<T>> {
   const token = await getAuthToken()
   
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Accept': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   }
 
   // Only add Authorization header if we have a token
