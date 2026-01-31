@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios'
+import { getApiBaseUrl } from '../config/api'
 
-// Use environment variable or fallback to proxy path
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api'
+// Get API base URL (respects USE_LOCAL_API env var to switch between local and remote)
+const API_BASE_URL = getApiBaseUrl()
 
 /**
  * Create and configure the Axios instance
