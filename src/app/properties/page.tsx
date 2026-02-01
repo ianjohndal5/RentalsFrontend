@@ -411,6 +411,29 @@ function PropertiesContent() {
               </div>
             </div>
           </div>
+
+          <div className="categories-section">
+            <h2 className="section-title">List by Categories</h2>
+            <ul className="categories-list">
+              {categories.map((category, index) => (
+                <li key={index} className="category-item">
+                  <span className="category-name">{category.name}</span>
+                  <span className="category-count">({category.count})</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="top-searches-section">
+            <h2 className="section-title">Top Searches</h2>
+            <ul className="top-searches-list">
+              {topSearches.map((search, index) => (
+                <li key={index} className="search-item">
+                  {search}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="properties-main-content">
@@ -573,30 +596,6 @@ function PropertiesContent() {
                 </p>
               </div>
             )}
-
-            {/* Categories and Top Searches Sections */}
-            <div className="categories-section">
-              <h2 className="section-title">List by Categories</h2>
-              <ul className="categories-list">
-                {categories.map((category, index) => (
-                  <li key={index} className="category-item">
-                    <span className="category-name">{category.name}</span>
-                    <span className="category-count">({category.count})</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="top-searches-section">
-              <h2 className="section-title">Top Searches</h2>
-              <ul className="top-searches-list">
-                {topSearches.map((search, index) => (
-                  <li key={index} className="search-item">
-                    {search}
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </div>
       </main>

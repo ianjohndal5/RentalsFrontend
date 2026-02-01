@@ -521,24 +521,11 @@
     background: #f9fafb;
   }
 
-  /* Categories and Top Searches in Main Content */
-  .properties-content-wrapper .categories-section,
-  .properties-content-wrapper .top-searches-section {
-    margin-top: 40px;
-    padding: 32px 24px;
-    background: #ffffff;
-    border-radius: 16px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  }
-
-  .properties-content-wrapper .categories-section {
-    margin-bottom: 18px;
-  }
-
-  .properties-content-wrapper .top-searches-section {
-    margin-bottom: 0;
-  }
+    /* Categories and Top Searches in Main Content - Hidden on desktop (they're in sidebar) */
+    .properties-content-wrapper .categories-section,
+    .properties-content-wrapper .top-searches-section {
+      display: none;
+    }
 
   /* Hide overlay and close button on desktop */
   .properties-sidebar-overlay {
@@ -805,9 +792,16 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, auto);
-    gap: 20px;
+    gap: 16px;
     margin-bottom: 24px;
     min-height: 0;
+  }
+
+  /* Override vertical property card width in grid to use available space */
+  .properties-grid .vertical-property-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   /* Pagination */
@@ -912,7 +906,7 @@
 
     .properties-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+      gap: 16px;
     }
   }
 
@@ -979,6 +973,12 @@
 
     /* Hide desktop sidebar on mobile */
     .properties-sidebar {
+      display: none;
+    }
+
+    /* Hide categories and top searches on mobile - they're in main content */
+    .properties-sidebar .categories-section,
+    .properties-sidebar .top-searches-section {
       display: none;
     }
 
@@ -1559,12 +1559,20 @@
       height: 18px;
     }
 
-    /* Categories and Top Searches in Main Content - Mobile */
+    /* Categories and Top Searches in Main Content - Show on mobile */
     .properties-content-wrapper .categories-section,
     .properties-content-wrapper .top-searches-section {
+      display: block;
       margin-top: 24px;
       padding: 20px 16px;
       border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .properties-content-wrapper .categories-section {
+      margin-bottom: 18px;
     }
 
     .properties-content-wrapper {
