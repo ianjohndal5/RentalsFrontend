@@ -191,10 +191,11 @@ export default function RentManagerDetailsPage() {
       const baths = parseInt(moreFilters.bathrooms)
       filtered = filtered.filter(p => p.bathrooms === baths)
     }
-    if (moreFilters.parking !== 'all') {
-      const park = parseInt(moreFilters.parking)
-      filtered = filtered.filter(p => p.parking === park)
-    }
+    // Parking filter - disabled for now, will be used later
+    // if (moreFilters.parking !== 'all') {
+    //   const park = parseInt(moreFilters.parking)
+    //   filtered = filtered.filter(p => p.parking === park)
+    // }
 
     filtered.sort((a, b) => {
       const dateA = a.published_at ? new Date(a.published_at).getTime() : 0
