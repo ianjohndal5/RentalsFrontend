@@ -36,6 +36,8 @@ export interface Blog {
   excerpt: string
   category: string
   read_time: number
+  likes: number
+  comments: number
   author: string
   image: string | null
   published_at: string | null
