@@ -2,9 +2,8 @@
 
 import { ProtectedRoute } from '../../components/common'
 
-// Force dynamic rendering for all agent routes
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Note: revalidate and dynamic exports are not allowed in Client Components
+// These need to be in Server Components only
 
 export default function AgentLayout({
   children,

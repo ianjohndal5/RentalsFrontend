@@ -10,6 +10,7 @@ package-lock.json
 # Production
 /build
 /dist
+.next/
 
 # Misc
 .DS_Store
