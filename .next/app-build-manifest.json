@@ -30,10 +30,11 @@
       "static/css/app/properties/page.css",
       "static/chunks/app/properties/page.js"
     ],
-    "/_not-found/page": [
+    "/property/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/css/app/property/[id]/page.css",
+      "static/chunks/app/property/[id]/page.js"
     ]
   }
 }
