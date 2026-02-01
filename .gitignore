@@ -12,6 +12,7 @@ package-lock.json
 /dist
 .next/
 
+
 # Misc
 .DS_Store
 .env.local

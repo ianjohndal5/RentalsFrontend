@@ -1,13 +1,14 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '../../../components/layout/Navbar'
 import Footer from '../../../components/layout/Footer'
 import HorizontalPropertyCard from '../../../components/common/HorizontalPropertyCard'
 import VerticalPropertyCard from '../../../components/common/VerticalPropertyCard'
-import { getRentManagerById } from '../../../data/rentManagers'
+import { propertiesApi } from '../../../api'
+import type { Property } from '../../../types'
 import PageHeader from '../../../components/layout/PageHeader'
 import './page.css'
 
@@ -15,7 +16,40 @@ export default function RentManagerDetailsPage() {
   const params = useParams()
   const id = params?.id as string
   const managerId = Number(id)
-  const manager = useMemo(() => (Number.isFinite(managerId) ? getRentManagerById(managerId) : undefined), [managerId])
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
+  const [manager, setManager] = useState<{ id: number; name: string; role: string; listings: Property[] } | null>(null)
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const allProperties = await propertiesApi.getAll()
+        
+        // Filter properties by rent manager ID
+        const managerProperties = allProperties.filter(p => p.rent_manager?.id === managerId)
+        
+        if (managerProperties.length > 0 && managerProperties[0].rent_manager) {
+          const rentManager = managerProperties[0].rent_manager
+          setManager({
+            id: rentManager.id,
+            name: rentManager.name,
+            role: rentManager.is_official ? 'Rent Manager' : 'Property Specialist',
+            listings: managerProperties
+          })
+        }
+        
+        setProperties(managerProperties)
+      } catch (error) {
+        console.error('Error fetching properties:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (Number.isFinite(managerId)) {
+      fetchProperties()
+    }
+  }, [managerId])
 
   const [activeTab, setActiveTab] = useState<'listing' | 'reviews'>('listing')
   const [viewMode, setViewMode] = useState<'horizontal' | 'vertical'>('horizontal')
@@ -36,6 +70,19 @@ export default function RentManagerDetailsPage() {
     email: '',
     message: '',
   })
+
+  if (loading) {
+    return (
+      <div className="rm-details-page">
+        <Navbar />
+        <PageHeader title="MY LISTING" />
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <p>Loading rent manager details...</p>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   if (!manager) {
     return (
@@ -76,22 +123,45 @@ export default function RentManagerDetailsPage() {
     setFormData({ firstName: '', lastName: '', phone: '', email: '', message: '' })
   }
 
+  // Helper functions
+  const formatPrice = (price: number): string => {
+    return `₱${price.toLocaleString('en-US')}/Month`
+  }
+
+  const formatDate = (dateString: string | null): string => {
+    if (!dateString) return 'Date not available'
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  const getImageUrl = (image: string | null): string => {
+    if (!image) return '/assets/property-main.png'
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image
+    }
+    if (image.startsWith('storage/') || image.startsWith('/storage/')) {
+      return `/api/${image.startsWith('/') ? image.slice(1) : image}`
+    }
+    return image
+  }
+
   // Filter and sort properties
   const filteredAndSortedProperties = useMemo(() => {
-    let filtered = [...manager.listings]
+    if (!manager) return []
+    
+    let filtered = [...properties]
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(p =>
         p.title.toLowerCase().includes(query) ||
-        p.propertyType.toLowerCase().includes(query)
+        p.type.toLowerCase().includes(query)
       )
     }
 
     if (priceFilter !== 'all') {
       filtered = filtered.filter(p => {
-        const priceStr = p.price.replace(/[₱$,]/g, '').replace('/Month', '').trim()
-        const price = parseFloat(priceStr) || 0
+        const price = p.price
 
         switch (priceFilter) {
           case 'under-20k':
@@ -111,7 +181,7 @@ export default function RentManagerDetailsPage() {
     }
 
     if (moreFilters.propertyType !== 'all') {
-      filtered = filtered.filter(p => p.propertyType === moreFilters.propertyType)
+      filtered = filtered.filter(p => p.type === moreFilters.propertyType)
     }
     if (moreFilters.bedrooms !== 'all') {
       const beds = parseInt(moreFilters.bedrooms)
@@ -127,35 +197,13 @@ export default function RentManagerDetailsPage() {
     }
 
     filtered.sort((a, b) => {
-      const parseDate = (dateStr: string) => {
-        const date = new Date(dateStr)
-        if (isNaN(date.getTime())) {
-          const parts = dateStr.split(', ')
-          if (parts.length === 2) {
-            const year = parseInt(parts[1])
-            const monthDay = parts[0].split(' ')
-            if (monthDay.length >= 2) {
-              const day = parseInt(monthDay[monthDay.length - 1])
-              const monthMap: { [key: string]: number } = {
-                'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-                'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-              }
-              const month = monthMap[monthDay[0]] ?? 0
-              return new Date(year, month, day).getTime()
-            }
-          }
-          return 0
-        }
-        return date.getTime()
-      }
-
-      const dateA = parseDate(a.date)
-      const dateB = parseDate(b.date)
+      const dateA = a.published_at ? new Date(a.published_at).getTime() : 0
+      const dateB = b.published_at ? new Date(b.published_at).getTime() : 0
       return sortOrder === 'newest' ? dateB - dateA : dateA - dateB
     })
 
     return filtered
-  }, [manager.listings, searchQuery, priceFilter, sortOrder, moreFilters])
+  }, [properties, searchQuery, priceFilter, sortOrder, moreFilters, manager])
 
   const reviews = [
     {
@@ -212,7 +260,7 @@ export default function RentManagerDetailsPage() {
                     <h2 className="rm-profile-name">{manager.name}</h2>
                     <div className="rm-profile-meta-row">
                       <span className="rm-badge">{manager.role}</span>
-                      <span className="rm-listings-pill">{manager.listingsCount} Listings</span>
+                      <span className="rm-listings-pill">{properties.length} Listings</span>
                     </div>
                   </div>
 
@@ -229,15 +277,10 @@ export default function RentManagerDetailsPage() {
               </div>
 
               <div className="rm-profile-body">
-                <h3 className="rm-about-title">{manager.aboutTitle}</h3>
-                {manager.aboutParagraphs.map((p, idx) => (
-                  <p key={idx} className="rm-about-paragraph">{p}</p>
-                ))}
-                <ul className="rm-about-bullets">
-                  {manager.bullets.map((b, idx) => (
-                    <li key={idx}>{b}</li>
-                  ))}
-                </ul>
+                <h3 className="rm-about-title">About {manager.name}</h3>
+                <p className="rm-about-paragraph">
+                  {manager.name} is a {manager.role} with {properties.length} property listings.
+                </p>
               </div>
             </div>
 
@@ -298,7 +341,7 @@ export default function RentManagerDetailsPage() {
                 onClick={() => setActiveTab('listing')}
                 type="button"
               >
-                Listing ({manager.listingsCount})
+                Listing ({properties.length})
               </button>
               <button
                 className={`rm-tab ${activeTab === 'reviews' ? 'active' : ''}`}
@@ -456,43 +499,48 @@ export default function RentManagerDetailsPage() {
 
                 <div className={`rm-listings ${viewMode === 'vertical' ? 'rm-listings-grid' : ''}`}>
                   {filteredAndSortedProperties.length > 0 ? (
-                    filteredAndSortedProperties.map((p) =>
-                      viewMode === 'horizontal' ? (
+                    filteredAndSortedProperties.map((p) => {
+                      const propertySize = p.area 
+                        ? `${p.area} sqft` 
+                        : `${(p.bedrooms * 15 + p.bathrooms * 5)} sqft`
+                      
+                      return viewMode === 'horizontal' ? (
                         <HorizontalPropertyCard
                           key={p.id}
                           id={p.id}
-                          propertyType={p.propertyType}
-                          date={p.date}
-                          price={p.price}
+                          propertyType={p.type}
+                          date={formatDate(p.published_at)}
+                          price={formatPrice(p.price)}
                           title={p.title}
-                          image={p.image}
+                          image={getImageUrl(p.image)}
                           rentManagerName={manager.name}
                           rentManagerRole={manager.role}
                           bedrooms={p.bedrooms}
                           bathrooms={p.bathrooms}
-                          parking={p.parking}
-                          propertySize={`${(p.bedrooms * 15 + p.bathrooms * 5)} sqft`}
-                          location={p.location || manager.location}
+                          parking={0}
+                          propertySize={propertySize}
+                          location={p.location}
                         />
                       ) : (
                         <VerticalPropertyCard
                           key={p.id}
                           id={p.id}
-                          propertyType={p.propertyType}
-                          date={p.date}
-                          price={p.price}
+                          propertyType={p.type}
+                          date={formatDate(p.published_at)}
+                          price={formatPrice(p.price)}
                           title={p.title}
-                          image={p.image}
+                          image={getImageUrl(p.image)}
                           rentManagerName={manager.name}
                           rentManagerRole={manager.role}
                           bedrooms={p.bedrooms}
                           bathrooms={p.bathrooms}
-                          parking={p.parking}
-                          propertySize={`${(p.bedrooms * 15 + p.bathrooms * 5)} sqft`}
-                          location={p.location || manager.location}
+                          parking={0}
+                          propertySize={propertySize}
+                          location={p.location}
                         />
                       )
-                    )) : (
+                    })
+                  ) : (
                     <div className="rm-empty-state">
                       <p>No properties found matching your filters.</p>
                     </div>

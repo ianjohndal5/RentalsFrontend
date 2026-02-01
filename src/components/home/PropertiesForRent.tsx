@@ -1,94 +1,58 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import VerticalPropertyCard from '../common/VerticalPropertyCard'
+import { propertiesApi } from '../../api'
+import type { Property } from '../../types'
 import './PropertiesForRent.css'
 
 function PropertiesForRent() {
-  // Sample properties data matching Figma design
-  const properties = [
-    {
-      id: 1,
-      propertyType: 'Condominium',
-      date: 'Jan 15, 2026',
-      price: '₱35,000/Month',
-      title: 'Azure Urban Residences - 2BR Fully Furnished',
-      image: '/assets/property-main.png',
-      rentManagerName: 'Rental.Ph Official',
-      rentManagerRole: 'Rent Manager',
-      bedrooms: 2,
-      bathrooms: 2,
-      parking: 1,
-      location: 'Parañaque City',
-    },
-    {
-      id: 2,
-      propertyType: 'Apartment',
-      date: 'Jan 18, 2026',
-      price: '₱18,000/Month',
-      title: 'Cozy 1BR Apartment Near BGC',
-      image: '/assets/property-main.png',
-      rentManagerName: 'Rental.Ph Official',
-      rentManagerRole: 'Rent Manager',
-      bedrooms: 1,
-      bathrooms: 1,
-      parking: 0,
-      location: 'Taguig City',
-    },
-    {
-      id: 3,
-      propertyType: 'Condominium',
-      date: 'Jan 20, 2026',
-      price: '₱52,000/Month',
-      title: 'Luxury Penthouse with City View',
-      image: '/assets/property-main.png',
-      rentManagerName: 'Rental.Ph Official',
-      rentManagerRole: 'Rent Manager',
-      bedrooms: 3,
-      bathrooms: 3,
-      parking: 2,
-      location: 'Makati City',
-    },
-    {
-      id: 4,
-      propertyType: 'House',
-      date: 'Jan 22, 2026',
-      price: '₱45,000/Month',
-      title: 'Modern 3BR House in Exclusive Village',
-      image: '/assets/property-main.png',
-      rentManagerName: 'Rental.Ph Official',
-      rentManagerRole: 'Rent Manager',
-      bedrooms: 3,
-      bathrooms: 2,
-      parking: 2,
-      location: 'Quezon City',
-    },
-    {
-      id: 5,
-      propertyType: 'Bed Space',
-      date: 'Jan 24, 2026',
-      price: '₱6,500/Month',
-      title: 'Clean Bed Space for Students/Professionals',
-      image: '/assets/property-main.png',
-      rentManagerName: 'Rental.Ph Official',
-      rentManagerRole: 'Rent Manager',
-      bedrooms: 1,
-      bathrooms: 1,
-      parking: 0,
-      location: 'Manila',
-    },
-    {
-      id: 6,
-      propertyType: 'Commercial Spaces',
-      date: 'Jan 25, 2026',
-      price: '₱75,000/Month',
-      title: 'Prime Commercial Space in Makati CBD',
-      image: '/assets/property-main.png',
-      rentManagerName: 'Rental.Ph Official',
-      rentManagerRole: 'Rent Manager',
-      bedrooms: 0,
-      bathrooms: 2,
-      parking: 3,
-      location: 'Makati City',
-    },
-  ]
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const data = await propertiesApi.getAll({ per_page: 6 })
+        setProperties(data)
+      } catch (error) {
+        console.error('Error fetching properties:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProperties()
+  }, [])
+
+  // Helper function to format price
+  const formatPrice = (price: number): string => {
+    return `₱${price.toLocaleString('en-US')}/Month`
+  }
+
+  // Helper function to format date
+  const formatDate = (dateString: string | null): string => {
+    if (!dateString) return 'Date not available'
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  // Helper function to get rent manager role
+  const getRentManagerRole = (isOfficial: boolean | undefined): string => {
+    return isOfficial ? 'Rent Manager' : 'Property Specialist'
+  }
+
+  // Helper function to get image URL
+  const getImageUrl = (image: string | null): string => {
+    if (!image) return '/assets/property-main.png'
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image
+    }
+    if (image.startsWith('storage/') || image.startsWith('/storage/')) {
+      return `/api/${image.startsWith('/') ? image.slice(1) : image}`
+    }
+    return image
+  }
 
   return (
     <section id="properties-for-rent" className="properties-for-rent-section">
@@ -102,24 +66,42 @@ function PropertiesForRent() {
           </div>
         </div>
 
-        <div className="property-cards-grid">
-          {properties.map((property) => (
-            <VerticalPropertyCard
-              key={property.id}
-              propertyType={property.propertyType}
-              date={property.date}
-              price={property.price}
-              title={property.title}
-              image={property.image}
-              rentManagerName={property.rentManagerName}
-              rentManagerRole={property.rentManagerRole}
-              bedrooms={property.bedrooms}
-              bathrooms={property.bathrooms}
-              parking={property.parking}
-              location={property.location}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            <p>Loading properties...</p>
+          </div>
+        ) : properties.length > 0 ? (
+          <div className="property-cards-grid">
+            {properties.map((property) => {
+              const propertySize = property.area 
+                ? `${property.area} sqft` 
+                : `${(property.bedrooms * 15 + property.bathrooms * 5)} sqft`
+              
+              return (
+                <VerticalPropertyCard
+                  key={property.id}
+                  id={property.id}
+                  propertyType={property.type}
+                  date={formatDate(property.published_at)}
+                  price={formatPrice(property.price)}
+                  title={property.title}
+                  image={getImageUrl(property.image)}
+                  rentManagerName={property.rent_manager?.name || 'Rental.Ph Official'}
+                  rentManagerRole={getRentManagerRole(property.rent_manager?.is_official)}
+                  bedrooms={property.bedrooms}
+                  bathrooms={property.bathrooms}
+                  parking={0}
+                  propertySize={propertySize}
+                  location={property.location}
+                />
+              )
+            })}
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            <p>No properties available at the moment.</p>
+          </div>
+        )}
       </div>
     </section>
   )

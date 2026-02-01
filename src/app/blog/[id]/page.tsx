@@ -1,69 +1,76 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '../../../components/layout/Navbar'
 import Footer from '../../../components/layout/Footer'
 import PageHeader from '../../../components/layout/PageHeader'
+import { blogsApi } from '../../../api'
+import type { Blog } from '../../../types'
 import './page.css'
 
 export default function BlogDetailsPage() {
   const params = useParams()
   const id = params?.id as string
+  const [blogPost, setBlogPost] = useState<Blog | null>(null)
+  const [relatedArticles, setRelatedArticles] = useState<Blog[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Sample blog data - in a real app, this would come from an API
-  const blogPost = {
-    id: id || '1',
-    title: '10 Essential Tips for First-Time Property Managers in the Philippines',
-    author: 'Maria Santos',
-    date: 'January 15, 2026',
-    image: '/assets/blog-image.png',
-    likes: 342,
-    comments: 24,
-    category: 'Property Management',
-    readTime: '7 min read',
-    content: `Solinea is Alveo's First Multi-Tower Development In Cebu City. This master-planned development offers a resort-inspired environment perfect for modern living. With a 2.6-hectare land area, Solinea provides residents with central amenities including landscaped parks, kid's play areas, a multi-experiential pool, and a clubhouse with gym, function room, and game room. The development also features upscale retail shops and restaurants along Cardinal Rosales Ave, making it a complete lifestyle destination.
+  useEffect(() => {
+    const fetchBlog = async () => {
+      if (!id) return
+      
+      try {
+        const blogId = parseInt(id)
+        if (isNaN(blogId)) {
+          console.error('Invalid blog ID')
+          return
+        }
+        
+        const data = await blogsApi.getById(blogId)
+        setBlogPost(data)
+        
+        // Fetch related articles (other blogs in the same category)
+        const allBlogs = await blogsApi.getAll()
+        const related = allBlogs
+          .filter(blog => blog.id !== blogId && blog.category === data.category)
+          .slice(0, 3)
+        setRelatedArticles(related)
+      } catch (error) {
+        console.error('Error fetching blog:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-The property management landscape in the Philippines has evolved significantly over the years. As a first-time property manager, understanding the local market dynamics, legal requirements, and tenant expectations is crucial for success. This comprehensive guide will walk you through the essential aspects of property management in the Philippines.
+    fetchBlog()
+  }, [id])
 
-One of the most important aspects of property management is tenant screening. Proper screening helps you find reliable tenants who will pay rent on time and take care of your property. Always conduct background checks, verify employment, and check references from previous landlords.
-
-Maintenance and upkeep are also critical. Regular property inspections and prompt response to maintenance requests help maintain property value and tenant satisfaction. Building good relationships with reliable contractors and service providers is essential.
-
-Understanding the legal framework is another key component. Familiarize yourself with the Rent Control Act, local ordinances, and tenant rights. Having proper documentation, including lease agreements and property condition reports, protects both you and your tenants.
-
-Financial management is equally important. Keep detailed records of income and expenses, set aside funds for maintenance and emergencies, and ensure timely rent collection. Consider using property management software to streamline these processes.
-
-Marketing your property effectively is crucial for attracting quality tenants. High-quality photos, detailed descriptions, and strategic listing placement can significantly impact your vacancy rates. Social media and online platforms are powerful tools for reaching potential tenants.
-
-Communication skills cannot be overstated. Being responsive, professional, and clear in your communications builds trust with tenants and helps prevent misunderstandings. Regular updates about property maintenance, policy changes, or community events keep tenants informed and engaged.
-
-Finally, continuous learning and staying updated with market trends, legal changes, and best practices will help you grow as a property manager. Join local property management associations, attend workshops, and network with other professionals in the field.`
+  const formatDate = (dateString: string | null): string => {
+    if (!dateString) return 'Date not available'
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
   }
 
-  const relatedArticles = [
-    {
-      id: 1,
-      title: 'Understanding Your Rental Contract: A Complete Guide',
-      category: 'Legal',
-      readTime: '7 min read',
-      image: '/assets/property-main.png'
-    },
-    {
-      id: 2,
-      title: 'Understanding Your Rental Contract: A Complete Guide',
-      category: 'Legal',
-      readTime: '7 min read',
-      image: '/assets/property-main.png'
-    },
-    {
-      id: 3,
-      title: 'Understanding Your Rental Contract: A Complete Guide',
-      category: 'Legal',
-      readTime: '7 min read',
-      image: '/assets/property-main.png'
+  const formatReadTime = (minutes: number): string => {
+    return `${minutes} min read`
+  }
+
+  const getImageUrl = (image: string | null): string => {
+    if (!image) return '/assets/blog-image.png'
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image
     }
-  ]
+    if (image.startsWith('storage/') || image.startsWith('/storage/')) {
+      return `/api/${image.startsWith('/') ? image.slice(1) : image}`
+    }
+    return image
+  }
 
   const comments = [
     {
@@ -87,29 +94,38 @@ Finally, continuous learning and staying updated with market trends, legal chang
       <PageHeader title="BLOG" />
 
       <main className="blog-details-main-content">
-        <div className="blog-details-layout">
-          <div className="blog-details-article-column">
-            <div className="blog-details-header">
-              <h1 className="blog-details-title">{blogPost.title}</h1>
-              <div className="blog-details-meta">
-                <div className="blog-details-author">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span>{blogPost.author}</span>
-                </div>
-                <div className="blog-details-date">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 2V6M14 2V6M3 10H17M5 4H15C16.1046 4 17 4.89543 17 6V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V6C3 4.89543 3.89543 4 5 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span>{blogPost.date}</span>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            <p>Loading blog post...</p>
+          </div>
+        ) : !blogPost ? (
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            <p>Blog post not found</p>
+          </div>
+        ) : (
+          <div className="blog-details-layout">
+            <div className="blog-details-article-column">
+              <div className="blog-details-header">
+                <h1 className="blog-details-title">{blogPost.title}</h1>
+                <div className="blog-details-meta">
+                  <div className="blog-details-author">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span>{blogPost.author}</span>
+                  </div>
+                  <div className="blog-details-date">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 2V6M14 2V6M3 10H17M5 4H15C16.1046 4 17 4.89543 17 6V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V6C3 4.89543 3.89543 4 5 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span>{formatDate(blogPost.published_at)}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="blog-details-featured-image">
-              <img src={blogPost.image} alt={blogPost.title} />
-            </div>
+              <div className="blog-details-featured-image">
+                <img src={getImageUrl(blogPost.image)} alt={blogPost.title} />
+              </div>
 
             <div className="blog-details-social">
               <div className="blog-details-social-left">
@@ -146,20 +162,20 @@ Finally, continuous learning and staying updated with market trends, legal chang
               </div>
             </div>
 
-            <div className="blog-details-content">
-              {blogPost.content.split('\n\n').map((paragraph, index) => (
-                <div key={index}>
-                  <p className="blog-details-paragraph">
-                    {paragraph}
-                  </p>
-                  {index === 0 && (
-                    <div className="blog-details-ad-image">
-                      <img src="/assets/blog-image2.png" alt="House-Hunting Before the New Year Rush" />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+              <div className="blog-details-content">
+                {blogPost.content.split('\n\n').map((paragraph, index) => (
+                  <div key={index}>
+                    <p className="blog-details-paragraph">
+                      {paragraph}
+                    </p>
+                    {index === 0 && (
+                      <div className="blog-details-ad-image">
+                        <img src="/assets/blog-image2.png" alt="House-Hunting Before the New Year Rush" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
 
             <div className="blog-details-comments">
               <h2 className="blog-details-comments-title">Comments</h2>
@@ -179,28 +195,33 @@ Finally, continuous learning and staying updated with market trends, legal chang
               </div>
             </div>
 
-            <div className="blog-details-related">
-              <h2 className="blog-details-related-title">Related Articles</h2>
-              <div className="blog-details-related-grid">
-                {relatedArticles.map((article) => (
-                  <Link key={article.id} href={`/blog/${article.id}`} className="blog-details-related-card">
-                    <div className="related-card-image">
-                      <img src={article.image} alt={article.title} />
-                    </div>
-                    <div className="related-card-content">
-                      <div className="related-card-meta">
-                        <span className="related-card-category">{article.category}</span>
-                        <span className="related-card-read-time">{article.readTime}</span>
-                      </div>
-                      <h3 className="related-card-title">{article.title}</h3>
-                      <span className="related-card-link">Read More →</span>
-                    </div>
-                  </Link>
-                ))}
+              <div className="blog-details-related">
+                <h2 className="blog-details-related-title">Related Articles</h2>
+                <div className="blog-details-related-grid">
+                  {relatedArticles.length > 0 ? (
+                    relatedArticles.map((article) => (
+                      <Link key={article.id} href={`/blog/${article.id}`} className="blog-details-related-card">
+                        <div className="related-card-image">
+                          <img src={getImageUrl(article.image)} alt={article.title} />
+                        </div>
+                        <div className="related-card-content">
+                          <div className="related-card-meta">
+                            <span className="related-card-category">{article.category}</span>
+                            <span className="related-card-read-time">{formatReadTime(article.read_time)}</span>
+                          </div>
+                          <h3 className="related-card-title">{article.title}</h3>
+                          <span className="related-card-link">Read More →</span>
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    <p>No related articles found</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </main>
 
       <Footer />
