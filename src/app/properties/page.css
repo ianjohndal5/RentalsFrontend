@@ -1572,8 +1572,15 @@
     }
 
     .properties-grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    /* Ensure property cards fit in 2 columns on small screens */
+    .properties-grid .vertical-property-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
     }
 
     .properties-list {
