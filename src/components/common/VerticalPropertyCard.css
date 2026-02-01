@@ -413,6 +413,77 @@
     font-size: 10px;
   }
 
+  /* Browse carousel styles for 768px */
+  .browse-property-carousel .vertical-property-card {
+    min-width: 260px;
+    max-width: 260px;
+    width: 260px;
+  }
+
+  .browse-property-carousel .vertical-property-image {
+    height: 180px;
+  }
+
+  .browse-property-carousel .vertical-property-content {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .browse-property-carousel .vertical-property-price {
+    font-size: 18px;
+  }
+
+  .browse-property-carousel .vertical-property-title {
+    font-size: 13px;
+    max-height: 36px;
+  }
+
+  .browse-property-carousel .vertical-property-type {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+
+  .browse-property-carousel .vertical-property-date {
+    font-size: 9px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-badge {
+    padding: 6px 8px;
+    margin-top: 4px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-name {
+    font-size: 10px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-role {
+    font-size: 8px;
+  }
+
+  .browse-property-carousel .vertical-property-features {
+    height: 40px;
+    padding: 6px 4px;
+  }
+
+  .browse-property-carousel .vertical-property-feature-item {
+    padding: 4px 2px;
+    gap: 3px;
+  }
+
+  .browse-property-carousel .vertical-property-feature-item svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .browse-property-carousel .vertical-property-feature-item span:not(.feature-tooltip) {
+    font-size: 10px;
+  }
+
   .vertical-property-card:hover {
     transform: none; /* Disable hover transform on mobile */
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08), 0px 2px 4px rgba(0, 0, 0, 0.04);
@@ -621,129 +692,291 @@
 ========================= */
 @media (max-width: 480px) {
   .vertical-property-card {
-    border-radius: 10px;
+    border-radius: 8px;
     margin-bottom: 0;
+    max-width: 140px;
+    width: 140px;
+    height: auto;
   }
   
   .vertical-property-image {
-    height: 120px;
-    border-radius: 10px 10px 0 0;
+    height: 100px;
+    border-radius: 8px 8px 0 0;
   }
   
   .vertical-property-content {
-    padding: 8px;
-    gap: 5px;
-  }
-
-  .vertical-property-type {
-    font-size: 10px;
-    padding: 3px 6px;
-  }
-
-  .vertical-property-date {
-    font-size: 10px;
-  }
-  
-  .vertical-property-price {
-    font-size: 14px;
-  }
-
-  .vertical-property-title {
-    font-size: 11px;
-    max-height: 28px;
-  }
-
-  .vertical-property-type {
-    font-size: 8px;
-    padding: 2px 4px;
-  }
-
-  .vertical-property-date {
-    font-size: 8px;
-  }
-
-  .vertical-property-contact-icons {
-    top: 6px;
-    right: 6px;
-    padding: 3px;
+    padding: 6px;
     gap: 3px;
   }
 
-  .vertical-property-contact-icons svg {
-    width: 24px;
-    height: 24px;
-    padding: 4px;
+  .vertical-property-header-row {
+    gap: 2px;
+    margin-bottom: 1px;
+    align-items: center;
   }
 
-  .vertical-property-like svg {
-    width: 24px;
-    height: 24px;
+  .vertical-property-type {
+    font-size: 6px;
+    padding: 1px 3px;
+  }
+
+  .vertical-property-date {
+    font-size: 6px;
+  }
+  
+  .vertical-property-price {
+    font-size: 12px;
+  }
+
+  .vertical-property-title {
+    font-size: 8px;
+    max-height: 20px;
+    line-height: 1.2;
+  }
+
+  .vertical-property-contact-icons {
+    top: 4px;
+    right: 4px;
+    padding: 2px;
+    gap: 2px;
   }
 
   .vertical-property-contact-icons svg,
   .vertical-property-contact-icons .vertical-property-like {
-    width: 24px;
-    height: 24px;
-    padding: 4px;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
   }
 
-  .vertical-property-features {
-    padding: 6px 4px;
-  }
-
-  .vertical-property-feature-item {
-    padding: 3px 4px;
-    gap: 2px;
-  }
-
-  .vertical-property-feature-item svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .vertical-property-feature-item span:not(.feature-tooltip) {
-    font-size: 9px;
-  }
-
-  .vertical-property-price {
-    font-size: 20px;
+  .vertical-property-like svg {
+    width: 20px;
+    height: 20px;
   }
 
   .vertical-rent-manager-badge {
-    padding: 10px;
+    padding: 4px;
+    margin-top: 2px;
+    gap: 4px;
   }
 
   .vertical-rent-manager-avatar {
-    width: 36px;
-    height: 36px;
+    width: 20px;
+    height: 20px;
   }
 
   .vertical-rent-manager-name {
-    font-size: 13px;
+    font-size: 7px;
   }
 
   .vertical-rent-manager-role {
-    font-size: 11px;
+    font-size: 6px;
   }
 
   .vertical-property-features {
-    padding: 10px 6px;
-    min-height: 70px;
+    height: 32px;
+    padding: 3px 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 0;
   }
 
   .vertical-property-feature-item {
-    flex: 1 1 calc(33.333% - 6px);
-    min-width: 60px;
-    padding: 4px 2px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 1px;
     gap: 2px;
+    border-right: 1px solid #e5e7eb;
+    min-width: 0;
+  }
+
+  .vertical-property-feature-item:last-child {
+    border-right: none;
   }
 
   .vertical-property-feature-item svg {
-    width: 11px;
-    height: 11px;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
   }
 
   .vertical-property-feature-item span:not(.feature-tooltip) {
+    font-size: 7px;
+    white-space: nowrap;
+  }
+
+  /* Carousel specific overrides for very small screens - must override 768px styles */
+  .property-carousel .vertical-property-card,
+  .featured-section .property-carousel .vertical-property-card,
+  .browse-property-carousel .vertical-property-card {
+    min-width: 140px !important;
+    max-width: 140px !important;
+    width: 140px !important;
+  }
+
+  .property-carousel .vertical-property-image {
+    height: 100px;
+  }
+
+  .property-carousel .vertical-property-content {
+    padding: 6px;
+    gap: 3px;
+  }
+
+  .property-carousel .vertical-property-price {
+    font-size: 12px;
+  }
+
+  .property-carousel .vertical-property-title {
     font-size: 8px;
+    max-height: 20px;
+  }
+
+  .property-carousel .vertical-property-type {
+    font-size: 6px;
+    padding: 1px 3px;
+  }
+
+  .property-carousel .vertical-property-date {
+    font-size: 6px;
+  }
+
+  .property-carousel .vertical-rent-manager-badge {
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .property-carousel .vertical-rent-manager-avatar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .property-carousel .vertical-rent-manager-name {
+    font-size: 7px;
+  }
+
+  .property-carousel .vertical-rent-manager-role {
+    font-size: 6px;
+  }
+
+  .property-carousel .vertical-property-features {
+    height: 32px;
+    padding: 3px 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .property-carousel .vertical-property-feature-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 1px;
+    gap: 2px;
+    border-right: 1px solid #e5e7eb;
+  }
+
+  .property-carousel .vertical-property-feature-item:last-child {
+    border-right: none;
+  }
+
+  .property-carousel .vertical-property-feature-item svg {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+
+  .property-carousel .vertical-property-feature-item span:not(.feature-tooltip) {
+    font-size: 7px;
+    white-space: nowrap;
+  }
+
+  /* Browse carousel specific overrides for very small screens */
+  .browse-property-carousel .vertical-property-image {
+    height: 100px;
+  }
+
+  .browse-property-carousel .vertical-property-content {
+    padding: 6px;
+    gap: 3px;
+  }
+
+  .browse-property-carousel .vertical-property-header-row {
+    gap: 2px;
+    margin-bottom: 1px;
+    align-items: center;
+  }
+
+  .browse-property-carousel .vertical-property-price {
+    font-size: 12px;
+  }
+
+  .browse-property-carousel .vertical-property-title {
+    font-size: 8px;
+    max-height: 20px;
+    line-height: 1.2;
+  }
+
+  .browse-property-carousel .vertical-property-type {
+    font-size: 6px;
+    padding: 1px 3px;
+  }
+
+  .browse-property-carousel .vertical-property-date {
+    font-size: 6px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-badge {
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-avatar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-name {
+    font-size: 7px;
+  }
+
+  .browse-property-carousel .vertical-rent-manager-role {
+    font-size: 6px;
+  }
+
+  .browse-property-carousel .vertical-property-features {
+    height: 32px;
+    padding: 3px 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .browse-property-carousel .vertical-property-feature-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 1px;
+    gap: 2px;
+    border-right: 1px solid #e5e7eb;
+  }
+
+  .browse-property-carousel .vertical-property-feature-item:last-child {
+    border-right: none;
+  }
+
+  .browse-property-carousel .vertical-property-feature-item svg {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+
+  .browse-property-carousel .vertical-property-feature-item span:not(.feature-tooltip) {
+    font-size: 7px;
+    white-space: nowrap;
   }
 }

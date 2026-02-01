@@ -90,8 +90,12 @@
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  justify-content: center;
-  align-items: center;  
+  justify-content: flex-start;
+  align-items: center;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding: 0;
+  scroll-padding-left: 0;
 }
 
 .location-filter-tabs::-webkit-scrollbar {
@@ -354,7 +358,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .featured-container {
     padding: 0 20px;
   }
@@ -384,11 +388,17 @@
   .location-filter-tabs {
     gap: 10px;
     margin-bottom: 24px;
+    justify-content: flex-start;
+    margin-left: -40px;
+    margin-right: -40px;
+    padding-left: 40px;
+    padding-right: 40px;
   }
 
   .location-tab {
-    padding: 8px 16px;
-    font-size: 14px;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-width: 1.5px;
   }
 
   .browse-property-carousel {
@@ -399,9 +409,9 @@
 
   /* Make browse carousel cards smaller on mobile */
   .browse-property-carousel .vertical-property-card {
-    min-width: 280px;
-    max-width: 280px;
-    width: 280px;
+    min-width: 260px;
+    max-width: 260px;
+    width: 260px;
   }
 
   .carousel-nav-arrow {
@@ -428,30 +438,36 @@
 
   /* Make cards smaller to fit multiple on mobile */
   .featured-section .property-carousel .vertical-property-card {
-    min-width: 280px;
-    max-width: 280px;
-    width: 280px;
+    min-width: 260px;
+    max-width: 260px;
+    width: 260px;
     flex-shrink: 0;
   }
 
   .browse-properties-section {
-    margin-top: 40px;
-    padding-top: 32px;
+    margin-top: 10px;
+    padding-top: 12px;
   }
 
   .browse-section-title {
-    font-size: 22px;
+    font-size: 8px;
     margin-bottom: 20px;
   }
 
   .location-filter-tabs {
     gap: 8px;
     margin-bottom: 20px;
+    justify-content: flex-start;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .location-tab {
-    padding: 8px 14px;
-    font-size: 13px;
+    padding: 5px 10px;
+    font-size: 11px;
+    border-width: 1.5px;
   }
 
   .browse-property-carousel {
@@ -460,11 +476,18 @@
     touch-action: pan-x; /* Enable touch scrolling */
   }
 
-  /* Make browse carousel cards smaller on mobile */
+  /* Make browse carousel cards smaller on very small screens */
   .browse-property-carousel .vertical-property-card {
-    min-width: 280px;
-    max-width: 280px;
-    width: 280px;
+    min-width: 140px;
+    max-width: 140px;
+    width: 140px;
+  }
+
+  /* Make property carousel cards smaller on very small screens */
+  .featured-section .property-carousel .vertical-property-card {
+    min-width: 140px;
+    max-width: 140px;
+    width: 140px;
   }
 
   .carousel-nav-arrow {

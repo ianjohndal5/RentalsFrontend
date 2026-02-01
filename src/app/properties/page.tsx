@@ -207,25 +207,123 @@ function PropertiesContent() {
       <Navbar />
       <PageHeader title="Properties for Rent" />
 
-      {isSidebarOpen && (
-        <div 
-          className="properties-sidebar-overlay"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-
       <main className="properties-main-layout">
-        <div className={`properties-sidebar ${isSidebarOpen ? 'mobile-open' : ''}`}>
-          <button 
-            className="sidebar-close-btn"
-            onClick={() => setIsSidebarOpen(false)}
-            aria-label="Close filters"
-          >
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 6L6 18M6 6L18 18" stroke="#333" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </button>
-          
+        {/* Dropdown Filter Menu */}
+        {isSidebarOpen && (
+          <>
+            <div 
+              className="filter-dropdown-overlay"
+              onClick={() => setIsSidebarOpen(false)}
+            />
+            <div className={`filter-dropdown ${isSidebarOpen ? 'open' : ''}`}>
+              <div className="filter-dropdown-header">
+                <h2 className="filter-dropdown-title">Advance Search</h2>
+                <button 
+                  className="filter-close-btn"
+                  onClick={() => setIsSidebarOpen(false)}
+                  aria-label="Close filters"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="filter-dropdown-content">
+                <div className="advance-search-section">
+                  <h2 className="section-title">Advance Search</h2>
+                  <div className="filter-group">
+                    <select
+                      className="filter-select"
+                      value={selectedLocation}
+                      onChange={(e) => setSelectedLocation(e.target.value)}
+                    >
+                      <option value="">Location</option>
+                      {locations.map(location => (
+                        <option key={location} value={location}>{location}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="filter-group">
+                    <select
+                      className="filter-select"
+                      value={selectedType}
+                      onChange={(e) => setSelectedType(e.target.value)}
+                    >
+                      {propertyTypes.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="filter-group">
+                    <select
+                      className="filter-select"
+                      value={minBaths}
+                      onChange={(e) => setMinBaths(e.target.value)}
+                    >
+                      <option value="">Min. Baths</option>
+                      {bathOptions.map(bath => (
+                        <option key={bath} value={bath}>{bath}+</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="filter-group">
+                    <select
+                      className="filter-select"
+                      value={minBeds}
+                      onChange={(e) => setMinBeds(e.target.value)}
+                    >
+                      <option value="">Min. Beds</option>
+                      {bedOptions.map(bed => (
+                        <option key={bed} value={bed}>{bed}+</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="filter-group price-range-group">
+                    <label className="price-range-label">Price Range</label>
+                    <div className="price-range-inputs-container">
+                      <div className="price-range-inputs">
+                        <input
+                          type="text"
+                          className="price-input"
+                          placeholder="T"
+                          value={priceMin}
+                          onChange={(e) => setPriceMin(e.target.value)}
+                        />
+                        <div className="price-range-separator">
+                          <span>To</span>
+                        </div>
+                        <input
+                          type="text"
+                          className="price-input"
+                          placeholder="O"
+                          value={priceMax}
+                          onChange={(e) => setPriceMax(e.target.value)}
+                        />
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="200000"
+                        step="1000"
+                        value={priceMin || 0}
+                        onChange={(e) => setPriceMin(e.target.value)}
+                        className="price-range-slider"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Desktop Sidebar - Hidden on mobile */}
+        <div className="properties-sidebar">
           <div className="advance-search-section">
             <h2 className="section-title">Advance Search</h2>
             <div className="filter-group">
@@ -313,29 +411,6 @@ function PropertiesContent() {
               </div>
             </div>
           </div>
-
-          <div className="categories-section">
-            <h2 className="section-title">List by Categories</h2>
-            <ul className="categories-list">
-              {categories.map((category, index) => (
-                <li key={index} className="category-item">
-                  <span className="category-name">{category.name}</span>
-                  <span className="category-count">({category.count})</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="top-searches-section">
-            <h2 className="section-title">Top Searches</h2>
-            <ul className="top-searches-list">
-              {topSearches.map((search, index) => (
-                <li key={index} className="search-item">
-                  {search}
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         <div className="properties-main-content">
@@ -365,39 +440,41 @@ function PropertiesContent() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <select
-                className="sort-dropdown-btn"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <option value="price-low">Price Low to High</option>
-                <option value="price-high">Price High to Low</option>
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-              </select>
-              <button
-                className="hamburger-menu-btn"
-                aria-label="List View"
-                onClick={() => setViewMode('horizontal')}
-                style={{ backgroundColor: viewMode === 'horizontal' ? '#FE8E0A' : '#ffffff' }}
-              >
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 12H21M3 6H21M3 18H21" stroke={viewMode === 'horizontal' ? "#ffffff" : "#333"} strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
-              <button
-                className="grid-view-btn"
-                aria-label="Grid View"
-                onClick={() => setViewMode('vertical')}
-                style={{ backgroundColor: viewMode === 'vertical' ? '#FE8E0A' : '#ffffff' }}
-              >
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
-                  <rect x="14" y="3" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
-                  <rect x="3" y="14" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
-                  <rect x="14" y="14" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
-                </svg>
-              </button>
+              <div className="top-search-bar-controls">
+                <select
+                  className="sort-dropdown-btn"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="price-low">Price Low to High</option>
+                  <option value="price-high">Price High to Low</option>
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                </select>
+                <button
+                  className="hamburger-menu-btn"
+                  aria-label="List View"
+                  onClick={() => setViewMode('horizontal')}
+                  style={{ backgroundColor: viewMode === 'horizontal' ? '#FE8E0A' : '#ffffff' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12H21M3 6H21M3 18H21" stroke={viewMode === 'horizontal' ? "#ffffff" : "#333"} strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </button>
+                <button
+                  className="grid-view-btn"
+                  aria-label="Grid View"
+                  onClick={() => setViewMode('vertical')}
+                  style={{ backgroundColor: viewMode === 'vertical' ? '#FE8E0A' : '#ffffff' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
+                    <rect x="14" y="3" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
+                    <rect x="3" y="14" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
+                    <rect x="14" y="14" width="7" height="7" stroke={viewMode === 'vertical' ? "#ffffff" : "#333"} strokeWidth="2" fill="none" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -496,6 +573,30 @@ function PropertiesContent() {
                 </p>
               </div>
             )}
+
+            {/* Categories and Top Searches Sections */}
+            <div className="categories-section">
+              <h2 className="section-title">List by Categories</h2>
+              <ul className="categories-list">
+                {categories.map((category, index) => (
+                  <li key={index} className="category-item">
+                    <span className="category-name">{category.name}</span>
+                    <span className="category-count">({category.count})</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="top-searches-section">
+              <h2 className="section-title">Top Searches</h2>
+              <ul className="top-searches-list">
+                {topSearches.map((search, index) => (
+                  <li key={index} className="search-item">
+                    {search}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </main>

@@ -107,12 +107,13 @@
 
 @media (max-width: 480px) {
   .page-header {
-    padding: 30px 20px;
-    min-height: 80px;
+    padding: 24px 16px;
+    min-height: 70px;
   }
 
   .page-header-title {
-    font-size: 24px;
+    font-size: 20px;
+    letter-spacing: 0.3px;
   }
 
   .page-header-accent::before {
