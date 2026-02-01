@@ -134,10 +134,11 @@
 .browse-property-carousel {
   display: flex;
   gap: 24px;
-  overflow-x: hidden; /* Changed to hidden to prevent manual scrolling interference */
+  overflow-x: auto; /* Changed to auto for touch scrolling on mobile */
   overflow-y: hidden;
-  scroll-snap-type: none; /* Disable snap for smooth infinite scroll */
-  scroll-behavior: auto;
+  scroll-snap-type: x mandatory; /* Enable snap for better mobile experience */
+  scroll-behavior: smooth;
+  touch-action: pan-x; /* Enable touch scrolling */
   padding: 20px 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Hide scrollbar for cleaner look */
@@ -151,6 +152,7 @@
 
 .browse-property-carousel > * {
   flex-shrink: 0;
+  scroll-snap-align: start; /* Enable snap for better mobile experience */
 }
 
 /* Carousel Navigation Arrow */
@@ -390,8 +392,16 @@
   }
 
   .browse-property-carousel {
-    gap: 20px;
+    gap: 16px;
     padding: 16px 0;
+    touch-action: pan-x; /* Enable touch scrolling */
+  }
+
+  /* Make browse carousel cards smaller on mobile */
+  .browse-property-carousel .vertical-property-card {
+    min-width: 280px;
+    max-width: 280px;
+    width: 280px;
   }
 
   .carousel-nav-arrow {
@@ -411,14 +421,16 @@
 
   .featured-section .property-carousel {
     padding: 16px 20px 24px 20px;
-    gap: 16px;
+    gap: 12px;
+    touch-action: pan-x; /* Enable touch scrolling */
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* Make cards in carousel nearly full-width on mobile */
+  /* Make cards smaller to fit multiple on mobile */
   .featured-section .property-carousel .vertical-property-card {
-    min-width: calc(100vw - 80px);
-    max-width: calc(100vw - 80px);
-    width: calc(100vw - 80px);
+    min-width: 280px;
+    max-width: 280px;
+    width: 280px;
     flex-shrink: 0;
   }
 
@@ -443,14 +455,16 @@
   }
 
   .browse-property-carousel {
-    gap: 16px;
+    gap: 12px;
     padding: 12px 0;
+    touch-action: pan-x; /* Enable touch scrolling */
   }
 
+  /* Make browse carousel cards smaller on mobile */
   .browse-property-carousel .vertical-property-card {
-    min-width: calc(100vw - 80px);
-    max-width: calc(100vw - 80px);
-    width: calc(100vw - 80px);
+    min-width: 280px;
+    max-width: 280px;
+    width: 280px;
   }
 
   .carousel-nav-arrow {

@@ -339,40 +339,78 @@
     margin-bottom: 0;
   }
 
-  /* Override for carousel - make cards wider */
+  /* Override for carousel - make cards smaller to fit multiple on screen */
   .property-carousel .vertical-property-card {
-    min-width: calc(100vw - 80px);
-    max-width: calc(100vw - 80px);
-    width: calc(100vw - 80px);
+    min-width: 280px;
+    max-width: 280px;
+    width: 280px;
     flex-shrink: 0;
-    border-radius: 16px;
+    border-radius: 12px;
   }
 
   .property-carousel .vertical-property-image {
-    height: 260px; /* Increased for better visibility in carousel */
+    height: 180px; /* Reduced for smaller cards */
   }
 
   .property-carousel .vertical-property-content {
-    padding: 16px;
-    gap: 12px;
+    padding: 12px;
+    gap: 8px;
   }
 
   .property-carousel .vertical-property-price {
-    font-size: 24px;
+    font-size: 18px;
   }
 
   .property-carousel .vertical-property-title {
-    font-size: 16px;
-    max-height: 48px;
+    font-size: 13px;
+    max-height: 36px;
+    -webkit-line-clamp: 2;
   }
 
   .property-carousel .vertical-property-type {
-    font-size: 11px;
-    padding: 4px 8px;
+    font-size: 9px;
+    padding: 3px 6px;
   }
 
   .property-carousel .vertical-property-date {
-    font-size: 11px;
+    font-size: 9px;
+  }
+
+  .property-carousel .vertical-rent-manager-badge {
+    padding: 6px 8px;
+    margin-top: 4px;
+  }
+
+  .property-carousel .vertical-rent-manager-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .property-carousel .vertical-rent-manager-name {
+    font-size: 10px;
+  }
+
+  .property-carousel .vertical-rent-manager-role {
+    font-size: 8px;
+  }
+
+  .property-carousel .vertical-property-features {
+    height: 40px;
+    padding: 6px 4px;
+  }
+
+  .property-carousel .vertical-property-feature-item {
+    padding: 4px 2px;
+    gap: 3px;
+  }
+
+  .property-carousel .vertical-property-feature-item svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .property-carousel .vertical-property-feature-item span:not(.feature-tooltip) {
+    font-size: 10px;
   }
 
   .vertical-property-card:hover {
