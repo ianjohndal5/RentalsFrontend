@@ -3,12 +3,17 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import HorizontalPropertyCard from '../common/VerticalPropertyCard'
+import { propertiesApi } from '../../api'
+import type { Property } from '../../types'
 import './FeaturedProperties.css'
 
 function FeaturedProperties() {
   const [selectedLocation, setSelectedLocation] = useState('All Locations')
   const propertyCarouselRef = useRef<HTMLDivElement>(null)
   const [isPaused, setIsPaused] = useState(false)
+  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([])
+  const [browseProperties, setBrowseProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
 
   const locations = [
     'All Locations',
@@ -19,6 +24,69 @@ function FeaturedProperties() {
     'Cebu City',
     'Davao City',
   ]
+
+  // Fetch featured properties
+  useEffect(() => {
+    const fetchFeaturedProperties = async () => {
+      try {
+        const data = await propertiesApi.getFeatured()
+        setFeaturedProperties(data)
+      } catch (error) {
+        console.error('Error fetching featured properties:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchFeaturedProperties()
+  }, [])
+
+  // Fetch properties for browse section based on location
+  useEffect(() => {
+    const fetchBrowseProperties = async () => {
+      try {
+        const params: { location?: string } = {}
+        if (selectedLocation !== 'All Locations') {
+          params.location = selectedLocation
+        }
+        const data = await propertiesApi.getAll(params)
+        setBrowseProperties(data.slice(0, 8)) // Limit to 8 for carousel
+      } catch (error) {
+        console.error('Error fetching browse properties:', error)
+      }
+    }
+
+    fetchBrowseProperties()
+  }, [selectedLocation])
+
+  // Helper function to format price
+  const formatPrice = (price: number): string => {
+    return `₱${price.toLocaleString('en-US')}/Month`
+  }
+
+  // Helper function to format date
+  const formatDate = (dateString: string | null): string => {
+    if (!dateString) return 'Date not available'
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  // Helper function to get rent manager role
+  const getRentManagerRole = (isOfficial: boolean | undefined): string => {
+    return isOfficial ? 'Rent Manager' : 'Property Specialist'
+  }
+
+  // Helper function to get image URL
+  const getImageUrl = (image: string | null): string => {
+    if (!image) return '/assets/property-main.png'
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image
+    }
+    if (image.startsWith('storage/') || image.startsWith('/storage/')) {
+      return `/api/${image.startsWith('/') ? image.slice(1) : image}`
+    }
+    return image
+  }
 
   // Auto-scroll property-carousel with seamless infinite loop
   useEffect(() => {
@@ -108,15 +176,39 @@ function FeaturedProperties() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Render items multiple times for seamless infinite loop */}
-          {Array.from({ length: 4 }).map((_, setIndex) => (
-            Array.from({ length: 6 }).map((_, index) => (
-              <HorizontalPropertyCard 
-                key={`property-${setIndex}-${index}`} 
-                location="Makati City" 
-              />
+          {loading ? (
+            <div style={{ padding: '2rem', textAlign: 'center' }}>Loading properties...</div>
+          ) : featuredProperties.length > 0 ? (
+            // Render items multiple times for seamless infinite loop
+            Array.from({ length: 4 }).map((_, setIndex) => (
+              featuredProperties.slice(0, 6).map((property, index) => {
+                const propertySize = property.area 
+                  ? `${property.area} sqft` 
+                  : `${(property.bedrooms * 15 + property.bathrooms * 5)} sqft`
+                
+                return (
+                  <HorizontalPropertyCard 
+                    key={`property-${setIndex}-${property.id}`}
+                    id={property.id}
+                    propertyType={property.type}
+                    date={formatDate(property.published_at)}
+                    price={formatPrice(property.price)}
+                    title={property.title}
+                    image={getImageUrl(property.image)}
+                    rentManagerName={property.rent_manager?.name || 'Rental.Ph Official'}
+                    rentManagerRole={getRentManagerRole(property.rent_manager?.is_official)}
+                    bedrooms={property.bedrooms}
+                    bathrooms={property.bathrooms}
+                    parking={0}
+                    propertySize={propertySize}
+                    location={property.location}
+                  />
+                )
+              })
             ))
-          ))}
+          ) : (
+            <div style={{ padding: '2rem', textAlign: 'center' }}>No featured properties available</div>
+          )}
         </div>
       </div>
 
@@ -144,12 +236,34 @@ function FeaturedProperties() {
               </svg>
             </button>
             <div className="browse-property-carousel">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <HorizontalPropertyCard 
-                  key={`browse-${index}`} 
-                  location={selectedLocation === 'All Locations' ? 'Makati City' : selectedLocation}
-                />
-              ))}
+              {browseProperties.length > 0 ? (
+                browseProperties.map((property) => {
+                  const propertySize = property.area 
+                    ? `${property.area} sqft` 
+                    : `${(property.bedrooms * 15 + property.bathrooms * 5)} sqft`
+                  
+                  return (
+                    <HorizontalPropertyCard 
+                      key={`browse-${property.id}`}
+                      id={property.id}
+                      propertyType={property.type}
+                      date={formatDate(property.published_at)}
+                      price={formatPrice(property.price)}
+                      title={property.title}
+                      image={getImageUrl(property.image)}
+                      rentManagerName={property.rent_manager?.name || 'Rental.Ph Official'}
+                      rentManagerRole={getRentManagerRole(property.rent_manager?.is_official)}
+                      bedrooms={property.bedrooms}
+                      bathrooms={property.bathrooms}
+                      parking={0}
+                      propertySize={propertySize}
+                      location={property.location}
+                    />
+                  )
+                })
+              ) : (
+                <div style={{ padding: '2rem', textAlign: 'center' }}>No properties available</div>
+              )}
             </div>
             <button className="carousel-nav-arrow carousel-next" aria-label="Next">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

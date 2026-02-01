@@ -1,7 +1,8 @@
 {
-  "/blog/[id]/page": "app/blog/[id]/page.js",
-  "/page": "app/page.js",
-  "/rent-managers/page": "app/rent-managers/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/rent-managers/[id]/page": "app/rent-managers/[id]/page.js",
   "/blog/page": "app/blog/page.js",
-  "/rent-managers/[id]/page": "app/rent-managers/[id]/page.js"
+  "/about/page": "app/about/page.js",
+  "/news/page": "app/news/page.js",
+  "/properties/page": "app/properties/page.js"
 }
