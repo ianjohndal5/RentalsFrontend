@@ -221,7 +221,8 @@
 
 .advanced-options-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
   gap: 12px;
 }
 
@@ -232,7 +233,8 @@
 }
 
 .advanced-option-group.price-range-group {
-  grid-column: span 2;
+  grid-column: 1 / -1; /* Span both columns */
+  grid-row: 2; /* Second row */
 }
 
 .advanced-option-label {
@@ -274,6 +276,7 @@
 
 .price-range-input {
   flex: 1;
+  min-width: 0; /* Allow input to shrink below content size */
   padding: 8px 12px;
   border: 1px solid rgba(167, 167, 167, 0.65);
   border-radius: 6px;
@@ -305,6 +308,20 @@
   width: 100%;
   max-width: 1129px;
   padding: 0 20px;
+  display: block; /* Explicitly show on desktop */
+}
+
+/* Ensure recommended searches are visible on desktop and tablets (screens wider than 768px) */
+@media (min-width: 769px) {
+  .recommended-searches {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .recommended-searches-list {
+    display: flex !important;
+  }
 }
 
 .recommended-searches-label {
@@ -334,7 +351,9 @@
   font-weight: 400;
   cursor: pointer;
   transition: all 0.2s ease;
-  white-space: nowrap;
+  white-space: normal; /* Allow text to wrap on smaller screens */
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .recommended-search-chip:hover {
@@ -376,18 +395,35 @@
     padding: 0 24px;
     min-width: 200px;
   }
+
+  /* Keep recommended searches visible on tablets */
+  .recommended-searches {
+    display: block;
+  }
 }
 
 @media (max-width: 768px) {
   .hero-background {
     height: 100%;
-    min-height: 600px;
+    min-height: 700px;
+    max-height: 900px;
   }
 
   section#home {
     height: auto !important;
-    min-height: 600px;
-    padding-bottom: 40px;
+    min-height: 700px;
+    max-height: 900px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Make hero content wrapper use flexbox to push recommended searches to bottom */
+  section#home > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
   }
 
   .hero-title {
@@ -448,26 +484,45 @@
   }
 
   .advanced-options-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 12px;
   }
 
   .advanced-option-group.price-range-group {
-    grid-column: span 1;
+    grid-column: 1 / -1; /* Span both columns */
+    grid-row: 2; /* Second row */
   }
 
   .price-range-inputs-wrapper {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .price-range-input {
+    min-width: 0; /* Allow inputs to shrink on mobile */
   }
 
   .price-range-separator {
     text-align: center;
   }
 
-  /* Hide recommended searches on mobile */
+  /* Keep recommended searches visible and positioned at bottom */
   .recommended-searches {
-    display: none;
+    display: block !important;
+    margin-top: auto; /* Push to bottom */
+    padding-top: 20px;
+    padding-bottom: 10px;
+  }
+
+  /* Ensure recommended search chips are visible and wrap on smaller screens */
+  .recommended-search-chip {
+    white-space: normal;
+    word-break: break-word;
+    font-size: 12px;
+    padding: 6px 12px;
+    max-width: 100%;
   }
 
   .advanced-options-panel {
@@ -479,13 +534,25 @@
 @media (max-width: 480px) {
   section#home {
     height: auto !important;
-    min-height: 550px;
-    padding-bottom: 30px;
+    min-height: 650px;
+    max-height: 850px;
+    padding-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Make hero content wrapper use flexbox to push recommended searches to bottom */
+  section#home > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
   }
 
   .hero-background {
     height: 100%;
-    min-height: 550px;
+    min-height: 650px;
+    max-height: 850px;
   }
 
   .hero-title {
@@ -540,9 +607,34 @@
     padding: 6px 10px;
   }
 
-  /* Hide recommended searches on mobile */
+  .price-range-input {
+    min-width: 0; /* Ensure inputs can shrink on very small screens */
+  }
+
+  .price-range-inputs-wrapper {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .price-range-separator {
+    text-align: center;
+  }
+
+  /* Keep recommended searches visible and positioned at bottom */
   .recommended-searches {
-    display: none;
+    display: block !important;
+    margin-top: auto; /* Push to bottom */
+    padding-top: 15px;
+    padding-bottom: 10px;
+  }
+
+  /* Ensure recommended search chips are visible and wrap on very small screens */
+  .recommended-search-chip {
+    white-space: normal;
+    word-break: break-word;
+    font-size: 11px;
+    padding: 5px 10px;
+    max-width: 100%;
   }
 
   .advanced-options-panel {
