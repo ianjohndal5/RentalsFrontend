@@ -66,7 +66,7 @@ export const agentsApi = {
     }
 
     try {
-      const response = await apiClient.post<AgentRegistrationResponse>('/agents/register', formData, {
+      const response = await apiClient.post<AgentRegistrationResponse>('/register', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

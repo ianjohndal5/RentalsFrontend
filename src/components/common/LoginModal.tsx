@@ -24,43 +24,20 @@ function LoginModal({ isOpen, onClose, onRegisterClick }: LoginModalProps) {
     setLoginError(null)
 
     try {
-      // Try admin login first
-      let response: any = null
-      let isAdmin = false
-      
-      try {
-        response = await authApi.adminLogin({
-          email,
-          password,
-          remember: rememberMe,
-        })
-        isAdmin = true
-      } catch (adminError: any) {
-        // If admin login fails (401 or other error), try agent login
-        if (adminError.response?.status === 401 || adminError.response?.status === 404) {
-          try {
-            response = await authApi.login({
-              email,
-              password,
-              remember: rememberMe,
-            })
-            isAdmin = false
-          } catch (agentError: any) {
-            // Both logins failed
-            throw agentError
-          }
-        } else {
-          // Other error from admin login, throw it
-          throw adminError
-        }
-      }
+      // Use unified login endpoint (handles both agents and admins)
+      const response = await authApi.login({
+        email,
+        password,
+        remember: rememberMe,
+      })
 
       if (response.success && response.data?.token) {
         // Store token and proceed with login
         localStorage.setItem('auth_token', response.data.token)
         
-        // For admin login, check admin object, otherwise check user object
-        const userData = isAdmin ? response.data?.admin : response.data?.user
+        // Determine if user is admin or agent from response
+        const isAdmin = !!response.data?.admin || response.data?.role === 'admin'
+        const userData = isAdmin ? response.data?.admin : (response.data?.agent || response.data?.user)
         
         // Store user name if available
         const userName = userData?.name || 
@@ -74,7 +51,7 @@ function LoginModal({ isOpen, onClose, onRegisterClick }: LoginModalProps) {
         }
         
         // Store user role (admin or agent)
-        const userRole = isAdmin ? 'admin' : (userData?.role || 'agent')
+        const userRole = response.data?.role || (isAdmin ? 'admin' : 'agent')
         localStorage.setItem('agent_role', userRole)
         localStorage.setItem('user_role', userRole) // Also store as generic user_role
         
