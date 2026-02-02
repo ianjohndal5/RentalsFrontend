@@ -6,9 +6,40 @@ import Link from 'next/link'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
 import PageHeader from '../../components/layout/PageHeader'
-import { propertiesApi } from '../../api'
+import { agentsApi, propertiesApi } from '../../api'
+import { getApiBaseUrl } from '../../config/api'
 import type { Property } from '../../types'
+import type { Agent } from '../../api/endpoints/agents'
 import './page.css'
+
+// Helper function to get agent image URL
+const getAgentImageUrl = (imagePath: string | null | undefined): string | null => {
+  if (!imagePath) return null
+  
+  // If it's already a full URL, return it
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+  
+  // If it starts with /storage, it's a Laravel storage path
+  if (imagePath.startsWith('/storage') || imagePath.startsWith('storage/')) {
+    const baseUrl = getApiBaseUrl().replace('/api', '')
+    return `${baseUrl}/${imagePath.startsWith('/') ? imagePath.slice(1) : imagePath}`
+  }
+  
+  // Otherwise, assume it's a relative path from storage
+  const baseUrl = getApiBaseUrl().replace('/api', '')
+  return `${baseUrl}/storage/${imagePath}`
+}
+
+// Helper function to get initials for fallback avatar
+const getInitials = (name: string): string => {
+  const parts = name.trim().split(' ')
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
+  }
+  return name.substring(0, 2).toUpperCase()
+}
 
 interface RentManagerInfo {
   id: number
@@ -18,6 +49,7 @@ interface RentManagerInfo {
   listings: number
   email: string
   phone?: string
+  image?: string | null
 }
 
 export default function RentManagersPage() {
@@ -31,45 +63,44 @@ export default function RentManagersPage() {
   useEffect(() => {
     const fetchRentManagers = async () => {
       try {
+        // Fetch agents from the backend
+        const agents = await agentsApi.getAll()
+        
+        // Also fetch properties to get location information for agents without city/state
         const properties = await propertiesApi.getAll()
         
-        // Extract unique rent managers from properties
-        const managerMap = new Map<number, {
-          manager: { id: number; name: string; email: string; is_official: boolean }
-          properties: Property[]
-          locations: Set<string>
-        }>()
-
+        // Create a map of agent IDs to their property locations
+        const agentLocationsMap = new Map<number, string[]>()
         properties.forEach(property => {
-          if (property.rent_manager) {
-            const managerId = property.rent_manager.id
-            if (!managerMap.has(managerId)) {
-              managerMap.set(managerId, {
-                manager: property.rent_manager,
-                properties: [],
-                locations: new Set()
-              })
+          // Handle both agent (new) and rent_manager (legacy) formats
+          const agentId = (property as any).agent_id || (property as any).agent?.id || property.rent_manager?.id
+          if (agentId && property.location) {
+            if (!agentLocationsMap.has(agentId)) {
+              agentLocationsMap.set(agentId, [])
             }
-            const entry = managerMap.get(managerId)!
-            entry.properties.push(property)
-            if (property.location) {
-              entry.locations.add(property.location)
-            }
+            agentLocationsMap.get(agentId)!.push(property.location)
           }
         })
 
-        // Convert to array format
-        const managersList: RentManagerInfo[] = Array.from(managerMap.values()).map(entry => {
-          const locations = Array.from(entry.locations)
-          const primaryLocation = locations[0] || 'N/A'
+        // Convert agents to RentManagerInfo format
+        const managersList: RentManagerInfo[] = agents.map(agent => {
+          // Get location from agent's city/state or from their properties
+          const propertyLocations = agentLocationsMap.get(agent.id) || []
+          const uniqueLocations = Array.from(new Set(propertyLocations))
+          const primaryLocation = agent.city || agent.state || uniqueLocations[0] || 'N/A'
+          
+          // Get image from agent (check multiple possible field names)
+          const agentImage = agent.image || agent.avatar || agent.profile_image
           
           return {
-            id: entry.manager.id,
-            name: entry.manager.name,
-            role: entry.manager.is_official ? 'Rent Manager' : 'Property Specialist',
+            id: agent.id,
+            name: agent.full_name,
+            role: 'Rent Manager', // All agents from backend are approved, so they're rent managers
             location: primaryLocation,
-            listings: entry.properties.length,
-            email: entry.manager.email,
+            listings: agent.properties_count,
+            email: agent.email,
+            phone: agent.phone,
+            image: agentImage,
           }
         })
 
@@ -216,12 +247,25 @@ export default function RentManagersPage() {
                 >
                   <div className="manager-profile-picture-container">
                     <div className="manager-profile-picture">
-                      <svg width="100%" height="100%" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="400" height="300" fill="#f0f0f0"/>
-                        <circle cx="200" cy="120" r="50" fill="#205ED7"/>
-                        <circle cx="200" cy="100" r="20" fill="white"/>
-                        <path d="M150 200C150 180 170 160 200 160C230 160 250 180 250 200V220H150V200Z" fill="white"/>
-                      </svg>
+                      {manager.image ? (
+                        <img 
+                          src={getAgentImageUrl(manager.image) || ''} 
+                          alt={manager.name}
+                          onError={(e) => {
+                            // Fallback to initials if image fails to load
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                            const fallback = target.nextElementSibling as HTMLElement
+                            if (fallback) fallback.style.display = 'flex'
+                          }}
+                        />
+                      ) : null}
+                      <div 
+                        className="manager-profile-picture-fallback"
+                        style={{ display: manager.image ? 'none' : 'flex' }}
+                      >
+                        <span>{getInitials(manager.name)}</span>
+                      </div>
                     </div>
                   </div>
                   
@@ -294,11 +338,24 @@ export default function RentManagersPage() {
                 {filteredManagers.slice(0, 3).map((manager) => (
                   <div key={manager.id} className="recent-manager-item">
                     <div className="recent-manager-avatar">
-                      <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="25" cy="25" r="25" fill="#205ED7"/>
-                        <circle cx="25" cy="20" r="8" fill="white"/>
-                        <path d="M12 35C12 30 18 25 25 25C32 25 38 30 38 35V40H12V35Z" fill="white"/>
-                      </svg>
+                      {manager.image ? (
+                        <img 
+                          src={getAgentImageUrl(manager.image) || ''} 
+                          alt={manager.name}
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                            const fallback = target.nextElementSibling as HTMLElement
+                            if (fallback) fallback.style.display = 'flex'
+                          }}
+                        />
+                      ) : null}
+                      <div 
+                        className="recent-manager-avatar-fallback"
+                        style={{ display: manager.image ? 'none' : 'flex' }}
+                      >
+                        <span>{getInitials(manager.name)}</span>
+                      </div>
                     </div>
                     <div className="recent-manager-info">
                       <h4 className="recent-manager-name">{manager.name}</h4>

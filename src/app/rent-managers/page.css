@@ -243,7 +243,31 @@
 .manager-profile-picture {
   width: 100%;
   height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+}
+
+.manager-profile-picture img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.manager-profile-picture-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #205ED7;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 2px;
 }
 
 .manager-profile-picture svg {
@@ -400,6 +424,40 @@
 
 .recent-manager-avatar {
   flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #205ED7;
+}
+
+.recent-manager-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recent-manager-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #205ED7;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.recent-manager-avatar svg {
+  width: 50px;
+  height: 50px;
 }
 
 .recent-manager-info {
