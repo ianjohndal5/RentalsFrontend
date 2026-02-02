@@ -99,11 +99,6 @@
       "static/chunks/main-app.js",
       "static/css/app/agent/create-listing/basic-info/page.css",
       "static/chunks/app/agent/create-listing/basic-info/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

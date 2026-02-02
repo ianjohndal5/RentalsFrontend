@@ -38,11 +38,11 @@ export interface LoginResponse {
 
 export const authApi = {
   /**
-   * Login agent
+   * Login user (agent or admin)
    */
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     try {
-      const response = await apiClient.post<LoginResponse>('/auth/login', credentials)
+      const response = await apiClient.post<LoginResponse>('/login', credentials)
       return response.data
     } catch (error: any) {
       console.error('Login API call error:', error)
@@ -51,11 +51,11 @@ export const authApi = {
   },
 
   /**
-   * Login admin
+   * Login admin (uses unified login endpoint)
    */
   adminLogin: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     try {
-      const response = await apiClient.post<LoginResponse>('/admin/login', credentials)
+      const response = await apiClient.post<LoginResponse>('/login', credentials)
       return response.data
     } catch (error: any) {
       console.error('Admin login API call error:', error)
