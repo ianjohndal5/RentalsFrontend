@@ -99,6 +99,30 @@
       "static/chunks/main-app.js",
       "static/css/app/agent/create-listing/basic-info/page.css",
       "static/chunks/app/agent/create-listing/basic-info/page.js"
+    ],
+    "/admin/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/page.css",
+      "static/chunks/app/admin/page.js"
+    ],
+    "/admin/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/layout.css",
+      "static/chunks/app/admin/layout.js"
+    ],
+    "/admin/agents/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/agents/page.css",
+      "static/chunks/app/admin/agents/page.js"
+    ],
+    "/admin/users/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/users/page.css",
+      "static/chunks/app/admin/users/page.js"
     ]
   }
 }

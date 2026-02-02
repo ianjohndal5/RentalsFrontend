@@ -15,7 +15,17 @@ export interface LoginResponse {
   message: string
   data?: {
     token?: string
+    role?: string
     user?: {
+      id: number
+      name?: string
+      first_name?: string
+      last_name?: string
+      email: string
+      status?: string
+      role?: string
+    }
+    agent?: {
       id: number
       name?: string
       first_name?: string

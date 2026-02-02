@@ -1,7 +1,7 @@
 {
   "/page": "app/page.js",
-  "/agent/inbox/page": "app/agent/inbox/page.js",
-  "/agent/blogs/page": "app/agent/blogs/page.js",
   "/agent/page": "app/agent/page.js",
-  "/agent/downloadables/page": "app/agent/downloadables/page.js"
+  "/admin/agents/page": "app/admin/agents/page.js",
+  "/admin/users/page": "app/admin/users/page.js",
+  "/agent/listings/page": "app/agent/listings/page.js"
 }
