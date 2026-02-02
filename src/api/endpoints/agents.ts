@@ -35,7 +35,41 @@ export interface AgentRegistrationResponse {
   errors?: Record<string, string[]>
 }
 
+export interface Agent {
+  id: number
+  first_name: string
+  last_name: string
+  full_name: string
+  email: string
+  phone?: string
+  agency_name?: string
+  city?: string
+  state?: string
+  properties_count: number
+  image?: string | null
+  avatar?: string | null
+  profile_image?: string | null
+}
+
+export interface GetAllAgentsResponse {
+  success: boolean
+  data: Agent[]
+}
+
 export const agentsApi = {
+  /**
+   * Get all approved agents
+   */
+  getAll: async (): Promise<Agent[]> => {
+    try {
+      const response = await apiClient.get<GetAllAgentsResponse>('/agents')
+      return response.data.data
+    } catch (error: any) {
+      console.error('API call error:', error)
+      throw error
+    }
+  },
+
   /**
    * Register a new agent
    */
