@@ -12,6 +12,18 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/admin/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/page.css",
+      "static/chunks/app/admin/page.js"
+    ],
+    "/admin/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/layout.css",
+      "static/chunks/app/admin/layout.js"
+    ],
     "/agent/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -24,18 +36,6 @@
       "static/css/app/agent/layout.css",
       "static/chunks/app/agent/layout.js"
     ],
-    "/agent/downloadables/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/agent/downloadables/page.css",
-      "static/chunks/app/agent/downloadables/page.js"
-    ],
-    "/agent/inbox/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/agent/inbox/page.css",
-      "static/chunks/app/agent/inbox/page.js"
-    ],
     "/agent/digital-card/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -47,6 +47,24 @@
       "static/chunks/main-app.js",
       "static/css/app/agent/listings/page.css",
       "static/chunks/app/agent/listings/page.js"
+    ],
+    "/about/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/about/page.css",
+      "static/chunks/app/about/page.js"
+    ],
+    "/agent/inbox/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/agent/inbox/page.css",
+      "static/chunks/app/agent/inbox/page.js"
+    ],
+    "/agent/downloadables/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/agent/downloadables/page.css",
+      "static/chunks/app/agent/downloadables/page.js"
     ],
     "/agent/tracker/page": [
       "static/chunks/webpack.js",
@@ -66,52 +84,6 @@
       "static/css/app/agent/blogs/page.css",
       "static/chunks/app/agent/blogs/page.js"
     ],
-    "/properties/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/properties/page.css",
-      "static/chunks/app/properties/page.js"
-    ],
-    "/agent/account/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/agent/account/page.css",
-      "static/chunks/app/agent/account/page.js"
-    ],
-    "/about/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/about/page.css",
-      "static/chunks/app/about/page.js"
-    ],
-    "/agent/create-listing/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/agent/create-listing/page.js"
-    ],
-    "/agent/create-listing/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/agent/create-listing/layout.js"
-    ],
-    "/agent/create-listing/basic-info/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/agent/create-listing/basic-info/page.css",
-      "static/chunks/app/agent/create-listing/basic-info/page.js"
-    ],
-    "/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/admin/page.css",
-      "static/chunks/app/admin/page.js"
-    ],
-    "/admin/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/admin/layout.css",
-      "static/chunks/app/admin/layout.js"
-    ],
     "/admin/agents/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -123,6 +95,11 @@
       "static/chunks/main-app.js",
       "static/css/app/admin/users/page.css",
       "static/chunks/app/admin/users/page.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
