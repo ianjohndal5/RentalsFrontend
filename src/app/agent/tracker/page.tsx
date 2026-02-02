@@ -171,7 +171,11 @@ export default function AgentRentalTracker() {
                 <label className="art-field">
                   <span className="art-label">Due Date</span>
                   <div className="art-date">
-                    <input className="art-input" placeholder="mm/dd/yyyy" />
+                    <input 
+                      className="art-input" 
+                      type="date"
+                      placeholder="mm/dd/yyyy" 
+                    />
                   </div>
                 </label>
                 <label className="art-field">
@@ -210,19 +214,22 @@ export default function AgentRentalTracker() {
                 <FiSearch className="art-search-icon" />
                 <input
                   className="art-search-input"
-                  placeholder="Search by tenant, unit, method, or reference..."
+                  placeholder="Search payments..."
+                  type="search"
                 />
               </div>
             </div>
 
-            <div className="art-table">
-              <div className="art-table-head">
-                <div>Tenant</div>
-                <div>Propery Name</div>
-                <div>Payment Paid</div>
-                <div className="right">Actions</div>
+            <div className="art-table-wrapper">
+              <div className="art-table">
+                <div className="art-table-head">
+                  <div>Tenant</div>
+                  <div>Propery Name</div>
+                  <div>Payment Paid</div>
+                  <div className="right">Actions</div>
+                </div>
+                <div className="art-table-empty">No Payment History Found.</div>
               </div>
-              <div className="art-table-empty">No Payment History Found.</div>
             </div>
           </section>
         </div>

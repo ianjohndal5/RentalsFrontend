@@ -1,10 +1,17 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import '../index.css'
 import '../styles/landing.css'
 
 export const metadata: Metadata = {
   title: 'Rentals.ph - Your Trusted Property Rental Platform',
   description: 'Find the perfect rental property in the Philippines',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 }
 
 export default function RootLayout({
