@@ -20,6 +20,7 @@ import {
   FiMessageCircle,
   FiMenu,
   FiX,
+  FiSettings,
 } from 'react-icons/fi'
 
 
@@ -160,6 +161,13 @@ function AppSidebar() {
       >
         <FiCreditCard className="nav-icon" />
         <span>Digital Business Card</span>
+      </Link>
+      <Link
+        href="/agent/page-builder"
+        className={`nav-item ${isActive('/agent/page-builder') ? 'active' : ''}`}
+      >
+        <FiSettings className="nav-icon" />
+        <span>Page Builder</span>
       </Link>
 
       <div className="nav-section">
