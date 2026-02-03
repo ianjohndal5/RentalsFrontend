@@ -14,6 +14,7 @@ import {
   FiFileText,
   FiBookOpen,
   FiLayout,
+  FiSettings,
 } from 'react-icons/fi'
 
 
@@ -121,6 +122,13 @@ function AgentSidebar() {
           >
             <FiCreditCard className="nav-icon" />
             <span>Digital Business Card</span>
+          </Link>
+          <Link
+            href="/agent/page-builder"
+            className={`nav-item ${isActive('/agent/page-builder') ? 'active' : ''}`}
+          >
+            <FiSettings className="nav-icon" />
+            <span>Page Builder</span>
           </Link>
 
         <div className="nav-section">
