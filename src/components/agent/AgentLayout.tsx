@@ -26,7 +26,6 @@ function AgentLayout({ children, title, subtitle }: AgentLayoutProps) {
 
   return (
     <div className="agent-dashboard">
-      <AgentSidebar />
       <main className="agent-main">
         <AgentHeader title={title} subtitle={subtitle} />
         
