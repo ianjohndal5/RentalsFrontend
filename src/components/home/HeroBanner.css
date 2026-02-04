@@ -12,6 +12,29 @@
   box-sizing: border-box;
 }
 
+.hero-banner-left-link,
+.hero-banner-right-link {
+  flex: 1;
+  text-decoration: none;
+  display: block;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.hero-banner-left-link:hover,
+.hero-banner-right-link:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.hero-banner-left-link:hover .hero-banner-left,
+.hero-banner-right-link:hover .hero-banner-right {
+  background-color: rgba(32, 94, 215, 0.95);
+}
+
+.hero-banner-right-link:hover .hero-banner-right {
+  background-color: rgba(254, 142, 10, 0.85);
+}
+
 /* Left Section - Blue Panel */
 .hero-banner-left {
   flex: 1;
