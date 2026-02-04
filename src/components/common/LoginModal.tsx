@@ -39,11 +39,10 @@ function LoginModal({ isOpen, onClose, onRegisterClick }: LoginModalProps) {
         const isAdmin = !!response.data?.admin || response.data?.role === 'admin'
         const userData = isAdmin ? response.data?.admin : (response.data?.agent || response.data?.user)
         
-        // Store user name if available
-        const userName = userData?.name || 
-          (userData?.first_name && userData?.last_name 
-            ? `${userData.first_name} ${userData.last_name}` 
-            : null)
+        // Store user name if available (construct from first_name and last_name)
+        const userName = userData?.first_name && userData?.last_name 
+          ? `${userData.first_name} ${userData.last_name}` 
+          : null
         
         if (userName) {
           localStorage.setItem('agent_name', userName)
