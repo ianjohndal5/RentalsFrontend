@@ -10,6 +10,7 @@ import { agentsApi, propertiesApi } from '../../api'
 import { getApiBaseUrl } from '../../config/api'
 import type { Property } from '../../types'
 import type { Agent } from '../../api/endpoints/agents'
+import type { PaginatedResponse } from '../../api/types'
 import './page.css'
 
 // Helper function to get agent image URL
@@ -67,7 +68,12 @@ export default function RentManagersPage() {
         const agents = await agentsApi.getAll()
         
         // Also fetch properties to get location information for agents without city/state
-        const properties = await propertiesApi.getAll()
+        const propertiesResponse = await propertiesApi.getAll()
+        
+        // Handle both array response and paginated response
+        const properties: Property[] = Array.isArray(propertiesResponse)
+          ? propertiesResponse
+          : (propertiesResponse as PaginatedResponse<Property>).data || []
         
         // Create a map of agent IDs to their property locations
         const agentLocationsMap = new Map<number, string[]>()

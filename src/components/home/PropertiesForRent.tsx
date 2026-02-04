@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import VerticalPropertyCard from '../common/VerticalPropertyCard'
 import { propertiesApi } from '../../api'
 import type { Property } from '../../types'
+import type { PaginatedResponse } from '../../api/types'
 import './PropertiesForRent.css'
 
 function PropertiesForRent() {
@@ -13,7 +14,11 @@ function PropertiesForRent() {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const data = await propertiesApi.getAll({ per_page: 6 })
+        const dataResponse = await propertiesApi.getAll({ per_page: 6 })
+        // Handle both array response and paginated response
+        const data: Property[] = Array.isArray(dataResponse)
+          ? dataResponse
+          : (dataResponse as PaginatedResponse<Property>).data || []
         setProperties(data)
       } catch (error) {
         console.error('Error fetching properties:', error)
