@@ -568,8 +568,14 @@ function PropertiesContent() {
                       price: formatPrice(property.price),
                       title: property.title,
                       image: property.image || '/assets/property-main.png',
-                      rentManagerName: property.rent_manager?.name || 'Rental.Ph Official',
-                      rentManagerRole: getRentManagerRole(property.rent_manager?.is_official),
+                      rentManagerName: property.agent?.first_name && property.agent?.last_name
+                        ? `${property.agent.first_name} ${property.agent.last_name}`
+                        : property.agent?.full_name
+                        || property.rent_manager?.name
+                        || 'Rental.Ph Official',
+                      rentManagerRole: property.agent
+                        ? getRentManagerRole(property.agent.verified)
+                        : getRentManagerRole(property.rent_manager?.is_official),
                       bedrooms: property.bedrooms,
                       bathrooms: property.bathrooms,
                       parking: 0, // Parking not in backend model, defaulting to 0

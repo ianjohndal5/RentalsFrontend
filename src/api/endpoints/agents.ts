@@ -37,18 +37,24 @@ export interface AgentRegistrationResponse {
 
 export interface Agent {
   id: number
-  first_name: string
-  last_name: string
-  full_name: string
+  first_name: string | null
+  last_name: string | null
+  full_name?: string
   email: string
-  phone?: string
-  agency_name?: string
-  city?: string
-  state?: string
-  properties_count: number
+  phone?: string | null
+  agency_name?: string | null
+  city?: string | null
+  state?: string | null
+  prc_license_number?: string | null
+  license_type?: 'broker' | 'salesperson' | null
+  status?: 'pending' | 'approved' | 'rejected' | null
+  verified?: boolean
+  properties_count?: number
   image?: string | null
   avatar?: string | null
   profile_image?: string | null
+  created_at?: string | null
+  updated_at?: string | null
 }
 
 export interface GetAllAgentsResponse {
