@@ -111,7 +111,7 @@ export default function RentManagersPage() {
             location: primaryLocation,
             listings: agent.properties_count || 0,
             email: agent.email,
-            phone: agent.phone,
+            phone: agent.phone ?? undefined,
             image: agentImage,
           }
         })
