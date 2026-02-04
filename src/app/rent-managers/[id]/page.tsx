@@ -11,6 +11,7 @@ import { propertiesApi, agentsApi } from '../../../api'
 import { getApiBaseUrl } from '../../../config/api'
 import type { Property } from '../../../types'
 import type { Agent } from '../../../api/endpoints/agents'
+import type { PaginatedResponse } from '../../../api/types'
 import PageHeader from '../../../components/layout/PageHeader'
 import './page.css'
 
@@ -53,7 +54,12 @@ export default function RentManagerDetailsPage() {
         })
         
         // Now fetch properties and filter by agent ID
-        const allProperties = await propertiesApi.getAll()
+        const allPropertiesResponse = await propertiesApi.getAll()
+        
+        // Handle both array response and paginated response
+        const allProperties: Property[] = Array.isArray(allPropertiesResponse)
+          ? allPropertiesResponse
+          : (allPropertiesResponse as PaginatedResponse<Property>).data || []
         
         // Filter properties by agent ID - check both agent and rent_manager for backward compatibility
         const managerProperties = allProperties.filter(p => {
