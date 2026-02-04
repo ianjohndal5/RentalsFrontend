@@ -28,7 +28,6 @@ export {
 // Agent components
 export {
     AgentHeader,
-    AgentSidebar,
     AgentLayout
 } from './agent'
 
