@@ -54,20 +54,19 @@ function LoginModal({ isOpen, onClose, onRegisterClick }: LoginModalProps) {
         localStorage.setItem('agent_role', userRole)
         localStorage.setItem('user_role', userRole) // Also store as generic user_role
         
-        // Check if account status is processing/pending and store it (only for agents)
+        // Check if account status is pending and store it (only for agents)
         if (userRole === 'agent' && !isAdmin) {
           // Access agent data directly since we know it's an agent
           const agentData = response.data?.agent
           const agentStatus = agentData?.status
           
-          if (agentStatus === 'processing' || 
-              agentStatus === 'pending' ||
-              agentStatus === 'under_review') {
+          // Valid statuses are: 'pending' | 'approved' | 'rejected' | null
+          if (agentStatus === 'pending') {
             localStorage.setItem('agent_registration_status', 'processing')
             localStorage.setItem('agent_registered_email', email)
             localStorage.setItem('agent_status', agentStatus)
           } else {
-            // Clear processing status if account is approved
+            // Clear processing status if account is approved or rejected
             localStorage.removeItem('agent_registration_status')
             localStorage.removeItem('agent_registered_email')
             localStorage.setItem('agent_status', agentStatus || 'active')
