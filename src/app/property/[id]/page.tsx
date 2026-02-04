@@ -47,9 +47,13 @@ export default function PropertyDetailsPage() {
         }))
         
         // Fetch similar properties (same type or location)
-        const allProperties = await propertiesApi.getAll()
+        const allPropertiesResponse = await propertiesApi.getAll()
+        // Handle both array and paginated response
+        const allProperties = Array.isArray(allPropertiesResponse) 
+          ? allPropertiesResponse 
+          : allPropertiesResponse.data || []
         const similar = allProperties
-          .filter(p => p.id !== propertyId && (p.type === data.type || p.location === data.location))
+          .filter((p: Property) => p.id !== propertyId && (p.type === data.type || p.location === data.location))
           .slice(0, 6)
         setSimilarProperties(similar)
       } catch (error) {
@@ -221,11 +225,21 @@ export default function PropertyDetailsPage() {
                       fontSize: '20px',
                       fontWeight: 'bold'
                     }}>
-                      {property.rent_manager?.name?.charAt(0) || 'R'}
+                      {(property.agent?.first_name?.charAt(0) || property.rent_manager?.name?.charAt(0) || 'R')}
                     </div>
                     <div>
-                      <p className="rent-manager-name">{property.rent_manager?.name || 'Rental.Ph Official'}</p>
-                      <p className="rent-manager-role">{getRentManagerRole(property.rent_manager?.is_official)}</p>
+                      <p className="rent-manager-name">
+                        {property.agent?.first_name && property.agent?.last_name 
+                          ? `${property.agent.first_name} ${property.agent.last_name}`
+                          : property.agent?.full_name 
+                          || property.rent_manager?.name 
+                          || 'Rental.Ph Official'}
+                      </p>
+                      <p className="rent-manager-role">
+                        {property.agent 
+                          ? getRentManagerRole(property.agent.verified) 
+                          : getRentManagerRole(property.rent_manager?.is_official)}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -347,8 +361,18 @@ export default function PropertyDetailsPage() {
                           price={formatPrice(prop.price)}
                           title={prop.title}
                           image={getImageUrl(prop.image)}
-                          rentManagerName={prop.rent_manager?.name || 'Rental.Ph Official'}
-                          rentManagerRole={getRentManagerRole(prop.rent_manager?.is_official)}
+                          rentManagerName={
+                            prop.agent?.first_name && prop.agent?.last_name
+                              ? `${prop.agent.first_name} ${prop.agent.last_name}`
+                              : prop.agent?.full_name
+                              || prop.rent_manager?.name
+                              || 'Rental.Ph Official'
+                          }
+                          rentManagerRole={
+                            prop.agent
+                              ? getRentManagerRole(prop.agent.verified)
+                              : getRentManagerRole(prop.rent_manager?.is_official)
+                          }
                           bedrooms={prop.bedrooms}
                           bathrooms={prop.bathrooms}
                           parking={0}

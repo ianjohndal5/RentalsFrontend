@@ -14,34 +14,34 @@ export interface LoginResponse {
   success: boolean
   message: string
   data?: {
-    token?: string
-    role?: string
+    token: string
+    token_type: string
+    role: string
     user?: {
       id: number
-      name?: string
-      first_name?: string
-      last_name?: string
+      first_name: string
+      last_name: string
       email: string
-      status?: string
-      role?: string
+      role: string
     }
     agent?: {
       id: number
-      name?: string
-      first_name?: string
-      last_name?: string
+      first_name: string
+      last_name: string
       email: string
-      status?: string
-      role?: string
+      phone?: string | null
+      agency_name?: string | null
+      prc_license_number?: string | null
+      license_type?: 'broker' | 'salesperson' | null
+      status?: 'pending' | 'approved' | 'rejected' | null
+      verified?: boolean
     }
     admin?: {
       id: number
-      name?: string
-      first_name?: string
-      last_name?: string
+      first_name: string
+      last_name: string
       email: string
-      status?: string
-      role?: string
+      role: string
     }
   }
   errors?: Record<string, string[]>

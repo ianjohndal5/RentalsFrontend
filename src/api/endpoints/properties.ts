@@ -26,15 +26,16 @@ export const propertiesApi = {
   /**
    * Get all properties with optional filters
    */
-  getAll: async (params?: GetPropertiesParams): Promise<Property[]> => {
+  getAll: async (params?: GetPropertiesParams): Promise<Property[] | PaginatedResponse<Property>> => {
     const response = await apiClient.get<Property[] | PaginatedResponse<Property>>('/properties', { params })
     
-    // Handle both direct array response and paginated response
+    // Backend returns paginated response with data, current_page, per_page, total, last_page
     if (Array.isArray(response.data)) {
       return response.data
     }
     
-    return response.data.data || []
+    // Return paginated response if it exists
+    return response.data
   },
 
   /**
@@ -48,16 +49,16 @@ export const propertiesApi = {
   /**
    * Create a new property (requires authentication)
    */
-  create: async (propertyData: FormData): Promise<Property> => {
-    const response = await apiClient.post<Property>('/properties', propertyData)
+  create: async (propertyData: FormData): Promise<{ success: boolean; message: string; data: Property }> => {
+    const response = await apiClient.post<{ success: boolean; message: string; data: Property }>('/properties', propertyData)
     return response.data
   },
 
   /**
    * Create multiple properties at once (bulk create - requires authentication)
    */
-  bulkCreate: async (properties: Partial<Property>[]): Promise<{ data: Property[], created_count: number }> => {
-    const response = await apiClient.post<{ data: Property[], created_count: number }>('/properties/bulk', {
+  bulkCreate: async (properties: Partial<Property>[]): Promise<{ success: boolean; message: string; data: Property[]; created_count: number }> => {
+    const response = await apiClient.post<{ success: boolean; message: string; data: Property[]; created_count: number }>('/properties/bulk', {
       properties,
     })
     return response.data
