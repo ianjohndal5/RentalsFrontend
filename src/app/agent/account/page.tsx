@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import AppSidebar from '../../../components/common/AppSidebar'
 import AgentHeader from '../../../components/agent/AgentHeader'
+import { agentsApi } from '../../../api'
+import type { Agent } from '../../../api/endpoints/agents'
 import { 
   FiSend,
   FiUser,
@@ -15,9 +17,11 @@ import './page.css'
 export default function AgentAccount() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'profile' | 'edit' | 'password'>('profile')
+  const [loading, setLoading] = useState(true)
+  const [agent, setAgent] = useState<Agent | null>(null)
   
   // Profile data
-  const [profileData] = useState({
+  const [profileData, setProfileData] = useState({
     name: 'John Anderson',
     email: 'johnanderson@gmail.com',
     phone: '+63 9298765432',
@@ -39,6 +43,60 @@ export default function AgentAccount() {
     province: 'Cebu',
     city: 'Cebu City'
   })
+
+  useEffect(() => {
+    const fetchAgentData = async () => {
+      try {
+        const agentId = localStorage.getItem('agent_id')
+        if (!agentId) {
+          console.error('No agent ID found in localStorage')
+          setLoading(false)
+          return
+        }
+
+        const agentData = await agentsApi.getById(parseInt(agentId))
+        setAgent(agentData)
+
+        // Update profile data
+        const agentName = agentData.full_name || 
+          (agentData.first_name && agentData.last_name 
+            ? `${agentData.first_name} ${agentData.last_name}` 
+            : 'Unknown Agent')
+        
+        setProfileData({
+          name: agentName,
+          email: agentData.email || '',
+          phone: agentData.phone ? `+63 ${agentData.phone}` : '',
+          role: agentData.verified ? 'Rent Manager' : 'Property Agent',
+          avatar: agentData.image || agentData.avatar || agentData.profile_image || '/assets/profile-placeholder.png'
+        })
+
+        // Update edit form data
+        const phoneNumber = agentData.phone || ''
+        const phoneWithoutCode = phoneNumber.replace(/^\+?63\s?/, '')
+        
+        setEditFormData({
+          firstName: agentData.first_name || '',
+          lastName: agentData.last_name || '',
+          email: agentData.email || '',
+          countryCode: 'PH+63',
+          contactNumber: phoneWithoutCode,
+          aboutYourself: '',
+          addressLine1: '',
+          country: 'Philippines',
+          region: agentData.state || 'Region VII - Central Visayas',
+          province: agentData.city || 'Cebu',
+          city: agentData.city || 'Cebu City'
+        })
+      } catch (error) {
+        console.error('Error fetching agent data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAgentData()
+  }, [])
 
   // Change password form data
   const [passwordFormData, setPasswordFormData] = useState({
@@ -168,19 +226,21 @@ export default function AgentAccount() {
                   <div className="profile-image-section">
                     <div className="profile-image-large">
                       <img 
-                        src="/assets/profile-placeholder.png" 
-                        alt="John Anderson" 
+                        src={profileData.avatar} 
+                        alt={profileData.name} 
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
                           target.nextElementSibling?.classList.remove('hidden');
                         }} 
                       />
-                      <div className="avatar-fallback-large hidden">JA</div>
+                      <div className="avatar-fallback-large hidden">
+                        {profileData.name.split(' ').map(n => n[0]).join('').toUpperCase() || 'A'}
+                      </div>
                     </div>
                     <div className="profile-name-section">
-                      <h3>John Anderson</h3>
-                      <p>Property Agent</p>
+                      <h3>{profileData.name}</h3>
+                      <p>{profileData.role}</p>
                     </div>
                   </div>
                   <button 

@@ -49,6 +49,11 @@ function LoginModal({ isOpen, onClose, onRegisterClick }: LoginModalProps) {
           localStorage.setItem('user_name', userName) // Also store as generic user_name
         }
         
+        // Store agent ID if available
+        if (userData?.id && !isAdmin) {
+          localStorage.setItem('agent_id', userData.id.toString())
+        }
+        
         // Store user role (admin or agent)
         const userRole = response.data?.role || (isAdmin ? 'admin' : 'agent')
         localStorage.setItem('agent_role', userRole)

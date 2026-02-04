@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AppSidebar from '../../../components/common/AppSidebar'
 import AgentHeader from '../../../components/agent/AgentHeader'
+import { agentsApi } from '../../../api'
+import type { Agent } from '../../../api/endpoints/agents'
 
 import { 
   FiSend
@@ -10,12 +12,14 @@ import {
 import './page.css'
 
 export default function AgentEditProfile() {
+  const [loading, setLoading] = useState(true)
+  const [agent, setAgent] = useState<Agent | null>(null)
   const [formData, setFormData] = useState({
-    firstName: 'John',
-    lastName: 'Anderson',
-    email: 'johnanderson@gmail.com',
+    firstName: '',
+    lastName: '',
+    email: '',
     countryCode: 'PH+63',
-    contactNumber: '9298765432',
+    contactNumber: '',
     aboutYourself: '',
     addressLine1: '',
     country: 'Philippines',
@@ -23,6 +27,53 @@ export default function AgentEditProfile() {
     province: 'Cebu',
     city: 'Cebu City'
   })
+
+  useEffect(() => {
+    const fetchAgentData = async () => {
+      try {
+        const agentId = localStorage.getItem('agent_id')
+        if (!agentId) {
+          console.error('No agent ID found in localStorage')
+          setLoading(false)
+          return
+        }
+
+        const agentData = await agentsApi.getById(parseInt(agentId))
+        setAgent(agentData)
+
+        // Update form data with agent data
+        const phoneNumber = agentData.phone || ''
+        const phoneWithoutCode = phoneNumber.replace(/^\+?63\s?/, '')
+        
+        setFormData({
+          firstName: agentData.first_name || '',
+          lastName: agentData.last_name || '',
+          email: agentData.email || '',
+          countryCode: 'PH+63',
+          contactNumber: phoneWithoutCode,
+          aboutYourself: '',
+          addressLine1: '',
+          country: 'Philippines',
+          region: agentData.state || 'Region VII - Central Visayas',
+          province: agentData.city || 'Cebu',
+          city: agentData.city || 'Cebu City'
+        })
+      } catch (error) {
+        console.error('Error fetching agent data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAgentData()
+  }, [])
+
+  const agentName = agent?.full_name || 
+    (agent?.first_name && agent?.last_name 
+      ? `${agent.first_name} ${agent.last_name}` 
+      : 'Unknown Agent')
+  const agentImage = agent?.image || agent?.avatar || agent?.profile_image || '/assets/profile-placeholder.png'
+  const agentInitials = agentName.split(' ').map(n => n[0]).join('').toUpperCase() || 'A'
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -56,19 +107,23 @@ export default function AgentEditProfile() {
             <h2>Edit Profile</h2>
           </div>
 
+          {loading ? (
+            <div style={{ padding: '2rem', textAlign: 'center' }}>Loading profile...</div>
+          ) : (
+            <>
           <div className="profile-section-top">
             <div className="profile-image-section">
               <div className="profile-image-large">
-                <img src="/assets/profile-placeholder.png" alt="John Anderson" onError={(e) => {
+                <img src={agentImage} alt={agentName} onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   target.nextElementSibling?.classList.remove('hidden');
                 }} />
-                <div className="avatar-fallback-large hidden">JA</div>
+                <div className="avatar-fallback-large hidden">{agentInitials}</div>
               </div>
               <div className="profile-name-section">
-                <h3>John Anderson</h3>
-                <p>Property Agent</p>
+                <h3>{agentName}</h3>
+                <p>{agent?.verified ? 'Rent Manager' : 'Property Agent'}</p>
               </div>
             </div>
             <button type="submit" form="edit-profile-form" className="save-changes-btn">
@@ -258,6 +313,8 @@ export default function AgentEditProfile() {
               </div>
             </div>
           </form>
+          </>
+          )}
         </div>
       </main>
     </div>

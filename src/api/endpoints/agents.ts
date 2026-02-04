@@ -77,6 +77,19 @@ export const agentsApi = {
   },
 
   /**
+   * Get agent by ID
+   */
+  getById: async (id: number): Promise<Agent> => {
+    try {
+      const response = await apiClient.get<{ success: boolean; data: Agent }>(`/agents/${id}`)
+      return response.data.data
+    } catch (error: any) {
+      console.error('API call error:', error)
+      throw error
+    }
+  },
+
+  /**
    * Register a new agent
    */
   register: async (data: AgentRegistrationData, file?: File): Promise<AgentRegistrationResponse> => {

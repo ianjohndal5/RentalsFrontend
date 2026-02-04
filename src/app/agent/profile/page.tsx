@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AppSidebar from '../../../components/common/AppSidebar'
 import AgentHeader from '../../../components/agent/AgentHeader'
+import { agentsApi } from '../../../api'
+import type { Agent } from '../../../api/endpoints/agents'
 
 import {
   FiMail,
@@ -17,12 +19,45 @@ export default function AgentMyProfile() {
   const [activeTab, setActiveTab] = useState('reviews')
   const [rating, setRating] = useState(0)
   const [hoverRating, setHoverRating] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [agent, setAgent] = useState<Agent | null>(null)
   const [reviewForm, setReviewForm] = useState({
     firstname: '',
     lastname: '',
     email: '',
     review: ''
   })
+
+  useEffect(() => {
+    const fetchAgentData = async () => {
+      try {
+        const agentId = localStorage.getItem('agent_id')
+        if (!agentId) {
+          console.error('No agent ID found in localStorage')
+          setLoading(false)
+          return
+        }
+
+        const agentData = await agentsApi.getById(parseInt(agentId))
+        setAgent(agentData)
+      } catch (error) {
+        console.error('Error fetching agent data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAgentData()
+  }, [])
+
+  const agentName = agent?.full_name || 
+    (agent?.first_name && agent?.last_name 
+      ? `${agent.first_name} ${agent.last_name}` 
+      : 'Unknown Agent')
+  const agentEmail = agent?.email || ''
+  const agentPhone = agent?.phone ? `+63 ${agent.phone}` : '+63 987654321'
+  const agentImage = agent?.image || agent?.avatar || agent?.profile_image || '/assets/profile-placeholder.png'
+  const agentInitials = agentName.split(' ').map(n => n[0]).join('').toUpperCase() || 'A'
 
   // Sample property listings data
   const listings = [
@@ -69,38 +104,42 @@ export default function AgentMyProfile() {
           <h2 className="page-title">My Profile</h2>
 
           {/* Profile Card */}
-          <div className="profile-card">
-            <div className="profile-card-left">
-              <div className="profile-avatar-large">
-                <img src="/assets/profile-placeholder.png" alt="John Anderson" onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const fallback = target.nextElementSibling as HTMLElement;
-                  if (fallback) fallback.classList.remove('hidden');
-                }} />
-                <div className="avatar-fallback-large hidden">JA</div>
-              </div>
-              <div className="profile-info">
-                <h3 className="profile-name">John Anderson</h3>
-                <p className="profile-role">Property Agent</p>
-                <div className="profile-contact">
-                  <div className="contact-item">
-                    <FiPhone className="contact-icon" />
-                    <span>+63 987654321</span>
-                  </div>
-                  <div className="contact-item">
-                    <FiMail className="contact-icon" />
-                    <span>john.anderson@gmail.com</span>
+          {loading ? (
+            <div style={{ padding: '2rem', textAlign: 'center' }}>Loading profile...</div>
+          ) : (
+            <div className="profile-card">
+              <div className="profile-card-left">
+                <div className="profile-avatar-large">
+                  <img src={agentImage} alt={agentName} onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.classList.remove('hidden');
+                  }} />
+                  <div className="avatar-fallback-large hidden">{agentInitials}</div>
+                </div>
+                <div className="profile-info">
+                  <h3 className="profile-name">{agentName}</h3>
+                  <p className="profile-role">{agent?.verified ? 'Rent Manager' : 'Property Agent'}</p>
+                  <div className="profile-contact">
+                    <div className="contact-item">
+                      <FiPhone className="contact-icon" />
+                      <span>{agentPhone}</span>
+                    </div>
+                    <div className="contact-item">
+                      <FiMail className="contact-icon" />
+                      <span>{agentEmail}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
             <div className="profile-card-right">
               <div className="qr-code-container">
                 <div className="qr-code-box" />
               </div>
             </div>
-          </div>
+            </div>
+          )}
 
           {/* Tabs */}
           <div className="profile-tabs">

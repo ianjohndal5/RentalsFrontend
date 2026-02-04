@@ -13,6 +13,7 @@ interface DashboardHeaderProps {
   accountRoute?: string
   showNotifications?: boolean
   avatarFallback?: string
+  avatarImage?: string
 }
 
 function DashboardHeader({ 
@@ -22,7 +23,8 @@ function DashboardHeader({
   userRole,
   accountRoute,
   showNotifications = false,
-  avatarFallback
+  avatarFallback,
+  avatarImage
 }: DashboardHeaderProps) {
   const router = useRouter()
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -52,6 +54,8 @@ function DashboardHeader({
     localStorage.removeItem('agent_status')
     localStorage.removeItem('auth_token')
     localStorage.removeItem('agent_name')
+    localStorage.removeItem('agent_id')
+    localStorage.removeItem('agent_role')
     localStorage.removeItem('admin_token')
     localStorage.removeItem('admin_name')
     localStorage.removeItem('user_token')
@@ -99,7 +103,7 @@ function DashboardHeader({
               <div className="user-profile">
                 <div className="profile-avatar">
                   <img 
-                    src="/assets/profile-placeholder.png" 
+                    src={avatarImage || '/assets/profile-placeholder.png'} 
                     alt={userName} 
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
