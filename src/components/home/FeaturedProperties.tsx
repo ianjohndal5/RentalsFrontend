@@ -5,6 +5,7 @@ import Link from 'next/link'
 import HorizontalPropertyCard from '../common/VerticalPropertyCard'
 import { propertiesApi } from '../../api'
 import type { Property } from '../../types'
+import type { PaginatedResponse } from '../../api/types'
 import './FeaturedProperties.css'
 
 function FeaturedProperties() {
@@ -49,7 +50,11 @@ function FeaturedProperties() {
         if (selectedLocation !== 'All Locations') {
           params.location = selectedLocation
         }
-        const data = await propertiesApi.getAll(params)
+        const dataResponse = await propertiesApi.getAll(params)
+        // Handle both array response and paginated response
+        const data: Property[] = Array.isArray(dataResponse)
+          ? dataResponse
+          : (dataResponse as PaginatedResponse<Property>).data || []
         setBrowseProperties(data.slice(0, 8)) // Limit to 8 for carousel
       } catch (error) {
         console.error('Error fetching browse properties:', error)
