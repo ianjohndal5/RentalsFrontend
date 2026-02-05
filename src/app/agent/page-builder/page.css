@@ -4,6 +4,7 @@
   gap: 40px;
   margin-top: 24px;
   align-items: start;
+  align-content: start;
 }
 
 /* Left Column - Customization */
@@ -11,6 +12,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  align-items: stretch;
+  width: 100%;
 }
 
 .customize-section {
@@ -22,6 +25,8 @@
   box-shadow: 0 2px 8px rgba(32, 94, 215, 0.08);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .customize-section::before {
@@ -94,6 +99,8 @@
   border-radius: 12px;
   border: 1px solid #E5E7EB;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .section-label {
@@ -398,6 +405,10 @@
   position: relative;
   height: fit-content;
   overflow: visible;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .preview-card {
@@ -406,6 +417,10 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow: visible;
   border: 1px solid #E5E7EB;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .preview-card.property-mode {
@@ -453,6 +468,11 @@
   padding: 24px;
   background-color: #FFFFFF;
   overflow: visible;
+  width: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .preview-content.property-mode {
@@ -805,6 +825,9 @@
   min-height: 100vh;
   padding: 0;
   width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Hero Section */
@@ -1168,11 +1191,13 @@
   .page-builder-container {
     grid-template-columns: 1fr;
     gap: 24px;
+    align-items: stretch;
   }
 
   .page-builder-right {
     position: relative;
     top: 0;
+    width: 100%;
   }
 
   .themes-grid {
@@ -1187,6 +1212,7 @@
 @media (max-width: 768px) {
   .page-builder-container {
     gap: 20px;
+    align-items: stretch;
   }
 
   .customize-section {
@@ -1288,6 +1314,8 @@
   background-color: #FFFFFF;
   border-radius: 12px 12px 0 0;
   padding: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .property-tab {
@@ -1320,6 +1348,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
+  align-items: stretch;
 }
 
 /* Property Section */
@@ -1329,6 +1359,8 @@
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .property-section-header {
@@ -1863,5 +1895,93 @@
     justify-content: flex-end;
     margin-top: 8px;
   }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: #6B7280;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-size: 20px;
+}
+
+.modal-close:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.property-image-remove {
+  transition: all 0.2s;
+}
+
+.property-image-remove:hover {
+  background: rgba(239, 68, 68, 1) !important;
+  transform: scale(1.1);
+}
+
+.preview-experience-stats {
+  padding: 12px 0;
 }
 
