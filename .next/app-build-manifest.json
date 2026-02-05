@@ -24,11 +24,11 @@
       "static/css/app/agent/layout.css",
       "static/chunks/app/agent/layout.js"
     ],
-    "/agent/listings/page": [
+    "/agent/page-builder/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/agent/listings/page.css",
-      "static/chunks/app/agent/listings/page.js"
+      "static/css/app/agent/page-builder/page.css",
+      "static/chunks/app/agent/page-builder/page.js"
     ],
     "/agent/inbox/page": [
       "static/chunks/webpack.js",
@@ -47,18 +47,6 @@
       "static/chunks/main-app.js",
       "static/css/app/agent/digital-card/page.css",
       "static/chunks/app/agent/digital-card/page.js"
-    ],
-    "/agent/page-builder/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/agent/page-builder/page.css",
-      "static/chunks/app/agent/page-builder/page.js"
-    ],
-    "/agent/tracker/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/agent/tracker/page.css",
-      "static/chunks/app/agent/tracker/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
