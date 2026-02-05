@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import AppSidebar from '../../../components/common/AppSidebar'
 import AgentHeader from '../../../components/agent/AgentHeader'
 import { ASSETS } from '@/utils/assets'
@@ -22,7 +22,8 @@ import {
   FiChevronDown,
   FiTrash2,
   FiMove,
-  FiCheck
+  FiCheck,
+  FiX
 } from 'react-icons/fi'
 import './page.css'
 
@@ -36,6 +37,45 @@ export default function PageBuilder() {
   const [bio, setBio] = useState('This is my bio...')
   const [activeTab, setActiveTab] = useState('profile')
   const [leftSidebarTab, setLeftSidebarTab] = useState('content')
+  
+  // Profile image state
+  const [profileImage, setProfileImage] = useState<string | null>(null)
+  const profileImageInputRef = useRef<HTMLInputElement>(null)
+  
+  // Contact information states
+  const [contactInfo, setContactInfo] = useState({
+    email: '',
+    phone: '',
+    message: '',
+    website: ''
+  })
+  const [showContactModal, setShowContactModal] = useState(false)
+  const [editingContactType, setEditingContactType] = useState<string | null>(null)
+  
+  // Experience stats state
+  const [experienceStats, setExperienceStats] = useState([
+    { label: 'Years of Experience', value: '5' },
+    { label: 'Properties Sold', value: '120' },
+    { label: 'Happy Clients', value: '98' }
+  ])
+  const [showExperienceModal, setShowExperienceModal] = useState(false)
+  const [editingStatIndex, setEditingStatIndex] = useState<number | null>(null)
+  
+  // Featured listings edit state
+  const [showFeaturedListingsModal, setShowFeaturedListingsModal] = useState(false)
+  const [editingListingIndex, setEditingListingIndex] = useState<number | null>(null)
+  
+  // Testimonials edit state
+  const [showTestimonialsModal, setShowTestimonialsModal] = useState(false)
+  const [editingTestimonialIndex, setEditingTestimonialIndex] = useState<number | null>(null)
+  
+  // File input refs
+  const heroImageInputRef = useRef<HTMLInputElement>(null)
+  const profileCardImageInputRef = useRef<HTMLInputElement>(null)
+  const propertyImageInputRef = useRef<HTMLInputElement>(null)
+  
+  // Drag and drop state
+  const [draggedSectionIndex, setDraggedSectionIndex] = useState<number | null>(null)
   
   // Property mode states
   const [heroImage, setHeroImage] = useState('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop')
@@ -119,6 +159,172 @@ export default function PageBuilder() {
   
   const deleteSection = (sectionId: string) => {
     setLayoutSections(prev => prev.filter(section => section.id !== sectionId))
+    setSectionVisibility(prev => {
+      const newVisibility = { ...prev }
+      delete newVisibility[sectionId as keyof typeof prev]
+      return newVisibility
+    })
+  }
+  
+  // File upload handlers
+  const handleFileUpload = (file: File, type: 'profile' | 'hero' | 'profileCard' | 'property') => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const result = reader.result as string
+      switch (type) {
+        case 'profile':
+          setProfileImage(result)
+          break
+        case 'hero':
+          setHeroImage(result)
+          break
+        case 'profileCard':
+          setProfileCardImage(result)
+          break
+        case 'property':
+          setPropertyImages(prev => [...prev, result])
+          break
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+  
+  const handleImageInputChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'profile' | 'hero' | 'profileCard' | 'property') => {
+    const file = e.target.files?.[0]
+    if (file && file.type.startsWith('image/')) {
+      handleFileUpload(file, type)
+    }
+  }
+  
+  // Contact management
+  const handleContactIconClick = (type: 'email' | 'phone' | 'message' | 'website') => {
+    setEditingContactType(type)
+    setShowContactModal(true)
+  }
+  
+  const handleContactSave = () => {
+    setShowContactModal(false)
+    setEditingContactType(null)
+  }
+  
+  // Experience stats management
+  const handleAddExperienceStat = () => {
+    setEditingStatIndex(null)
+    setShowExperienceModal(true)
+  }
+  
+  const handleSaveExperienceStat = (label: string, value: string) => {
+    if (editingStatIndex !== null) {
+      const updated = [...experienceStats]
+      updated[editingStatIndex] = { label, value }
+      setExperienceStats(updated)
+    } else {
+      setExperienceStats([...experienceStats, { label, value }])
+    }
+    setShowExperienceModal(false)
+    setEditingStatIndex(null)
+  }
+  
+  const handleDeleteExperienceStat = (index: number) => {
+    setExperienceStats(prev => prev.filter((_, i) => i !== index))
+  }
+  
+  // Featured listings management
+  const handleEditFeaturedListing = (index: number) => {
+    setEditingListingIndex(index)
+    setShowFeaturedListingsModal(true)
+  }
+  
+  const handleSaveFeaturedListing = (listing: typeof featuredListings[0]) => {
+    // In a real app, this would update the featuredListings state
+    setShowFeaturedListingsModal(false)
+    setEditingListingIndex(null)
+  }
+  
+  // Testimonials management
+  const handleEditTestimonial = (index: number) => {
+    setEditingTestimonialIndex(index)
+    setShowTestimonialsModal(true)
+  }
+  
+  const handleSaveTestimonial = (testimonial: typeof testimonials[0]) => {
+    // In a real app, this would update the testimonials state
+    setShowTestimonialsModal(false)
+    setEditingTestimonialIndex(null)
+  }
+  
+  // Remove property image
+  const handleRemovePropertyImage = (index: number) => {
+    setPropertyImages(prev => prev.filter((_, i) => i !== index))
+  }
+  
+  // Drag and drop handlers
+  const handleDragStart = (index: number) => {
+    setDraggedSectionIndex(index)
+  }
+  
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+  
+  const handleDrop = (targetIndex: number) => {
+    if (draggedSectionIndex === null) return
+    
+    const newSections = [...layoutSections]
+    const [draggedItem] = newSections.splice(draggedSectionIndex, 1)
+    newSections.splice(targetIndex, 0, draggedItem)
+    setLayoutSections(newSections)
+    setDraggedSectionIndex(null)
+  }
+  
+  // Save changes handler
+  const handleSaveChanges = () => {
+    // In a real app, this would save to backend
+    console.log('Saving changes...', {
+      selectedTheme,
+      bio,
+      showBio,
+      showContactNumber,
+      showExperienceStats,
+      experienceStats,
+      showFeaturedListings,
+      showTestimonials,
+      contactInfo,
+      profileImage,
+      // Property mode data
+      heroImage,
+      mainHeading,
+      tagline,
+      overallDarkness,
+      propertyDescription,
+      propertyImages,
+      propertyPrice,
+      contactPhone,
+      contactEmail,
+      profileCardName,
+      profileCardRole,
+      profileCardBio,
+      profileCardImage,
+      sectionVisibility,
+      layoutSections,
+      selectedBrandColor,
+      selectedCornerRadius
+    })
+    alert('Changes saved successfully!')
+  }
+  
+  // Apply design settings to preview
+  const getCornerRadiusClass = () => {
+    switch (selectedCornerRadius) {
+      case 'sharp': return '0px'
+      case 'regular': return '8px'
+      case 'soft': return '16px'
+      default: return '16px'
+    }
+  }
+  
+  const getBrandColorClass = () => {
+    return selectedBrandColor
   }
 
   const themes = [
@@ -232,7 +438,17 @@ export default function PageBuilder() {
                       />
                       <div className="profile-avatar-fallback">JA</div>
                     </div>
-                    <button className="upload-button">
+                    <input
+                      type="file"
+                      ref={profileImageInputRef}
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={(e) => handleImageInputChange(e, 'profile')}
+                    />
+                    <button 
+                      className="upload-button"
+                      onClick={() => profileImageInputRef.current?.click()}
+                    >
                       <FiUpload className="upload-icon" />
                       Upload Image
                     </button>
@@ -252,7 +468,16 @@ export default function PageBuilder() {
                     <div className="toggle-item">
                       <div className="toggle-label-group">
                         <span className="toggle-label">Show Bio</span>
-                        <span className="toggle-action">Edit</span>
+                        <span 
+                          className="toggle-action"
+                          onClick={() => {
+                            const newBio = prompt('Edit your bio:', bio)
+                            if (newBio !== null) setBio(newBio)
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Edit
+                        </span>
                       </div>
                       <label className="toggle-switch">
                         <input
@@ -267,7 +492,13 @@ export default function PageBuilder() {
                     <div className="toggle-item">
                       <div className="toggle-label-group">
                         <span className="toggle-label">Contact Number</span>
-                        <span className="toggle-action">Edit</span>
+                        <span 
+                          className="toggle-action"
+                          onClick={() => handleContactIconClick('phone')}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Edit
+                        </span>
                       </div>
                       <label className="toggle-switch">
                         <input
@@ -280,19 +511,35 @@ export default function PageBuilder() {
                     </div>
 
                     <div className="contact-icons-row">
-                      <button className="contact-icon-btn">
+                      <button 
+                        className="contact-icon-btn"
+                        onClick={() => handleContactIconClick('email')}
+                        title={contactInfo.email || 'Add Email'}
+                      >
                         <FiMail />
                         <FiPlus className="icon-plus" />
                       </button>
-                      <button className="contact-icon-btn">
+                      <button 
+                        className="contact-icon-btn"
+                        onClick={() => handleContactIconClick('phone')}
+                        title={contactInfo.phone || 'Add Phone'}
+                      >
                         <FiPhone />
                         <FiPlus className="icon-plus" />
                       </button>
-                      <button className="contact-icon-btn">
+                      <button 
+                        className="contact-icon-btn"
+                        onClick={() => handleContactIconClick('message')}
+                        title={contactInfo.message || 'Add Message'}
+                      >
                         <FiMessageCircle />
                         <FiPlus className="icon-plus" />
                       </button>
-                      <button className="contact-icon-btn">
+                      <button 
+                        className="contact-icon-btn"
+                        onClick={() => handleContactIconClick('website')}
+                        title={contactInfo.website || 'Add Website'}
+                      >
                         <FiGlobe />
                         <FiPlus className="icon-plus" />
                       </button>
@@ -301,7 +548,13 @@ export default function PageBuilder() {
                     <div className="toggle-item">
                       <div className="toggle-label-group">
                         <span className="toggle-label">Experience Stats</span>
-                        <span className="toggle-action">Add</span>
+                        <span 
+                          className="toggle-action"
+                          onClick={handleAddExperienceStat}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Add
+                        </span>
                       </div>
                       <label className="toggle-switch">
                         <input
@@ -316,7 +569,13 @@ export default function PageBuilder() {
                     <div className="toggle-item">
                       <div className="toggle-label-group">
                         <span className="toggle-label">Featured Listings</span>
-                        <span className="toggle-action">Edit</span>
+                        <span 
+                          className="toggle-action"
+                          onClick={() => setShowFeaturedListingsModal(true)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Edit
+                        </span>
                       </div>
                       <label className="toggle-switch">
                         <input
@@ -331,7 +590,13 @@ export default function PageBuilder() {
                     <div className="toggle-item">
                       <div className="toggle-label-group">
                         <span className="toggle-label">Client Testimonials</span>
-                        <span className="toggle-action">Edit</span>
+                        <span 
+                          className="toggle-action"
+                          onClick={() => setShowTestimonialsModal(true)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Edit
+                        </span>
                       </div>
                       <label className="toggle-switch">
                         <input
@@ -345,7 +610,9 @@ export default function PageBuilder() {
                   </div>
                 </div>
 
-                <button className="save-changes-button">Save Changes</button>
+                <button className="save-changes-button" onClick={handleSaveChanges}>
+                  Save Changes
+                </button>
               </>
             ) : (
               <>
@@ -392,7 +659,17 @@ export default function PageBuilder() {
                       </div>
                       <div className="hero-preview-container">
                         <img src={heroImage} alt="Hero" className="hero-preview-image" />
-                        <button className="upload-custom-photo-btn">
+                        <input
+                          type="file"
+                          ref={heroImageInputRef}
+                          accept="image/*"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageInputChange(e, 'hero')}
+                        />
+                        <button 
+                          className="upload-custom-photo-btn"
+                          onClick={() => heroImageInputRef.current?.click()}
+                        >
                           <FiUpload className="upload-icon" />
                           Upload Custom Photo
                         </button>
@@ -485,11 +762,44 @@ export default function PageBuilder() {
                       </div>
                       <div className="property-images-grid">
                         {propertyImages.map((image, index) => (
-                          <div key={index} className="property-image-item">
+                          <div key={index} className="property-image-item" style={{ position: 'relative' }}>
                             <img src={image} alt={`Property ${index + 1}`} />
+                            <button
+                              className="property-image-remove"
+                              onClick={() => handleRemovePropertyImage(index)}
+                              style={{
+                                position: 'absolute',
+                                top: '4px',
+                                right: '4px',
+                                background: 'rgba(239, 68, 68, 0.9)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '24px',
+                                height: '24px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '14px'
+                              }}
+                              aria-label="Remove image"
+                            >
+                              <FiX />
+                            </button>
                           </div>
                         ))}
-                        <button className="add-image-button">
+                        <input
+                          type="file"
+                          ref={propertyImageInputRef}
+                          accept="image/*"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageInputChange(e, 'property')}
+                        />
+                        <button 
+                          className="add-image-button"
+                          onClick={() => propertyImageInputRef.current?.click()}
+                        >
                           <FiPlus className="add-icon" />
                           ADD
                         </button>
@@ -542,7 +852,17 @@ export default function PageBuilder() {
                       <div className="profile-card-edit">
                         <div className="profile-card-image-wrapper">
                           <img src={profileCardImage} alt="Profile" className="profile-card-image" />
-                          <button className="profile-card-upload-overlay">
+                          <input
+                            type="file"
+                            ref={profileCardImageInputRef}
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleImageInputChange(e, 'profileCard')}
+                          />
+                          <button 
+                            className="profile-card-upload-overlay"
+                            onClick={() => profileCardImageInputRef.current?.click()}
+                          >
                             <FiUpload />
                           </button>
                         </div>
@@ -577,7 +897,18 @@ export default function PageBuilder() {
                     <h2 className="layout-manager-title">Layout Manager</h2>
                     <div className="layout-sections-list">
                       {layoutSections.map((section, index) => (
-                        <div key={section.id} className="layout-section-item">
+                        <div 
+                          key={section.id} 
+                          className="layout-section-item"
+                          draggable
+                          onDragStart={() => handleDragStart(index)}
+                          onDragOver={handleDragOver}
+                          onDrop={() => handleDrop(index)}
+                          style={{
+                            cursor: 'move',
+                            opacity: draggedSectionIndex === index ? 0.5 : 1
+                          }}
+                        >
                           <div className="layout-section-reorder">
                             <button
                               className="reorder-btn"
@@ -618,7 +949,8 @@ export default function PageBuilder() {
                             </button>
                             <button
                               className="layout-action-btn sort-btn"
-                              aria-label="Sort"
+                              aria-label="Drag to reorder"
+                              title="Drag to reorder"
                             >
                               <FiMove />
                             </button>
@@ -700,7 +1032,7 @@ export default function PageBuilder() {
                       <div className="preview-profile-header">
                         <div className="preview-profile-image-wrapper">
                           <img 
-                            src={ASSETS.PLACEHOLDER_PROFILE} 
+                            src={profileImage || ASSETS.PLACEHOLDER_PROFILE} 
                             alt="John Anderson"
                             className="preview-profile-image"
                             onError={(e) => {
@@ -712,21 +1044,41 @@ export default function PageBuilder() {
                         </div>
                         <div className="preview-profile-info">
                           <h2 className="preview-name">John Anderson</h2>
-                          <p className="preview-tagline">Your journey to find a suitable place start here.</p>
-                          <div className="preview-contact-icons">
-                            <button className="preview-contact-icon">
-                              <FiMail />
-                            </button>
-                            <button className="preview-contact-icon">
-                              <FiPhone />
-                            </button>
-                            <button className="preview-contact-icon">
-                              <FiMessageCircle />
-                            </button>
-                            <button className="preview-contact-icon">
-                              <FiGlobe />
-                            </button>
-                          </div>
+                          {showBio && <p className="preview-tagline">{bio}</p>}
+                          {showContactNumber && (
+                            <div className="preview-contact-icons">
+                              {contactInfo.email && (
+                                <button className="preview-contact-icon" title={contactInfo.email}>
+                                  <FiMail />
+                                </button>
+                              )}
+                              {contactInfo.phone && (
+                                <button className="preview-contact-icon" title={contactInfo.phone}>
+                                  <FiPhone />
+                                </button>
+                              )}
+                              {contactInfo.message && (
+                                <button className="preview-contact-icon" title={contactInfo.message}>
+                                  <FiMessageCircle />
+                                </button>
+                              )}
+                              {contactInfo.website && (
+                                <button className="preview-contact-icon" title={contactInfo.website}>
+                                  <FiGlobe />
+                                </button>
+                              )}
+                            </div>
+                          )}
+                          {showExperienceStats && experienceStats.length > 0 && (
+                            <div className="preview-experience-stats" style={{ marginTop: '16px', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                              {experienceStats.map((stat, index) => (
+                                <div key={index} style={{ textAlign: 'center' }}>
+                                  <div style={{ fontSize: '20px', fontWeight: '700', color: '#205ED7' }}>{stat.value}</div>
+                                  <div style={{ fontSize: '12px', color: '#6B7280' }}>{stat.label}</div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -803,81 +1155,105 @@ export default function PageBuilder() {
 
                 {activeTab === 'property' && (
                   <div className="property-preview">
-                    {/* Hero Section */}
-                    {sectionVisibility.hero && (
-                      <div className="property-hero-section">
-                        <div 
-                          className="property-hero-image"
-                          style={{
-                            backgroundImage: `url(${heroImage})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            position: 'relative',
-                            filter: `brightness(${100 - overallDarkness}%)`
-                          }}
-                        >
-                          <div className="property-hero-overlay">
-                            <h1 className="property-hero-title">{mainHeading}</h1>
-                            <p className="property-hero-tagline">{tagline}</p>
-                            <button className="property-hero-price-btn">
-                              Starts at {propertyPrice} /mo
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* About Section */}
-                    {sectionVisibility.propertyDescription && (
-                      <div className="property-about-section">
-                        <h2 className="property-section-heading">About</h2>
-                        <p className="property-about-text">{propertyDescription}</p>
-                      </div>
-                    )}
-
-                    {/* What's Inside? Section */}
-                    {sectionVisibility.propertyImages && (
-                      <div className="property-inside-section">
-                        <h2 className="property-section-heading">What's Inside?</h2>
-                        <div className="property-inside-images">
-                          {propertyImages.map((image, index) => (
-                            <div key={index} className="property-inside-image-item">
-                              <img src={image} alt={`Interior ${index + 1}`} />
+                    {/* Render sections in the order specified by layoutSections */}
+                    {layoutSections.map((section) => {
+                      if (!section.visible) return null
+                      
+                      switch (section.id) {
+                        case 'hero':
+                          return (
+                            <div key={section.id} className="property-hero-section">
+                              <div 
+                                className="property-hero-image"
+                                style={{
+                                  backgroundImage: `url(${heroImage})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  position: 'relative',
+                                  filter: `brightness(${100 - overallDarkness}%)`
+                                }}
+                              >
+                                <div className="property-hero-overlay">
+                                  <h1 className="property-hero-title">{mainHeading}</h1>
+                                  <p className="property-hero-tagline">{tagline}</p>
+                                  <button className="property-hero-price-btn">
+                                    Starts at {propertyPrice} /mo
+                                  </button>
+                                </div>
+                              </div>
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Agent Profile Card */}
-                    {sectionVisibility.profileCard && (
-                      <div className="property-agent-card">
-                        <div className="property-agent-content">
-                          <div className="property-agent-image-wrapper">
-                            <img src={profileCardImage} alt={profileCardName} className="property-agent-image" />
-                          </div>
-                          <div className="property-agent-info">
-                            <h3 className="property-agent-name">{profileCardName}</h3>
-                            <p className="property-agent-role">{profileCardRole}</p>
-                            <p className="property-agent-quote">{profileCardBio}</p>
-                            <div className="property-agent-icons">
-                              <button className="property-agent-icon">
-                                <FiMail />
-                              </button>
-                              <button className="property-agent-icon">
-                                <FiPhone />
-                              </button>
-                              <button className="property-agent-icon">
-                                <FiMessageCircle />
-                              </button>
-                              <button className="property-agent-icon">
-                                <FiGlobe />
-                              </button>
+                          )
+                        
+                        case 'propertyDescription':
+                          return (
+                            <div key={section.id} className="property-about-section">
+                              <h2 className="property-section-heading">About</h2>
+                              <p className="property-about-text">{propertyDescription}</p>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                          )
+                        
+                        case 'propertyImages':
+                          return (
+                            <div key={section.id} className="property-inside-section">
+                              <h2 className="property-section-heading">What's Inside?</h2>
+                              <div className="property-inside-images">
+                                {propertyImages.map((image, index) => (
+                                  <div 
+                                    key={index} 
+                                    className="property-inside-image-item"
+                                    style={{ borderRadius: getCornerRadiusClass() }}
+                                  >
+                                    <img src={image} alt={`Interior ${index + 1}`} />
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )
+                        
+                        case 'profileCard':
+                          return (
+                            <div 
+                              key={section.id}
+                              className="property-agent-card"
+                              style={{
+                                backgroundColor: selectedBrandColor === 'white' ? '#3B82F6' : 
+                                               selectedBrandColor === 'dark' ? '#1F2937' :
+                                               selectedBrandColor === 'orange' ? '#F97316' :
+                                               selectedBrandColor === 'blue' ? '#3B82F6' : '#3B82F6',
+                                borderRadius: getCornerRadiusClass()
+                              }}
+                            >
+                              <div className="property-agent-content">
+                                <div className="property-agent-image-wrapper">
+                                  <img src={profileCardImage} alt={profileCardName} className="property-agent-image" />
+                                </div>
+                                <div className="property-agent-info">
+                                  <h3 className="property-agent-name">{profileCardName}</h3>
+                                  <p className="property-agent-role">{profileCardRole}</p>
+                                  <p className="property-agent-quote">{profileCardBio}</p>
+                                  <div className="property-agent-icons">
+                                    <button className="property-agent-icon">
+                                      <FiMail />
+                                    </button>
+                                    <button className="property-agent-icon">
+                                      <FiPhone />
+                                    </button>
+                                    <button className="property-agent-icon">
+                                      <FiMessageCircle />
+                                    </button>
+                                    <button className="property-agent-icon">
+                                      <FiGlobe />
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        
+                        default:
+                          return null
+                      }
+                    })}
 
                     {/* Ready To View? Section */}
                     <div className="property-contact-section">
@@ -931,7 +1307,169 @@ export default function PageBuilder() {
           </div>
         </div>
       </main>
+      
+      {/* Contact Modal */}
+      {showContactModal && (
+        <div className="modal-overlay" onClick={() => setShowContactModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit {editingContactType === 'email' ? 'Email' : editingContactType === 'phone' ? 'Phone' : editingContactType === 'message' ? 'Message' : 'Website'}</h3>
+              <button className="modal-close" onClick={() => setShowContactModal(false)}>
+                <FiX />
+              </button>
+            </div>
+            <div className="modal-body">
+              <input
+                type={editingContactType === 'email' ? 'email' : 'text'}
+                placeholder={`Enter ${editingContactType === 'email' ? 'email address' : editingContactType === 'phone' ? 'phone number' : editingContactType === 'message' ? 'message' : 'website URL'}`}
+                value={contactInfo[editingContactType as keyof typeof contactInfo] || ''}
+                onChange={(e) => setContactInfo(prev => ({ ...prev, [editingContactType!]: e.target.value }))}
+                style={{ width: '100%', padding: '12px', border: '1px solid #E5E7EB', borderRadius: '8px', marginBottom: '16px' }}
+              />
+              <button 
+                className="save-changes-button"
+                onClick={handleContactSave}
+                style={{ width: '100%' }}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Experience Stats Modal */}
+      {showExperienceModal && (
+        <div className="modal-overlay" onClick={() => setShowExperienceModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{editingStatIndex !== null ? 'Edit' : 'Add'} Experience Stat</h3>
+              <button className="modal-close" onClick={() => setShowExperienceModal(false)}>
+                <FiX />
+              </button>
+            </div>
+            <div className="modal-body">
+              <ExperienceStatForm
+                stat={editingStatIndex !== null ? experienceStats[editingStatIndex] : null}
+                onSave={handleSaveExperienceStat}
+                onCancel={() => setShowExperienceModal(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Featured Listings Modal */}
+      {showFeaturedListingsModal && (
+        <div className="modal-overlay" onClick={() => setShowFeaturedListingsModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+            <div className="modal-header">
+              <h3>Edit Featured Listings</h3>
+              <button className="modal-close" onClick={() => setShowFeaturedListingsModal(false)}>
+                <FiX />
+              </button>
+            </div>
+            <div className="modal-body">
+              <p style={{ color: '#6B7280', marginBottom: '16px' }}>
+                Featured listings management will be available in the full version.
+              </p>
+              <button 
+                className="save-changes-button"
+                onClick={() => setShowFeaturedListingsModal(false)}
+                style={{ width: '100%' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Testimonials Modal */}
+      {showTestimonialsModal && (
+        <div className="modal-overlay" onClick={() => setShowTestimonialsModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+            <div className="modal-header">
+              <h3>Edit Testimonials</h3>
+              <button className="modal-close" onClick={() => setShowTestimonialsModal(false)}>
+                <FiX />
+              </button>
+            </div>
+            <div className="modal-body">
+              <p style={{ color: '#6B7280', marginBottom: '16px' }}>
+                Testimonials management will be available in the full version.
+              </p>
+              <button 
+                className="save-changes-button"
+                onClick={() => setShowTestimonialsModal(false)}
+                style={{ width: '100%' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+  )
+}
+
+// Experience Stat Form Component
+function ExperienceStatForm({ 
+  stat, 
+  onSave, 
+  onCancel 
+}: { 
+  stat: { label: string; value: string } | null
+  onSave: (label: string, value: string) => void
+  onCancel: () => void
+}) {
+  const [label, setLabel] = useState(stat?.label || '')
+  const [value, setValue] = useState(stat?.value || '')
+  
+  return (
+    <>
+      <input
+        type="text"
+        placeholder="Label (e.g., Years of Experience)"
+        value={label}
+        onChange={(e) => setLabel(e.target.value)}
+        style={{ width: '100%', padding: '12px', border: '1px solid #E5E7EB', borderRadius: '8px', marginBottom: '12px' }}
+      />
+      <input
+        type="text"
+        placeholder="Value (e.g., 5)"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        style={{ width: '100%', padding: '12px', border: '1px solid #E5E7EB', borderRadius: '8px', marginBottom: '16px' }}
+      />
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <button 
+          className="save-changes-button"
+          onClick={() => onSave(label, value)}
+          style={{ flex: 1 }}
+          disabled={!label || !value}
+        >
+          Save
+        </button>
+        <button 
+          onClick={onCancel}
+          style={{ 
+            flex: 1, 
+            padding: '14px 32px', 
+            background: '#F3F4F6', 
+            color: '#111827', 
+            border: 'none', 
+            borderRadius: '8px', 
+            fontSize: '15px', 
+            fontWeight: '600', 
+            cursor: 'pointer' 
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </>
   )
 }
 
