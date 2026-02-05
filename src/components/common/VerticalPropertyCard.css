@@ -5,7 +5,7 @@
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -27,6 +27,17 @@
 }
 
 /* =========================
+   IMAGE WRAPPER
+========================= */
+.vertical-property-image-wrapper {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+  overflow: visible; /* Allow icons to extend beyond wrapper */
+  border-radius: 12px 12px 0 0;
+}
+
+/* =========================
    IMAGE
 ========================= */
 .vertical-property-image {
@@ -34,10 +45,11 @@
   height: 300px; /* Increased to give more prominence to images */
   object-fit: cover;
   object-position: center;
-  flex-shrink: 0;
   display: block;
   background: #f3f4f6;
   transition: transform 0.3s ease;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden; /* Clip the image itself */
 }
 
 /* =========================
@@ -155,29 +167,110 @@
 .vertical-property-contact-icons {
   display: flex;
   flex-direction: row;
-  align-items: end;
-  position: relative;
-  bottom: 102px;
-  /* Use clamp to ensure icons don't get clipped on narrow cards (min 4px, max 10% - 8px) */
-  right: clamp(4px, calc(10% - 8px), 140px);
+  align-items: center;
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
   gap: 8px;
   overflow: visible;
   flex-shrink: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
 }
 
-.vertical-property-contact-icons svg {
+/* Responsive adjustments for contact icons */
+@media (max-width: 768px) {
+  .vertical-property-contact-icons {
+    bottom: 8px;
+    right: 8px;
+    gap: 6px;
+    padding: 4px;
+  }
+  
+  .vertical-property-contact-icons svg {
+    width: 28px;
+    height: 28px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vertical-property-contact-icons {
+    bottom: 6px;
+    right: 6px;
+    gap: 4px;
+    padding: 3px;
+  }
+  
+  .vertical-property-contact-icons svg {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+  }
+}
+
+.vertical-property-contact-icons svg,
+.vertical-property-contact-icons button {
   width: 32px;
   height: 32px;
   cursor: pointer;
   padding: 6px;
   border-radius: 8px;
   transition: all 0.2s ease;
-  background: #f3f4f6;
+  background: transparent;
+  flex-shrink: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.vertical-property-contact-icons svg:hover {
+.vertical-property-contact-icons button svg {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.vertical-property-contact-icons .vertical-property-like {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vertical-property-contact-icons .vertical-property-like svg {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+}
+
+.vertical-property-contact-icons svg:hover,
+.vertical-property-contact-icons button:hover {
   transform: translateY(-2px);
-  background: #e5e7eb;
+}
+
+.vertical-property-contact-icons button:hover svg {
+  background: rgba(229, 231, 235, 0.8);
+  border-radius: 8px;
+}
+
+.vertical-property-contact-icons .vertical-property-like:hover {
+  background: transparent;
+  transform: scale(1.05);
+}
+
+.vertical-property-contact-icons .vertical-property-like:hover svg {
+  background: transparent;
 }
 
 /* =========================
@@ -353,6 +446,10 @@
     border-radius: 12px;
   }
 
+  .property-carousel .vertical-property-image-wrapper {
+    overflow: hidden;
+  }
+
   .property-carousel .vertical-property-image {
     height: 180px; /* Reduced for smaller cards */
   }
@@ -368,11 +465,14 @@
 
   /* Fix contact icons positioning for narrow carousel cards */
   .property-carousel .vertical-property-contact-icons {
-    right: 4px; /* Use fixed small offset instead of percentage to prevent clipping */
-    gap: 6px; /* Reduce gap slightly for narrow cards */
+    bottom: 8px;
+    right: 8px;
+    gap: 6px;
+    padding: 4px;
   }
 
-  .property-carousel .vertical-property-contact-icons svg {
+  .property-carousel .vertical-property-contact-icons svg,
+  .property-carousel .vertical-property-contact-icons .vertical-property-like svg {
     width: 28px; /* Slightly smaller icons for narrow cards */
     height: 28px;
   }
@@ -437,6 +537,10 @@
     width: 260px;
   }
 
+  .browse-property-carousel .vertical-property-image-wrapper {
+    overflow: hidden;
+  }
+
   .browse-property-carousel .vertical-property-image {
     height: 180px;
   }
@@ -452,11 +556,14 @@
 
   /* Fix contact icons positioning for narrow browse carousel cards */
   .browse-property-carousel .vertical-property-contact-icons {
-    right: 4px; /* Use fixed small offset instead of percentage to prevent clipping */
-    gap: 6px; /* Reduce gap slightly for narrow cards */
+    bottom: 8px;
+    right: 8px;
+    gap: 6px;
+    padding: 4px;
   }
 
-  .browse-property-carousel .vertical-property-contact-icons svg {
+  .browse-property-carousel .vertical-property-contact-icons svg,
+  .browse-property-carousel .vertical-property-contact-icons .vertical-property-like svg {
     width: 28px; /* Slightly smaller icons for narrow cards */
     height: 28px;
   }
@@ -522,10 +629,16 @@
     transition: transform 0.1s ease;
   }
   
+  /* Image Wrapper - Mobile */
+  .vertical-property-image-wrapper {
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+  }
+
   /* Image - Mobile Optimized for compact 2-column layout */
   .vertical-property-image {
     height: 140px;
-    border-radius: 12px 12px 0 0;
+    border-radius: 0;
     object-fit: cover;
   }
 
@@ -577,42 +690,50 @@
     line-height: 1.2;
   }
 
-  /* Contact Icons - Mobile Compact: All icons grouped together on right */
+  /* Contact Icons - Mobile: Positioned at bottom right of image */
   .vertical-property-contact-icons {
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     right: 8px;
-    bottom: auto;
-    flex-direction: column;
-    gap: 4px;
+    flex-direction: row;
+    gap: 6px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     padding: 4px;
     border-radius: 8px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
     z-index: 10;
     display: flex;
     align-items: center;
   }
 
-  .vertical-property-contact-icons svg,
-  .vertical-property-contact-icons .vertical-property-like {
+  .vertical-property-contact-icons svg {
     width: 28px;
     height: 28px;
-    padding: 6px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    padding: 5px;
+    background: transparent;
+    border: none;
     border-radius: 6px;
     transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
   }
 
   .vertical-property-contact-icons .vertical-property-like {
+    background: transparent;
+    border: none;
+    padding: 0;
     margin: 0;
-    padding: 6px;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vertical-property-contact-icons .vertical-property-like svg {
+    width: 28px;
+    height: 28px;
+    padding: 5px;
   }
 
   .vertical-property-contact-icons svg:active {
@@ -723,87 +844,94 @@
   .vertical-property-card {
     border-radius: 8px;
     margin-bottom: 0;
-    max-width: 140px;
-    width: 140px;
+    max-width: 100%;
+    width: 100%;
     height: auto;
   }
   
-  .vertical-property-image {
-    height: 100px;
+  .vertical-property-image-wrapper {
     border-radius: 8px 8px 0 0;
+    overflow: hidden;
+  }
+
+  .vertical-property-image {
+    height: 200px;
+    border-radius: 0;
   }
   
   .vertical-property-content {
-    padding: 6px;
-    gap: 3px;
+    padding: 12px;
+    gap: 8px;
   }
 
   .vertical-property-header-row {
-    gap: 2px;
-    margin-bottom: 1px;
+    gap: 8px;
+    margin-bottom: 4px;
     align-items: center;
   }
 
   .vertical-property-type {
-    font-size: 6px;
-    padding: 1px 3px;
+    font-size: 11px;
+    padding: 4px 8px;
   }
 
   .vertical-property-date {
-    font-size: 6px;
+    font-size: 11px;
   }
   
   .vertical-property-price {
-    font-size: 12px;
+    font-size: 18px;
   }
 
   .vertical-property-title {
-    font-size: 8px;
-    max-height: 20px;
-    line-height: 1.2;
+    font-size: 14px;
+    max-height: 40px;
+    line-height: 1.3;
   }
 
   .vertical-property-contact-icons {
-    top: 4px;
-    right: 4px;
-    padding: 2px;
-    gap: 2px;
+    bottom: 8px;
+    right: 8px;
+    padding: 4px;
+    gap: 6px;
   }
 
   .vertical-property-contact-icons svg,
   .vertical-property-contact-icons .vertical-property-like {
-    width: 20px;
-    height: 20px;
-    padding: 3px;
+    width: 28px;
+    height: 28px;
+    padding: 5px;
   }
 
   .vertical-property-like svg {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
   }
 
   .vertical-rent-manager-badge {
-    padding: 4px;
-    margin-top: 2px;
-    gap: 4px;
+    padding: 8px 10px;
+    margin-top: 8px;
+    gap: 8px;
+    display: flex;
   }
 
   .vertical-rent-manager-avatar {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
   }
 
   .vertical-rent-manager-name {
-    font-size: 7px;
+    font-size: 12px;
   }
 
   .vertical-rent-manager-role {
-    font-size: 6px;
+    font-size: 10px;
   }
 
   .vertical-property-features {
-    height: 32px;
-    padding: 3px 1px;
+    height: auto;
+    min-height: 44px;
+    padding: 8px 6px;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -815,8 +943,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2px 1px;
-    gap: 2px;
+    padding: 6px 4px;
+    gap: 4px;
     border-right: 1px solid #e5e7eb;
     min-width: 0;
   }
@@ -826,13 +954,13 @@
   }
 
   .vertical-property-feature-item svg {
-    width: 8px;
-    height: 8px;
+    width: 14px;
+    height: 14px;
     flex-shrink: 0;
   }
 
   .vertical-property-feature-item span:not(.feature-tooltip) {
-    font-size: 7px;
+    font-size: 11px;
     white-space: nowrap;
   }
 
@@ -840,59 +968,63 @@
   .property-carousel .vertical-property-card,
   .featured-section .property-carousel .vertical-property-card,
   .browse-property-carousel .vertical-property-card {
-    min-width: 140px !important;
-    max-width: 140px !important;
-    width: 140px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    width: 280px !important;
+  }
+
+  .property-carousel .vertical-property-image-wrapper {
+    overflow: hidden;
   }
 
   .property-carousel .vertical-property-image {
-    height: 100px;
+    height: 180px;
   }
 
   .property-carousel .vertical-property-content {
-    padding: 6px;
-    gap: 3px;
+    padding: 12px;
+    gap: 8px;
   }
 
   .property-carousel .vertical-property-price {
-    font-size: 12px;
+    font-size: 18px;
   }
 
   .property-carousel .vertical-property-title {
-    font-size: 8px;
-    max-height: 20px;
+    font-size: 13px;
+    max-height: 36px;
   }
 
   .property-carousel .vertical-property-type {
-    font-size: 6px;
-    padding: 1px 3px;
+    font-size: 9px;
+    padding: 3px 6px;
   }
 
   .property-carousel .vertical-property-date {
-    font-size: 6px;
+    font-size: 9px;
   }
 
   .property-carousel .vertical-rent-manager-badge {
-    padding: 4px;
-    gap: 4px;
+    padding: 6px 8px;
+    gap: 6px;
   }
 
   .property-carousel .vertical-rent-manager-avatar {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
   }
 
   .property-carousel .vertical-rent-manager-name {
-    font-size: 7px;
+    font-size: 10px;
   }
 
   .property-carousel .vertical-rent-manager-role {
-    font-size: 6px;
+    font-size: 8px;
   }
 
   .property-carousel .vertical-property-features {
-    height: 32px;
-    padding: 3px 1px;
+    height: 40px;
+    padding: 6px 4px;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -903,8 +1035,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2px 1px;
-    gap: 2px;
+    padding: 4px 2px;
+    gap: 3px;
     border-right: 1px solid #e5e7eb;
   }
 
@@ -913,24 +1045,28 @@
   }
 
   .property-carousel .vertical-property-feature-item svg {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
     flex-shrink: 0;
   }
 
   .property-carousel .vertical-property-feature-item span:not(.feature-tooltip) {
-    font-size: 7px;
+    font-size: 10px;
     white-space: nowrap;
   }
 
   /* Browse carousel specific overrides for very small screens */
+  .browse-property-carousel .vertical-property-image-wrapper {
+    overflow: hidden;
+  }
+
   .browse-property-carousel .vertical-property-image {
-    height: 100px;
+    height: 180px;
   }
 
   .browse-property-carousel .vertical-property-content {
-    padding: 6px;
-    gap: 3px;
+    padding: 12px;
+    gap: 8px;
   }
 
   .browse-property-carousel .vertical-property-header-row {
