@@ -13,57 +13,36 @@ export default function AboutPage() {
     <div className="about-page">
       <Navbar />
       <PageHeader title="ABOUT US" />
-      {/* Page Header */}
       
-      {/* Hero Section with Background Image */}
+      {/* Hero Section */}
       <section className="about-hero-section">
-        <div className="about-hero-container">
+        <div className="about-hero-background-wrapper">
           <img
-            src={ASSETS.ABOUT_TROPICAL_TRAVEL}
+            src={ASSETS.ABOUT_BACKGROUND}
             alt="About Us background"
-            className="about-hero-background"
-            onError={(e) => {
-              // Fallback to SVG if PNG doesn't load
-              e.currentTarget.src = ASSETS.ABOUT_BACKGROUND
-            }}
+            className="about-hero-background-image"
           />
-          {/* Orange bar below background */}
-          <div className="about-hero-orange-bar"></div>
+          <div className="about-hero-overlay"></div>
+        </div>
+        <div className="about-hero-container">
           <div className="about-hero-content">
-            <h1 className="about-hero-title text-center">About Rentals.ph</h1>
+            <h1 className="about-hero-title">About Rentals.ph</h1>
             <p className="about-hero-subtitle">We provide full service at every step.</p>
           </div>
         </div>
+        <div className="about-hero-orange-bar"></div>
       </section>
 
-      {/* Section 1: Our Story & Platform Introduction */}
+      {/* Main Content Section */}
       <section className="about-main-section">
         <div className="about-main-container">
           <div className="about-main-content">
-            {/* Left - Image */}
-            <div className="about-main-image-wrapper">
-              <img
-                src={ASSETS.ABOUT_TROPICAL_TRAVEL}
-                alt="Rentals.ph Platform"
-                className="about-main-image"
-                onError={(e) => {
-                  e.currentTarget.src = ASSETS.ABOUT_BACKGROUND
-                }}
-              />
-            </div>
-            
-            {/* Right - Comprehensive Content */}
             <div className="about-main-text">
               <h2 className="about-main-title">OUR STORY</h2>
               
-              <div className="about-main-intro">
-                <p className="about-main-paragraph">
-                  Established in 2014 under Philippine Real Estate Management Solutions Inc., Rentals.ph was organized with one clear goal: to serve as the vehicle in translating real estate investments into productive assets. What started as a vision to revolutionize the rental market has grown into the Philippines' most trusted rental platform.
-                </p>
-                <p className="about-main-paragraph">
-                  Today, Rentals.ph stands as the only rental portal backed by realtors, rent managers, and licensed real estate professionals. We don't just list properties—we provide comprehensive support to property owners and personalized assistance to clients, making us the most trusted brand in rental marketing and servicing.
-                </p>
-              </div>
+              <p className="about-main-paragraph">
+                Established in 2014 under Philippine Real Estate Management Solutions Inc., Rentals.ph was organized with one clear goal: to serve as the vehicle in translating real estate investments into productive assets. Today, we stand as the only rental portal backed by realtors, rent managers, and licensed real estate professionals.
+              </p>
 
               <div className="about-main-grid">
                 <div className="about-main-item">
@@ -138,56 +117,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Section 2: Recognition & Impact */}
-      <section className="about-recognition-section">
-        <div className="about-recognition-container">
-          <h2 className="about-recognition-title">RECOGNITION & IMPACT</h2>
-          <p className="about-recognition-subtitle">
-            Our commitment to excellence has earned the trust of thousands across the Philippines
-          </p>
-          
-          <div className="about-recognition-content">
-            <div className="about-recognition-text">
-              <p className="about-recognition-paragraph">
-                Rentals.ph has established itself as the premier rental platform in the country, recognized for our industry-leading approach to real estate rental services. We take pride in being the only rental portal backed by certified real estate professionals, ensuring that every transaction is handled with expertise, integrity, and care.
-              </p>
-              <p className="about-recognition-paragraph">
-                Together with our sister brand Filipino Homes, we have successfully serviced owners and companies in marketing their properties—from lands and apartments to houses, condominiums, warehouses, and commercial spaces—creating lasting value for all stakeholders across key cities and provinces nationwide.
-              </p>
-            </div>
-            <div className="about-recognition-stats">
-              <div className="about-recognition-stat">
-                <div className="about-recognition-stat-number">2014</div>
-                <div className="about-recognition-stat-label">Established</div>
-              </div>
-              <div className="about-recognition-stat">
-                <div className="about-recognition-stat-number">#1</div>
-                <div className="about-recognition-stat-label">Trusted Platform</div>
-              </div>
-              <div className="about-recognition-stat">
-                <div className="about-recognition-stat-number">Nationwide</div>
-                <div className="about-recognition-stat-label">Coverage</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
-      {/* Section 3: Social Proof - Testimonials & Partners */}
+      {/* Social Proof Section */}
       <section className="about-social-proof-section">
+        <Testimonials />
         <div className="about-social-proof-container">
-          <Testimonials />
-          
           <div className="about-partners-compact">
             <Partners />
-            <div className="partners-subtitle-container">
-              <p className="partners-subtitle-text">Building Dreams, Together</p>
-            </div>
-            <div className="partners-description-container">
-              <p className="partners-description">
-                We collaborate with industry-leading organizations and trusted partners who share our commitment to excellence in real estate and rental services, delivering comprehensive solutions and exceptional value across the Philippines.
-              </p>
-            </div>
           </div>
         </div>
       </section>

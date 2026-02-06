@@ -33,7 +33,7 @@
   position: relative;
   width: 100%;
   flex-shrink: 0;
-  overflow: visible; /* Allow icons to extend beyond wrapper */
+  overflow: hidden; /* Clip the image when it scales on hover */
   border-radius: 12px 12px 0 0;
 }
 
@@ -59,8 +59,8 @@
   flex: 0 0 auto; /* Don't grow, just take needed space - gives more prominence to image */
   display: flex;
   flex-direction: column;
-  padding: 16px 18px; /* Slightly reduced vertical padding */
-  gap: 8px;
+  padding: 11px 18px; /* Slightly reduced vertical padding */
+  gap: 4px;
   overflow: visible; /* Allow contact icons to be visible even if they extend slightly */
 }
 
@@ -101,7 +101,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 0px;
   min-width: 0;
   position: relative; /* Ensure proper positioning context for icons */
   overflow: visible; /* Allow icons to be visible even if they extend slightly */
@@ -112,7 +112,6 @@
   font-family: 'Inter', sans-serif;
   font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.5px;
   white-space: nowrap;
   flex-shrink: 0;
   min-width: fit-content;
@@ -181,6 +180,7 @@
   border-radius: 8px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
+  border-radius: 8px;
 }
 
 /* Responsive adjustments for contact icons */
@@ -336,6 +336,7 @@
   flex-shrink: 0;
   margin-top: auto; /* Push to bottom of flex container */
   gap: 0;
+  border-radius: 0 0 8px 8px;
 }
 
 .vertical-property-feature-item {
@@ -680,7 +681,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 4px;
-    margin-top: 4px;
   }
   
   .vertical-property-price {

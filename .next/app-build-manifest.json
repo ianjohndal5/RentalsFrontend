@@ -12,6 +12,36 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/about/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/about/page.css",
+      "static/chunks/app/about/page.js"
+    ],
+    "/properties/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/properties/page.css",
+      "static/chunks/app/properties/page.js"
+    ],
+    "/property/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/property/[id]/page.css",
+      "static/chunks/app/property/[id]/page.js"
+    ],
+    "/rent-managers/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/rent-managers/page.css",
+      "static/chunks/app/rent-managers/page.js"
+    ],
+    "/rent-managers/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/rent-managers/[id]/page.css",
+      "static/chunks/app/rent-managers/[id]/page.js"
+    ],
     "/agent/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -23,12 +53,6 @@
       "static/chunks/main-app.js",
       "static/css/app/agent/layout.css",
       "static/chunks/app/agent/layout.js"
-    ],
-    "/agent/page-builder/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/agent/page-builder/page.css",
-      "static/chunks/app/agent/page-builder/page.js"
     ],
     "/agent/inbox/page": [
       "static/chunks/webpack.js",
@@ -47,6 +71,36 @@
       "static/chunks/main-app.js",
       "static/css/app/agent/digital-card/page.css",
       "static/chunks/app/agent/digital-card/page.js"
+    ],
+    "/agent/page-builder/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/agent/page-builder/page.css",
+      "static/chunks/app/agent/page-builder/page.js"
+    ],
+    "/agent/listings/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/agent/listings/page.css",
+      "static/chunks/app/agent/listings/page.js"
+    ],
+    "/agent/tracker/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/agent/tracker/page.css",
+      "static/chunks/app/agent/tracker/page.js"
+    ],
+    "/agent/rent-estimate/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/agent/rent-estimate/page.css",
+      "static/chunks/app/agent/rent-estimate/page.js"
+    ],
+    "/agent/blogs/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/agent/blogs/page.css",
+      "static/chunks/app/agent/blogs/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
