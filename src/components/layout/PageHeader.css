@@ -117,11 +117,11 @@
   }
 
   .page-header-accent::before {
-    clip-path: polygon(100% 0%, calc(100% - 18px) 0%, calc(100% - 68px) 100%, calc(100% - 50px) 100%);
+    clip-path: polygon(100% 0%, calc(100% - 25px) 0%, calc(100% - 75px) 100%, calc(100% - 50px) 100%);
   }
 
   .page-header-accent::after {
-    clip-path: polygon(calc(100% - 18px) 0%, 100% 0%, 100% 100%, calc(100% - 50px) 100%);
+    clip-path: polygon(calc(100% - 25px) 0%, 100% 0%, 100% 100%, calc(100% - 50px) 100%);
   }
 }
 
