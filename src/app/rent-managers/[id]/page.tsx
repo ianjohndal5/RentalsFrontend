@@ -565,21 +565,18 @@ export default function RentManagerDetailsPage() {
                           <option value="1">1</option>
                           <option value="2">2+</option>
                         </select>
+                                           
                       </div>
-                      <button
-                        className="rm-clear-filters"
-                        type="button"
-                        onClick={() => {
-                          setMoreFilters({
-                            propertyType: 'all',
-                            bedrooms: 'all',
-                            bathrooms: 'all',
-                            parking: 'all',
-                          })
-                        }}
-                      >
-                        Clear Filters
-                      </button>
+                      <div className="rm-filter-group">  
+                      <label className="rm-filter-label">Clear Filters</label>
+                        <button
+                          className="rm-clear-filters"
+                          type="button"
+                          onClick={() => setShowMoreFilters(false)}
+                        >
+                          Clear
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
