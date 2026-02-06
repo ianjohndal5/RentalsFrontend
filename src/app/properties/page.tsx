@@ -27,6 +27,7 @@ function PropertiesContent() {
   const [currentPage, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<'horizontal' | 'vertical'>('vertical')
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const sidebarOpenTimeRef = useRef<number>(0)
   const [properties, setProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -330,17 +331,34 @@ function PropertiesContent() {
     }
   }, [hasMore, isLoadingMore, loading, currentPage, totalPages])
 
+  // Track when sidebar opens to prevent immediate close
+  useEffect(() => {
+    if (isSidebarOpen) {
+      sidebarOpenTimeRef.current = Date.now()
+    }
+  }, [isSidebarOpen])
+
   // Sticky search bar visibility and close filter dropdown when scrolling to top
   useEffect(() => {
     let timeoutId: NodeJS.Timeout
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop
+    
     const handleScroll = () => {
       clearTimeout(timeoutId)
+      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const scrollDelta = Math.abs(currentScrollTop - lastScrollTop)
+      lastScrollTop = currentScrollTop
+      
       timeoutId = setTimeout(() => {
         const sidebar = document.querySelector('.properties-sidebar')
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+        const timeSinceOpen = Date.now() - sidebarOpenTimeRef.current
         
-        // Close filter dropdown when scrolling back to top
-        if (scrollTop <= 300 && isSidebarOpen) {
+        // Only close filter dropdown when:
+        // 1. User is at top (scrollTop <= 300)
+        // 2. User is actually scrolling (scrollDelta > 5)
+        // 3. Dropdown has been open for at least 500ms (prevent immediate close)
+        if (scrollTop <= 300 && isSidebarOpen && scrollDelta > 5 && timeSinceOpen > 500) {
           setIsSidebarOpen(false)
         }
         
@@ -366,7 +384,7 @@ function PropertiesContent() {
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
-    // Check on mount
+    // Check on mount (but don't close dropdown on initial check)
     handleScroll()
     return () => {
       window.removeEventListener('scroll', handleScroll)

@@ -207,10 +207,24 @@
     padding: 3px;
   }
   
-  .vertical-property-contact-icons svg {
+  /* Make all icons (gmail, WhatsApp, share) match heart icon size on mobile */
+  .vertical-property-contact-icons svg,
+  .vertical-property-contact-icons button svg {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+  }
+  
+  .vertical-property-contact-icons button {
     width: 24px;
     height: 24px;
-    padding: 4px;
+    padding: 3px;
+  }
+  
+  .vertical-property-contact-icons .vertical-property-like svg {
+    width: 18px;
+    height: 18px;
+    padding: 0;
   }
 }
 
@@ -707,15 +721,23 @@
     align-items: center;
   }
 
-  .vertical-property-contact-icons svg {
-    width: 28px;
-    height: 28px;
-    padding: 5px;
+  /* Make all icons match heart icon size on mobile */
+  .vertical-property-contact-icons svg,
+  .vertical-property-contact-icons button svg {
+    width: 18px;
+    height: 18px;
+    padding: 0;
     background: transparent;
     border: none;
     border-radius: 6px;
     transition: all 0.2s ease;
     flex-shrink: 0;
+  }
+  
+  .vertical-property-contact-icons button {
+    width: 24px;
+    height: 24px;
+    padding: 3px;
   }
 
   .vertical-property-contact-icons .vertical-property-like {
@@ -731,9 +753,9 @@
   }
 
   .vertical-property-contact-icons .vertical-property-like svg {
-    width: 28px;
-    height: 28px;
-    padding: 5px;
+    width: 18px;
+    height: 18px;
+    padding: 0;
   }
 
   .vertical-property-contact-icons svg:active {
@@ -896,16 +918,24 @@
     gap: 6px;
   }
 
+  /* Make all icons match heart icon size on mobile */
   .vertical-property-contact-icons svg,
-  .vertical-property-contact-icons .vertical-property-like {
-    width: 28px;
-    height: 28px;
-    padding: 5px;
+  .vertical-property-contact-icons button svg {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+  }
+  
+  .vertical-property-contact-icons button {
+    width: 24px;
+    height: 24px;
+    padding: 3px;
   }
 
-  .vertical-property-like svg {
-    width: 28px;
-    height: 28px;
+  .vertical-property-contact-icons .vertical-property-like svg {
+    width: 18px;
+    height: 18px;
+    padding: 0;
   }
 
   .vertical-rent-manager-badge {
