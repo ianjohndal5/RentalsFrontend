@@ -189,28 +189,44 @@
 }
 
 @media (max-width: 480px) {
-  .partners-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .partners-section {
+    padding: 60px 0;
+  }
+
+  .partners-container {
+    padding: 0 16px;
+  }
+
+  .partners-title {
+    font-size: 24px;
     margin-bottom: 30px;
   }
 
+  .partners-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
   .partner-card {
-    padding: 10px;
-    min-height: 220px;
+    padding: 8px;
+    min-height: 160px;
   }
 
   .partner-logo {
-    width: 300px;
-    height: 300px;
-    transform: scale(1.15);
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    aspect-ratio: 1;
+    transform: scale(1);
+    object-fit: contain;
   }
 
   .partner-card:hover .partner-logo {
-    transform: scale(1.25);
+    transform: scale(1.05);
   }
 
   .partner5-image {
-    min-height: 200px;
+    min-height: 180px;
   }
 }
