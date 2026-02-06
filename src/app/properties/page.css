@@ -2448,12 +2448,13 @@
       stroke: #666666;
     }
 
-    /* Sort and View Controls Row */
+    /* Sort and View Controls Row - Hide view mode buttons on mobile */
     .top-search-bar-controls {
       display: flex;
       gap: 6px;
       align-items: center;
       order: 2;
+      width: 100%;
     }
 
     .sort-dropdown-btn {
@@ -2469,19 +2470,16 @@
       min-width: 0;
     }
 
+    /* Hide view mode buttons on mobile (480px and below) */
     .hamburger-menu-btn,
     .grid-view-btn {
-      flex: 0 0 auto;
-      width: 40px;
-      height: 40px;
-      order: 0;
-      margin-left: 0;
+      display: none !important;
     }
 
-    .hamburger-menu-btn svg,
-    .grid-view-btn svg {
-      width: 18px;
-      height: 18px;
+    /* Force single column layout for properties grid on mobile */
+    .properties-grid {
+      grid-template-columns: 1fr !important;
+      gap: 16px;
     }
 
     .sticky-search-bar-container {
@@ -2509,6 +2507,12 @@
     .sticky-search-bar {
       flex-direction: column;
       gap: 8px;
+    }
+
+    /* Hide view mode buttons in sticky search bar on mobile */
+    .sticky-search-bar .hamburger-menu-btn,
+    .sticky-search-bar .grid-view-btn {
+      display: none !important;
     }
 
     .sticky-filters-section {
@@ -2568,12 +2572,13 @@
       padding: 16px 12px;
     }
 
+    /* Single column layout for properties grid on mobile (480px and below) */
     .properties-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr !important;
       gap: 16px;
     }
 
-    /* Ensure property cards fit in 2 columns on small screens */
+    /* Ensure property cards fit in single column on small screens */
     .properties-grid .vertical-property-card {
       width: 100% !important;
       max-width: 100% !important;
