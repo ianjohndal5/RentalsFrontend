@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { ASSETS } from '@/utils/assets'
+import { agentsApi } from '@/api'
+import { resolveAgentAvatar } from '@/utils/imageResolver'
 import {
   FiMail,
   FiDownload,
@@ -37,6 +39,9 @@ function AppSidebar() {
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showLogoutDropdown, setShowLogoutDropdown] = useState(false)
+  const [userName, setUserName] = useState<string>('')
+  const [userAvatar, setUserAvatar] = useState<string>(ASSETS.PLACEHOLDER_PROFILE)
+  const [isVerified, setIsVerified] = useState<boolean>(false)
   const [isCollapsed, setIsCollapsed] = useState(() => {
     if (typeof window === 'undefined') return false
     return localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true'
@@ -57,6 +62,73 @@ function AppSidebar() {
   const isAdminRoute = pathname?.startsWith('/admin')
   const isAgentRoute = pathname?.startsWith('/agent')
   const isBrokerRoute = pathname?.startsWith('/broker')
+
+  // Fetch user data for agent/broker
+  useEffect(() => {
+    if (!isAgentRoute && !isBrokerRoute) return
+
+    const fetchUserData = async () => {
+      try {
+        // Get stored data first
+        const storedName = localStorage.getItem('user_name') || localStorage.getItem('agent_name') || ''
+        const storedAgentId = localStorage.getItem('agent_id')
+        
+        // Set name from localStorage immediately
+        if (storedName) {
+          setUserName(storedName)
+        }
+
+        // Try to fetch current agent data
+        if (isAgentRoute || isBrokerRoute) {
+          try {
+            const agentData = await agentsApi.getCurrent()
+            
+            // Update name
+            if (agentData.first_name && agentData.last_name) {
+              const fullName = `${agentData.first_name} ${agentData.last_name}`
+              setUserName(fullName)
+              localStorage.setItem('agent_name', fullName)
+              localStorage.setItem('user_name', fullName)
+            } else if (agentData.full_name) {
+              setUserName(agentData.full_name)
+              localStorage.setItem('agent_name', agentData.full_name)
+              localStorage.setItem('user_name', agentData.full_name)
+            }
+            
+            // Update avatar and verification status
+            if (agentData.id) {
+              const avatarImage = resolveAgentAvatar(
+                agentData.image || agentData.avatar || agentData.profile_image,
+                agentData.id
+              )
+              setUserAvatar(avatarImage)
+              setIsVerified(agentData.verified || false)
+              localStorage.setItem('agent_id', agentData.id.toString())
+            }
+          } catch (error) {
+            console.error('Error fetching agent data in AppSidebar:', error)
+            // Fallback to stored agent ID for avatar
+            if (storedAgentId) {
+              const avatarImage = resolveAgentAvatar(null, parseInt(storedAgentId))
+              setUserAvatar(avatarImage)
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error in fetchUserData:', error)
+        // Fallback to localStorage values
+        const storedName = localStorage.getItem('user_name') || localStorage.getItem('agent_name') || ''
+        const storedAgentId = localStorage.getItem('agent_id')
+        if (storedName) setUserName(storedName)
+        if (storedAgentId) {
+          const avatarImage = resolveAgentAvatar(null, parseInt(storedAgentId))
+          setUserAvatar(avatarImage)
+        }
+      }
+    }
+
+    fetchUserData()
+  }, [isAgentRoute, isBrokerRoute])
 
   useEffect(() => {
     // Check unread messages for agent and broker routes
@@ -217,52 +289,16 @@ function AppSidebar() {
   // Agent sidebar content
   const renderAgentSidebar = () => (
     <>
-      {/*<Link
-        href="/"
-        className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg no-underline text-gray-500 text-[13px] font-medium transition-all ${isActive('/') && !pathname?.includes('//') ? 'bg-blue-50 text-blue-500' : 'hover:bg-gray-50 hover:text-gray-900'}`}
-      >
-        <FiLayout className="text-lg" />
-        <span>Home</span>
-      </Link>*/}
+      <NavLink href="/" icon={FiLayout} label="Home" active={isActive('/') && !pathname?.includes('//')} />
       <NavLink href="/agent" icon={FiHome} label="Dashboard" active={isActive('/agent') && !pathname?.includes('/agent/')} />
       <NavLink href="/agent/inbox" icon={FiMail} label="Inbox" active={isActive('/agent/inbox')} badge />
-      {/* <Link
-        href="/agent/downloadables"
-        className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg no-underline text-gray-500 text-[13px] font-medium transition-all ${isActive('/agent/downloadables') ? 'bg-blue-50 text-blue-500' : 'hover:bg-gray-50 hover:text-gray-900'}`}
-      >
-        <FiDownload className="text-lg" />
-        <span>Downloadables</span>
-      </Link> 
-      <Link
-        href="/agent/digital-card"
-        className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg no-underline text-gray-500 text-[13px] font-medium transition-all ${isActive('/agent/digital-card') ? 'bg-blue-50 text-blue-500' : 'hover:bg-gray-50 hover:text-gray-900'}`}
-      >
-        <FiCreditCard className="text-lg" />
-        <span>Digital Business Card</span>
-      </Link>*/}
+      <NavLink href="/agent/downloadables" icon={FiDownload} label="Downloadables" active={isActive('/agent/downloadables')} />
+      <NavLink href="/agent/digital-card" icon={FiCreditCard} label="Digital Business Card" active={isActive('/agent/digital-card')} />
       <NavLink href="/agent/page-builder" icon={FiSettings} label="Page Builder" active={isActive('/agent/page-builder')} />
       <NavLink href="/agent/listings" icon={FiList} label="My Listings" active={isActive('/agent/listings')} />
-        {/* <Link
-          href="/agent/tracker"
-          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg no-underline text-gray-500 text-[13px] font-medium transition-all ${isActive('/agent/tracker') ? 'bg-blue-50 text-blue-500' : 'hover:bg-gray-50 hover:text-gray-900'}`}
-        >
-          <FiBarChart2 className="text-lg" />
-          <span>Rental Tracker</span>
-        </Link>
-        <Link
-          href="/agent/rent-estimate"
-          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg no-underline text-gray-500 text-[13px] font-medium transition-all ${isActive('/agent/rent-estimate') ? 'bg-blue-50 text-blue-500' : 'hover:bg-gray-50 hover:text-gray-900'}`}
-        >
-          <FiFileText className="text-lg" />
-          <span>Rent Estimate</span>
-        </Link>
-        <Link
-          href="/agent/blogs"
-          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg no-underline text-gray-500 text-[13px] font-medium transition-all ${isActive('/agent/blogs') ? 'bg-blue-50 text-blue-500' : 'hover:bg-gray-50 hover:text-gray-900'}`}
-        >
-          <FiBookOpen className="text-lg" />
-          <span>Share Blogs</span>
-        </Link>*/}
+      <NavLink href="/agent/tracker" icon={FiBarChart2} label="Rental Tracker" active={isActive('/agent/tracker')} />
+      <NavLink href="/agent/rent-estimate" icon={FiFileText} label="Rent Estimate" active={isActive('/agent/rent-estimate')} />
+      <NavLink href="/agent/blogs" icon={FiBookOpen} label="Share Blogs" active={isActive('/agent/blogs')} />
     </>
   )
 
@@ -366,12 +402,12 @@ function AppSidebar() {
             <div 
               className={`flex items-center gap-2.5 px-5 py-4 border-t border-gray-200 flex-shrink-0 transition-colors cursor-pointer hover:bg-gray-100 ${isCollapsed ? 'md:justify-center md:px-2 md:py-3' : ''}`}
               onClick={() => setShowLogoutDropdown(!showLogoutDropdown)}
-              title={isCollapsed ? 'Account / Logout' : undefined}
+              title={isCollapsed ? (userName || 'Account / Logout') : undefined}
             >
               <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                 <img
-                  src={ASSETS.PLACEHOLDER_PROFILE}
-                  alt="User"
+                  src={userAvatar}
+                  alt={userName || 'User'}
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement
@@ -381,12 +417,22 @@ function AppSidebar() {
                     }
                   }}
                 />
-                <div className="w-full h-full hidden items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-[13px]">JA</div>
+                <div className="w-full h-full hidden items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-[13px]">
+                  {userName ? userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U'}
+                </div>
               </div>
               {!isCollapsed && (
                 <div className="flex flex-col gap-px flex-1 min-w-0">
-                  <span className="text-[13px] font-semibold text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">John Anderson</span>
-                  <span className="text-[11px] text-gray-400">{isBrokerRoute ? 'Broker' : 'Agent'}</span>
+                  <span className="text-[13px] font-semibold text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {userName || (isBrokerRoute ? 'Broker' : 'Agent')}
+                  </span>
+                  <span className="text-[11px] text-gray-400">
+                    {isBrokerRoute 
+                      ? 'Broker' 
+                      : isVerified 
+                        ? 'Rent Manager' 
+                        : 'Property Agent'}
+                  </span>
                 </div>
               )}
             </div>
