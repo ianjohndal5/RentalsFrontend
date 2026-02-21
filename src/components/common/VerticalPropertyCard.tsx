@@ -102,13 +102,13 @@ function VerticalPropertyCard({
 
   return (
     <article
-      className="group bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col w-full max-w-[400px] shadow-sm hover:shadow-md transition-all duration-200 h-[580px] min-h-[580px] max-h-[580px]"
+      className="group bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col w-full max-w-[400px] shadow-sm hover:shadow-md transition-all duration-200 h-[520px] min-h-[520px] max-h-[580px]"
       onClick={handleCardClick}
       style={{ cursor: id ? 'pointer' : 'default', borderWidth: '1px', borderStyle: 'solid', borderColor: 'rgb(229, 231, 235)' }}
     >
       {/* Property image with hover arrows */}
       <div
-        className="relative w-full aspect-[4/4] overflow-hidden rounded-t-xl bg-gray-100"
+        className="relative w-full aspect-[4/3] overflow-hidden rounded-t-xl bg-gray-100"
         onMouseEnter={() => setImageHovered(true)}
         onMouseLeave={() => setImageHovered(false)}
       >
